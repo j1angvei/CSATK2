@@ -1,0 +1,18 @@
+{
+  "experiments": [
+    {
+      "code": "code1",
+      "fastq1": "1.fastq",
+      "fastq2": "2.fastq",
+      "control": "code2",
+      "genomeCode": "11"
+    },
+    {
+      "code": "code2",
+      "fastq1": "3.fastq",
+      "fastq2": "4.fastq",
+      "control": null,
+      "genomeCode": "11"
+    }
+  ]
+}

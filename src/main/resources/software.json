@@ -1,0 +1,77 @@
+{
+  "software": [
+    {
+      "name": "fastqc",
+      "archive": "FastQC_v0.11.5.zip",
+      "folder": "FastQC",
+      "executable": "fastqc"
+    },
+    {
+      "name": "trimmomatic",
+      "archive": "Trimmomatic-0.36.zip",
+      "folder": "Trimmomatic-0.36",
+      "executable": "trimmomatic-0.36.jar"
+    },
+    {
+      "name": "bwa",
+      "archive": "bwa-0.7.13.tar.bz2",
+      "folder": "bwa-0.7.13",
+      "executable": "bwa"
+    },
+    {
+      "name": "samtools",
+      "archive": "samtools-1.3.1.tar.bz2",
+      "folder": "samtools-1.3.1",
+      "executable": "samtools"
+    },
+    {
+      "name": "macs",
+      "archive": "MACS-1.4.2-1.tar.gz",
+      "folder": "MACS-1.4.2",
+      "executable": "bin/macs14"
+    },
+    {
+      "name": "homer",
+      "archive": "homer.v4.8.2.zip",
+      "folder": "homer.v4.8.2",
+      "executable": "bin/annotatePeaks.pl"
+    },
+    {
+      "name": "qualimap",
+      "archive": "qualimap_v2.2.zip",
+      "folder": "qualimap_v2.2",
+      "executable": "qualimap"
+    },
+    {
+      "name": "macs2",
+      "archive": "MACS2-2.1.1.20160309.tar.gz",
+      "folder": "MACS2-2.1.1.20160309",
+      "executable": "bin/macs2"
+    }
+  ],
+  "directory": {
+    "sub": [
+      "archive",
+      "config",
+      "genome",
+      "input",
+      "log",
+      "output",
+      "script",
+      "software"
+    ],
+    "out": [
+      "index_genome",
+      "qc_raw",
+      "trim",
+      "qc_clean",
+      "fa_fastqc",
+      "alignment",
+      "bam_converted",
+      "bam_sorted",
+      "peak_calling",
+      "annotation",
+      "qc_alignment"
+    ]
+  }
+}

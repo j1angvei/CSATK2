@@ -1,4 +1,5 @@
 /**
+ * Entry of the program
  * Created by Wayne on 2016/11/23.
  */
 public class CSATK {
@@ -67,12 +68,12 @@ public class CSATK {
         );
     }
 
-    public static void taskArgError() {
-
+    private static void taskArgError() {
+        System.out.println("Illegal task arguments!");
     }
 
-    public static void functionArgError() {
-
+    private static void functionArgError() {
+        System.out.println("Illegal function arguments");
     }
 
     public static void analysis(String arg) {
