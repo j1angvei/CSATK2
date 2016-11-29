@@ -1,4 +1,10 @@
 {
+  "platform": {
+    "java": "java",
+    "python": "python",
+    "perl": "perl",
+    "r": "R"
+  },
   "software": [
     {
       "name": "fastqc",
@@ -65,7 +71,7 @@
       "qc_raw",
       "trim",
       "qc_clean",
-      "fa_fastqc",
+      "parse_zip",
       "alignment",
       "bam_converted",
       "bam_sorted",

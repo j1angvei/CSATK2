@@ -1,3 +1,5 @@
+package cn.j1angvei.castk2;
+
 /**
  * Created by Wayne on 2016/11/23.
  */

@@ -1,10 +1,14 @@
+package cn.j1angvei.castk2;
+
+import cn.j1angvei.castk2.util.ConfUtil;
+
 /**
  * Entry of the program
  * Created by Wayne on 2016/11/23.
  */
 public class CSATK {
-
     public static void main(String[] args) {
+        test();
         if (args.length == 0 || args.length > 2) {
             usage();
             return;
@@ -33,9 +37,11 @@ public class CSATK {
             default:
                 taskArgError();
         }
+
+
     }
 
-    public static void usage() {
+    private static void usage() {
         System.out.printf("Program: CSATK(ChIP-Seq Analysis Toolkit)\n" +
                         "Version: 2.0\n" +
                         "\n" +
@@ -45,10 +51,10 @@ public class CSATK {
                         "\t%s,\tChIP-Seq analysis pipeline\n" +
                         "\t%s,\trun function(s) in order\n" +
                         "\t%s,\t(re)install all software\n" +
-                        "\t%s,\treset CSATK to original state\n" +
+                        "\t%s,\treset cn.j1angvei.castk2.CSATK to original state\n" +
                         "\t%s,\tbackup all file of last analysis, ready for next analysis\n" +
                         "\n" +
-                        "\nFunctions:\n" +
+                        "Functions:\n" +
                         "\t%s,\tgenerate genome index\n" +
                         "\t%s,\tquality control of raw reads\n" +
                         "\t%s,\ttrim and filter raw reads\n" +
@@ -76,10 +82,17 @@ public class CSATK {
         System.out.println("Illegal function arguments");
     }
 
-    public static void analysis(String arg) {
+    private static void analysis(String arg) {
         switch (arg) {
             case Task.BACKUP:
 
         }
     }
+
+    private static void test() {
+        ConfUtil confUtil = ConfUtil.getInstance();
+        System.out.println(confUtil.getConfig());
+        System.out.println(confUtil.getInput());
+    }
+
 }

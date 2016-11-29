@@ -1,0 +1,116 @@
+package cn.j1angvei.castk2.util;
+
+import cn.j1angvei.castk2.conf.Config;
+import cn.j1angvei.castk2.conf.Platform;
+import cn.j1angvei.castk2.conf.Software;
+import cn.j1angvei.castk2.input.Experiment;
+import cn.j1angvei.castk2.input.Genome;
+import cn.j1angvei.castk2.input.Input;
+import cn.j1angvei.castk2.type.OutType;
+import cn.j1angvei.castk2.type.PfType;
+import cn.j1angvei.castk2.type.SubType;
+import cn.j1angvei.castk2.type.SwType;
+import com.google.gson.Gson;
+
+import java.io.File;
+import java.util.List;
+
+/**
+ * Created by mjian on 2016/11/29.
+ */
+public class ConfUtil {
+    private static ConfUtil INSTANCE;
+    private static final Gson GSON = new Gson();
+    private Config config;
+    private Input input;
+
+    private ConfUtil() {
+        config = GSON.fromJson(FileUtil.readConfig(), Config.class);
+        input = GSON.fromJson(FileUtil.readInput(), Input.class);
+    }
+
+    public static ConfUtil getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ConfUtil();
+        }
+        return INSTANCE;
+    }
+
+    public Config getConfig() {
+        return config;
+    }
+
+    public String getPlatform(PfType type) {
+        Platform pf = config.getPlatform();
+        switch (type) {
+            case JAVA:
+                return pf.getJava();
+            case PERL:
+                return pf.getPerl();
+            case PYTHON:
+                return pf.getPython();
+            case R:
+                return pf.getR();
+            default:
+                return null;
+        }
+    }
+
+    public Software getSoftware(SwType type) {
+        int index = type.ordinal();
+        return config.getSoftware().get(index);
+    }
+
+    public String getSwFolder(SwType type) {
+        Software software = config.getSoftware().get(type.ordinal());
+        return getSubDir(SubType.SOFTWARE) + software.getFolder();
+
+    }
+
+    public String getSwExe(SwType type) {
+        Software software = config.getSoftware().get(type.ordinal());
+        return getSwFolder(type) + software.getExecutable();
+    }
+
+
+    public String getSubDir(SubType type) {
+        int index = type.ordinal();
+        return FileUtil.getWorkDir() + config.getDirectory().getSub()[index] + File.separator;
+    }
+
+    public String getOutDir(OutType type) {
+        int index = type.ordinal();
+        return getSubDir(SubType.OUTPUT) + config.getDirectory().getOut()[index] + File.separator;
+    }
+
+    public Input getInput() {
+        return input;
+    }
+
+    public List<Genome> getGenomes() {
+        return input.getGenome();
+    }
+
+    public Genome getGenome(int genomeCode) {
+        for (Genome genome : getGenomes()) {
+            if (genome.getCode() == genomeCode) {
+                return genome;
+            }
+        }
+        return null;
+    }
+
+    public List<Experiment> getExperiments() {
+        return input.getExperiment();
+    }
+
+    public Experiment getExperiment(String expCode) {
+        for (Experiment experiment : getExperiments()) {
+            if (expCode.equals(experiment.getCode())) {
+                return experiment;
+            }
+        }
+        return null;
+    }
+
+}
