@@ -3,14 +3,14 @@
     {
       "code": 11,
       "name": "genome name 1",
-      "size": null,
+      "size": 0,
       "fasta": "reference genome file name here",
       "gtf": "genome1 genome annotation gff/gtf/gff3 file here"
     },
     {
       "code": 12,
       "name": "genome2 name",
-      "size": null,
+      "size": 0,
       "fasta": "genome2 reference genome fasta file here",
       "gtf": "genome2 genome annotation gff/gtf/gff3 file here"
     }
@@ -21,14 +21,14 @@
       "fastq1": "1.fastq",
       "fastq2": "2.fastq",
       "control": "code2",
-      "genomeCode": "11"
+      "genomeCode": 11
     },
     {
       "code": "code2",
       "fastq1": "3.fastq",
       "fastq2": "4.fastq",
       "control": null,
-      "genomeCode": "11"
+      "genomeCode": 11
     }
   ]
 }

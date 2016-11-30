@@ -61,26 +61,31 @@ public class ConfUtil {
         return config.getSoftware().get(index);
     }
 
-    public String getSwFolder(SwType type) {
+    public String getSoftwareArchive(SwType type) {
         Software software = config.getSoftware().get(type.ordinal());
-        return getSubDir(SubType.SOFTWARE) + software.getFolder();
+        return getSubDirectory(SubType.ARCHIVE) + software.getArchive();
+    }
+
+    public String getSoftwareFolder(SwType type) {
+        Software software = config.getSoftware().get(type.ordinal());
+        return getSubDirectory(SubType.SOFTWARE) + software.getFolder();
 
     }
 
-    public String getSwExe(SwType type) {
+    public String getSoftwareExecutable(SwType type) {
         Software software = config.getSoftware().get(type.ordinal());
-        return getSwFolder(type) + software.getExecutable();
+        return getSoftwareFolder(type) + software.getExecutable();
     }
 
 
-    public String getSubDir(SubType type) {
+    public String getSubDirectory(SubType type) {
         int index = type.ordinal();
         return FileUtil.getWorkDir() + config.getDirectory().getSub()[index] + File.separator;
     }
 
-    public String getOutDir(OutType type) {
+    public String getOutDirectory(OutType type) {
         int index = type.ordinal();
-        return getSubDir(SubType.OUTPUT) + config.getDirectory().getOut()[index] + File.separator;
+        return getSubDirectory(SubType.OUTPUT) + config.getDirectory().getOut()[index] + File.separator;
     }
 
     public Input getInput() {

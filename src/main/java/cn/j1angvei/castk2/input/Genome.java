@@ -25,6 +25,10 @@ public class Genome {
         return size;
     }
 
+    public void setSize(long size) {
+        this.size = size;
+    }
+
     public String getFasta() {
         return fasta;
     }

@@ -8,7 +8,7 @@ public class Experiment {
     private String fastq1;
     private String fastq2;
     private String control;
-    private String genomeCode;
+    private int genomeCode;
 
     public Experiment() {
     }
@@ -29,7 +29,7 @@ public class Experiment {
         return control;
     }
 
-    public String getGenomeCode() {
+    public int getGenomeCode() {
         return genomeCode;
     }
 
