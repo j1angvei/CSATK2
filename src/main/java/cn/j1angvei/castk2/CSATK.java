@@ -1,10 +1,6 @@
 package cn.j1angvei.castk2;
 
 import cn.j1angvei.castk2.util.ConfUtil;
-import com.sun.scenario.effect.impl.prism.PrImage;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Entry of the program
@@ -63,6 +59,7 @@ public class CSATK {
                         "\t%s,\tquality control of raw reads\n" +
                         "\t%s,\ttrim and filter raw reads\n" +
                         "\t%s,\tquality control of clean(filtered) reads\n" +
+                        "\t%s,\t parse quality control result in zip file" +
                         "\t%s,\talignment of clean reads\n" +
                         "\t%s,\tconvert sam to bam files\n" +
                         "\t%s,\tsort bam files\n" +
@@ -72,7 +69,7 @@ public class CSATK {
                         "\n"
                 ,
                 Task.PIPELINE, Task.FUNCTION, Task.INSTALL, Task.RESET, Task.BACKUP,
-                Function.GENOME_IDX, Function.QC_RAW, Function.TRIM, Function.QC_CLEAN,
+                Function.GENOME_IDX, Function.QC_RAW, Function.TRIM, Function.QC_CLEAN, Function.PARSE_QC_ZIP,
                 Function.ALIGNMENT, Function.CONVERT_SAM, Function.SORT_BAM, Function.QC_BAM,
                 Function.PEAK_CALLING, Function.PEAK_ANNOTATION
         );

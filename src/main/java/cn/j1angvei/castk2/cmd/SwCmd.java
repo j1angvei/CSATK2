@@ -11,6 +11,7 @@ import cn.j1angvei.castk2.util.FileUtil;
 import cn.j1angvei.castk2.util.SwUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ public class SwCmd {
                 CONF.getSubDirectory(SubType.INPUT) + genome.getFasta());
     }
 
-    public static List<String> qcRawReads(Experiment experiment) {
+    public static String[] qcRawReads(Experiment experiment) {
         List<String> cmd = new ArrayList<>();
         cmd.add(String.format("%s -o %s -t %d %s",
                 CONF.getSoftwareExecutable(SwType.FASTQC),
@@ -43,7 +44,7 @@ public class SwCmd {
                     CONF.getSubDirectory(SubType.INPUT) + experiment.getFastq2())
             );
         }
-        return cmd;
+        return FileUtil.listToArray(cmd);
     }
 
     public static String trimReads(Experiment experiment) {
@@ -87,7 +88,7 @@ public class SwCmd {
         }
     }
 
-    public static List<String> qcCleanReads(Experiment experiment) {
+    public static String[] qcCleanReads(Experiment experiment) {
         List<String> cmd = new ArrayList<>();
         cmd.add(String.format("%s -o %s -t %d %s",
                 CONF.getSoftwareExecutable(SwType.FASTQC),
@@ -103,7 +104,7 @@ public class SwCmd {
                     CONF.getOutDirectory(OutType.QC_CLEAN) + experiment.getFastq2())
             );
         }
-        return cmd;
+        return FileUtil.listToArray(cmd);
     }
 
     public static String alignment(Experiment experiment) {
@@ -146,7 +147,7 @@ public class SwCmd {
                 CONF.getOutDirectory(OutType.QC_BAM));
     }
 
-    public static List<String> callPeaks(Experiment experiment) {
+    public static String[] callPeaks(Experiment experiment) {
         List<String> cmd = new ArrayList<>();
         //add python environment variable
         cmd.add(OsCmd.addPythonPath(CONF.getSoftwareFolder(SwType.MACS2)));
@@ -175,10 +176,10 @@ public class SwCmd {
                     CONF.getOutDirectory(OutType.PEAK_CALLING) + experiment.getCode())
             );
         }
-        return cmd;
+        return FileUtil.listToArray(cmd);
     }
 
-    public static List<String> annotatePeaks(Experiment experiment) {
+    public static String[] annotatePeaks(Experiment experiment) {
         Genome genome = CONF.getGenome(experiment.getGenomeCode());
         String annoFormat = genome.getGtf().substring(genome.getGtf().lastIndexOf('.') + 1);
         List<String> cmd = new ArrayList<>();
@@ -190,6 +191,6 @@ public class SwCmd {
                 annoFormat,
                 CONF.getSubDirectory(SubType.INPUT) + genome.getGtf())
         );
-        return cmd;
+        return FileUtil.listToArray(cmd);
     }
 }

@@ -2,11 +2,9 @@ package cn.j1angvei.castk2.util;
 
 import org.apache.commons.io.FileUtils;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
+import java.util.List;
 
 /**
  * Created by mjian on 2016/11/29.
@@ -28,6 +26,18 @@ public class FileUtil {
         return content;
     }
 
+    public static void writeFile(String content, String fileName) {
+        File file = new File(fileName);
+        if (file.exists()) {
+            file.delete();
+        }
+        try {
+            FileUtils.writeStringToFile(new File(fileName), content, Charset.defaultCharset());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static String readConfig() {
         return readFile(WORK_DIR + "config" + File.separator + "config.json");
     }
@@ -35,6 +45,7 @@ public class FileUtil {
     public static String readInput() {
         return readFile(WORK_DIR + "config" + File.separator + "input.json");
     }
+
 
     public static long countFileSize(String fileName) {
         long count = 0;
@@ -48,7 +59,14 @@ public class FileUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("count " + fileName + " " + count);
+        System.out.println("count genome size " + fileName + " " + count);
         return count;
+    }
+
+    public static String[] listToArray(List<String> input) {
+        if (input != null) {
+            return input.toArray(new String[input.size()]);
+        }
+        return null;
     }
 }
