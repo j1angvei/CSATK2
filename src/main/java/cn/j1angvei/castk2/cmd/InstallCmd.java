@@ -17,7 +17,6 @@ public class InstallCmd {
 
     public static String[] install(SwType type) {
         String archive = CONF.getSoftwareArchive(type);
-        Software sw = CONF.getSoftware(type);
         String swSubDir = CONF.getDirectory(SubType.SOFTWARE);
         String swFolder = CONF.getSoftwareFolder(type);
         List<String> cmd = new ArrayList<>();
@@ -39,13 +38,14 @@ public class InstallCmd {
                 cmd.add(OsCmd.makeInstall(swFolder));
                 break;
             case MACS2:
-                cmd.add(OsCmd.addPythonPath(swFolder));
-                cmd.add(OsCmd.unpack(archive, CONF.getDirectory(SubType.ARCHIVE)));
-                cmd.add(OsCmd.changeDir(CONF.getDirectory(SubType.ARCHIVE) + sw.getFolder()));
-                cmd.add(String.format("%s setup.py install --prefix %s",
+                cmd.add(OsCmd.unpack(archive, swSubDir));
+                cmd.add(OsCmd.changeDir(swFolder));
+                String install = String.format("%s setup.py install --prefix %s",
                         CONF.getPlatform(PfType.PYTHON),
-                        swFolder)
-                );
+                        swFolder);
+                cmd.add(install);
+                cmd.add(OsCmd.addPythonPath(swFolder));
+                cmd.add(install);
                 break;
             case HOMER:
                 cmd.add(OsCmd.unpack(archive, swFolder));
