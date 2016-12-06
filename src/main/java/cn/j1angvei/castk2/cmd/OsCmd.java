@@ -35,19 +35,14 @@ public class OsCmd {
 
     public static String copy(String archive, String dir) {
         return String.format("cp %s %s", archive, dir);
-
     }
 
     public static String changeDir(String dir) {
         return String.format("cd %s", dir);
     }
 
-    public static String runScript(File file) {
-        return String.format("sh %s", file.toString());
-    }
-
     public static String addPythonPath(String swFolder) {
-        return String.format("export PYTHONPATH=%slib/python%s/site-packages:$PYTHONPATH", swFolder, SwUtil.getPythonVersion());
+        return String.format("export PYTHONPATH=%slib" + File.separator + "python%s" + File.separator + "site-packages" + File.separator + ":$PYTHONPATH", swFolder, SwUtil.getPythonVersion());
     }
 
     public static String addPath(String path) {

@@ -1,5 +1,6 @@
 package cn.j1angvei.castk2.cmd;
 
+import cn.j1angvei.castk2.conf.Software;
 import cn.j1angvei.castk2.type.PfType;
 import cn.j1angvei.castk2.type.SubType;
 import cn.j1angvei.castk2.type.SwType;
@@ -14,9 +15,10 @@ import java.util.List;
 public class InstallCmd {
     private static ConfUtil CONF = ConfUtil.getInstance();
 
-    public static List<String> install(SwType type) {
+    public static String[] install(SwType type) {
         String archive = CONF.getSoftwareArchive(type);
-        String swSubDir = CONF.getSubDirectory(SubType.SOFTWARE);
+        Software sw = CONF.getSoftware(type);
+        String swSubDir = CONF.getDirectory(SubType.SOFTWARE);
         String swFolder = CONF.getSoftwareFolder(type);
         List<String> cmd = new ArrayList<>();
         switch (type) {
@@ -38,8 +40,8 @@ public class InstallCmd {
                 break;
             case MACS2:
                 cmd.add(OsCmd.addPythonPath(swFolder));
-                cmd.add(OsCmd.unpack(archive, swSubDir));
-                cmd.add(OsCmd.changeDir(swFolder));
+                cmd.add(OsCmd.unpack(archive, CONF.getDirectory(SubType.ARCHIVE)));
+                cmd.add(OsCmd.changeDir(CONF.getDirectory(SubType.ARCHIVE) + sw.getFolder()));
                 cmd.add(String.format("%s setup.py install --prefix %s",
                         CONF.getPlatform(PfType.PYTHON),
                         swFolder)
@@ -49,7 +51,7 @@ public class InstallCmd {
                 cmd.add(OsCmd.unpack(archive, swFolder));
                 cmd.add(OsCmd.changeDir(swFolder));
                 cmd.add(String.format("%s %s -make",
-                        CONF.getSoftwareExecutable(type),
+                        CONF.getPlatform(PfType.PERL),
                         "configureHomer.pl")
                 );
                 break;
@@ -59,6 +61,6 @@ public class InstallCmd {
             default:
                 break;
         }
-        return cmd;
+        return cmd.toArray(new String[cmd.size()]);
     }
 }

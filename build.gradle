@@ -10,7 +10,7 @@ repositories {
 }
 jar {
     manifest {
-        attributes 'Main-Class': 'cn.j1angvei.CSATK'
+        attributes 'Main-Class': 'cn.j1angvei.castk2.CSATK'
     }
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }

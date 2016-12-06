@@ -1,28 +1,38 @@
 package cn.j1angvei.castk2.run;
 
+import cn.j1angvei.castk2.type.SubType;
+import cn.j1angvei.castk2.util.ConfUtil;
 import cn.j1angvei.castk2.util.FileUtil;
+import org.apache.commons.io.IOUtils;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by j1angvei on 2016/11/30.
  */
 public class Executor {
-    public static int execute(String expCode, String function, String... cmd) {
-        String fileName = expCode + "_" + function + ".sh";
-        File script = createScript(fileName, cmd);
+    private static final ConfUtil CONF = ConfUtil.getInstance();
+
+    public static int execute(String prefixName, String... cmd) {
+        String timestamp = new SimpleDateFormat("MMdd_HHmmss").format(new Date());
+        String scriptFile = CONF.getDirectory(SubType.SCRIPT) + timestamp + "_" + prefixName + ".sh";
+        String logFile = CONF.getDirectory(SubType.LOG) + timestamp + "_" + prefixName + ".log";
+        File script = createScript(scriptFile, cmd);
         int exitValue = 0;
         try {
             ProcessBuilder builder = new ProcessBuilder("sh", script.toString());
             builder.redirectErrorStream(true);
             Process process = builder.start();
-            output(process.getInputStream());
+            String log = IOUtils.toString(process.getInputStream(), Charset.defaultCharset());
+            FileUtil.writeFile(log, logFile);
             exitValue = process.waitFor();
         } catch (InterruptedException | IOException e) {
             e.printStackTrace();
         }
         return exitValue;
-
     }
 
     private static File createScript(String fileName, String... cmd) {
@@ -32,19 +42,5 @@ public class Executor {
         }
         FileUtil.writeFile(content, fileName);
         return new File(fileName);
-    }
-
-    private static void output(InputStream inputStream) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        String line;
-        try {
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-            }
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 }

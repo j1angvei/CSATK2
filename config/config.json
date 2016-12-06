@@ -31,15 +31,9 @@
       "executable": "samtools"
     },
     {
-      "name": "macs",
-      "archive": "MACS-1.4.2-1.tar.gz",
-      "folder": "MACS-1.4.2",
-      "executable": "bin/macs14"
-    },
-    {
       "name": "homer",
-      "archive": "homer.v4.8.2.zip",
-      "folder": "homer.v4.8.2",
+      "archive": "homer.v4.8.3.zip",
+      "folder": "homer.v4.8.3",
       "executable": "bin/annotatePeaks.pl"
     },
     {

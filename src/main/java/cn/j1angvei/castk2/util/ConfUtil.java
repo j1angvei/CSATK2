@@ -11,6 +11,8 @@ import cn.j1angvei.castk2.type.PfType;
 import cn.j1angvei.castk2.type.SubType;
 import cn.j1angvei.castk2.type.SwType;
 import com.google.gson.Gson;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.util.List;
@@ -63,13 +65,12 @@ public class ConfUtil {
 
     public String getSoftwareArchive(SwType type) {
         Software software = config.getSoftware().get(type.ordinal());
-        return getSubDirectory(SubType.ARCHIVE) + software.getArchive();
+        return getDirectory(SubType.ARCHIVE) + software.getArchive();
     }
 
     public String getSoftwareFolder(SwType type) {
         Software software = config.getSoftware().get(type.ordinal());
-        return getSubDirectory(SubType.SOFTWARE) + software.getFolder();
-
+        return getDirectory(SubType.SOFTWARE) + software.getFolder();
     }
 
     public String getSoftwareExecutable(SwType type) {
@@ -77,15 +78,14 @@ public class ConfUtil {
         return getSoftwareFolder(type) + software.getExecutable();
     }
 
-
-    public String getSubDirectory(SubType type) {
+    public String getDirectory(SubType type) {
         int index = type.ordinal();
         return FileUtil.getWorkDir() + config.getDirectory().getSub()[index] + File.separator;
     }
 
-    public String getOutDirectory(OutType type) {
+    public String getDirectory(OutType type) {
         int index = type.ordinal();
-        return getSubDirectory(SubType.OUTPUT) + config.getDirectory().getOut()[index] + File.separator;
+        return getDirectory(SubType.OUTPUT) + config.getDirectory().getOut()[index] + File.separator;
     }
 
     public Input getInput() {
