@@ -1,16 +1,11 @@
 package cn.j1angvei.castk2;
 
-import cn.j1angvei.castk2.util.ConfUtil;
-
 /**
  * Entry of the program
  * Created by Wayne on 2016/11/23.
  */
 public class CSATK {
     public static void main(String[] args) {
-        for (Function function : Function.values()) {
-            System.out.printf("origin: %s, name: %s, keyword: %s", function, function.name(), function.getKeyword());
-        }
         if (args.length == 0 || args.length > 2) {
             usage();
             return;
@@ -33,14 +28,12 @@ public class CSATK {
                 if (args.length == 2) {
                     Task.function(args[1]);
                 } else {
-                    functionArgError();
+                    throw new IllegalArgumentException("Function keywords are not in function1,function2,function... format!");
                 }
                 break;
             default:
-                taskArgError();
+                throw new IllegalArgumentException("Task keyword " + args[0] + " not found!");
         }
-
-
     }
 
     private static void usage() {
@@ -74,26 +67,4 @@ public class CSATK {
                 Function.PEAK_CALLING, Function.PEAK_ANNOTATION
         );
     }
-
-    private static void taskArgError() {
-        System.out.println("Illegal task arguments!");
-    }
-
-    private static void functionArgError() {
-        System.out.println("Illegal function arguments");
-    }
-
-    private static void analysis(String arg) {
-        switch (arg) {
-            case Task.BACKUP:
-
-        }
-    }
-
-    private static void test() {
-        ConfUtil confUtil = ConfUtil.getInstance();
-        System.out.println(confUtil.getConfig());
-        System.out.println(confUtil.getInput());
-    }
-
 }

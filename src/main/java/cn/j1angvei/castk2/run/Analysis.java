@@ -44,7 +44,7 @@ public class Analysis {
     private static void traverseExperiment(final Function function) {
         List<Thread> experimentThreads = new ArrayList<>();
         for (final Experiment experiment : CONF.getExperiments()) {
-            final String scriptNamePrefix = "Experiment_" + experiment.getCode() + "_" + function.name() + "_" + FileUtil.getTimestamp();
+            final String scriptNamePrefix = "Experiment_" + experiment.getCode() + "_" + function.name();
             Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -61,7 +61,7 @@ public class Analysis {
     private static void traverseGenomes(final Function function) {
         List<Thread> genomeThreads = new ArrayList<>();
         for (final Genome genome : CONF.getGenomes()) {
-            final String scriptNamePrefix = "Genome_" + genome.getCode() + "_" + function.name() + "_" + FileUtil.getTimestamp();
+            final String scriptNamePrefix = "Genome_" + genome.getCode() + "_" + function.name();
             Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {

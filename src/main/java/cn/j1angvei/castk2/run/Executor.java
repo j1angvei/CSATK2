@@ -7,8 +7,6 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by j1angvei on 2016/11/30.
