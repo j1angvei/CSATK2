@@ -25,7 +25,7 @@ public class Executor {
             builder.redirectErrorStream(true);
             Process process = builder.start();
             String log = IOUtils.toString(process.getInputStream(), Charset.defaultCharset());
-            FileUtil.writeFile(log, logFile);
+            FileUtil.overwriteFile(log, logFile);
             exitValue = process.waitFor();
         } catch (InterruptedException | IOException e) {
             e.printStackTrace();
@@ -38,7 +38,7 @@ public class Executor {
         for (String c : cmd) {
             content += c + "\n";
         }
-        FileUtil.writeFile(content, fileName);
+        FileUtil.overwriteFile(content, fileName);
         return new File(fileName);
     }
 }

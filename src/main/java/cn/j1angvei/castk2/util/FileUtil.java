@@ -28,16 +28,34 @@ public class FileUtil {
         return content;
     }
 
-    public static void writeFile(String content, String fileName) {
-        File file = new File(fileName);
-        if (file.exists()) {
-            file.delete();
-        }
+    public static void overwriteFile(String content, String fileName) {
+        File file = createFileIfNotExist(fileName);
         try {
-            FileUtils.writeStringToFile(new File(fileName), content, Charset.defaultCharset());
+            FileUtils.writeStringToFile(file, content, Charset.defaultCharset(), false);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void appendFile(String content, String fileName) {
+        File file = createFileIfNotExist(fileName);
+        try {
+            FileUtils.write(file, content, Charset.defaultCharset(), true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static File createFileIfNotExist(String fileName) {
+        File file = new File(fileName);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return file;
     }
 
     public static String readConfig() {

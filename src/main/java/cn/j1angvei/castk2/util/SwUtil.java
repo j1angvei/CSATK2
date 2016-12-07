@@ -2,10 +2,8 @@ package cn.j1angvei.castk2.util;
 
 import cn.j1angvei.castk2.input.Experiment;
 import cn.j1angvei.castk2.type.OutType;
-import org.apache.commons.io.FileUtils;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -21,7 +19,6 @@ public class SwUtil {
     }
 
 
-
     public static void parseQcZip(Experiment experiment) {
         String fastqFileNamePrefix = experiment.getFastq1().substring(0, experiment.getFastq1().lastIndexOf('.'));
         String outDir = CONF.getDirectory(OutType.PARSE_ZIP);
@@ -33,6 +30,7 @@ public class SwUtil {
             BufferedReader reader = new BufferedReader(new InputStreamReader(zip.getInputStream(entry)));
             boolean inOverrepresentedBlock = false;
             String line;
+            String faFileName = outDir + experiment.getCode() + ".fa";
             while ((line = reader.readLine()) != null) {
 
                 //skip comment line
@@ -51,7 +49,7 @@ public class SwUtil {
                             phred = "-phred33";
                         }
                     }
-                    FileUtils.writeStringToFile(new File(outDir + experiment.getCode() + ".phred"), phred, Charset.defaultCharset());
+                    FileUtil.overwriteFile(phred, outDir + experiment.getCode() + ".phred");
                 }
                 //read reads length
                 if (line.startsWith("Sequence length")) {
@@ -60,7 +58,7 @@ public class SwUtil {
                         len = len.split("-")[0];
                     }
                     len = String.valueOf(Integer.parseInt(len) / 3);
-                    FileUtils.writeStringToFile(new File(outDir + experiment.getCode() + ".len"), len, Charset.defaultCharset());
+                    FileUtil.overwriteFile(len, outDir + experiment.getCode() + ".len");
                 }
                 //in overrepresented block
                 if (line.startsWith(">>Overrepresented sequences")) {
@@ -68,7 +66,7 @@ public class SwUtil {
                     continue;
                 }
                 //exit block
-                if (line.startsWith(">>END_MODULE")) {
+                if (line.startsWith(">>END_MODULE") && inOverrepresentedBlock) {
                     inOverrepresentedBlock = false;
                     continue;
                 }
@@ -81,9 +79,12 @@ public class SwUtil {
                     if (forward.contains("N") || forward.contains("n")) {
                         continue;
                     }
-                    FileUtils.writeStringToFile(new File(outDir + experiment.getCode() + ".fa"), ">" + name + "\n" + forward, Charset.defaultCharset());
+                    System.out.println(forward);
+                    FileUtil.appendFile(">" + name + "\n" + forward, faFileName);
                 }
             }
+            //if overrepresented block is empty,so that fa file never created, then create a empty fa file
+            FileUtil.createFileIfNotExist(faFileName);
         } catch (IOException e) {
             e.printStackTrace();
         }

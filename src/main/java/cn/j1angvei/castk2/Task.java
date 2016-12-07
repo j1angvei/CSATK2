@@ -20,7 +20,7 @@ public class Task {
         for (Function function : Function.values()) {
             System.out.println("Start analysis, " + function.name());
             Analysis.runFunction(function);
-            System.out.println("Analysis , " + function.name() + "finished!");
+            System.out.println("Analysis , " + function.name() + " finished!");
         }
     }
 
@@ -47,7 +47,7 @@ public class Task {
             Function function = Function.fromKeyword(keyword);
             System.out.println("Start analysis, " + function.name());
             Analysis.runFunction(function);
-            System.out.println("Analysis , " + function.name() + "finished!");
+            System.out.println("Analysis " + function.name() + " finished!");
         }
     }
 }

@@ -32,7 +32,7 @@ public class CSATK {
                 }
                 break;
             default:
-                throw new IllegalArgumentException("Task keyword " + args[0] + " not found!");
+                throw new IllegalArgumentException("Task " + args[0] + " not found!");
         }
     }
 

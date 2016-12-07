@@ -2,32 +2,32 @@
   "genome": [
     {
       "code": 11,
-      "name": "genome name 1",
+      "name": "Arabidopsis_thaliana",
       "size": 0,
-      "fasta": "reference genome file name here",
-      "gtf": "genome1 genome annotation gff/gtf/gff3 file here"
+      "fasta": "Arabidopsis_thaliana.TAIR10.dna.toplevel.fa",
+      "gtf": "Arabidopsis_thaliana.TAIR10.32.gff3"
     },
     {
       "code": 12,
-      "name": "genome2 name",
+      "name": "Oryza_Sativa",
       "size": 0,
-      "fasta": "genome2 reference genome fasta file here",
-      "gtf": "genome2 genome annotation gff/gtf/gff3 file here"
+      "fasta": "all.fasta",
+      "gtf": "all.gff3"
     }
   ],
   "experiment": [
     {
-      "code": "code1",
-      "fastq1": "1.fastq",
-      "fastq2": "2.fastq",
-      "control": "code2",
+      "code": "C",
+      "fastq1": "C1.fastq",
+      "fastq2": "C2.fastq",
+      "control": null,
       "genomeCode": 11
     },
     {
-      "code": "code2",
-      "fastq1": "3.fastq",
-      "fastq2": "4.fastq",
-      "control": null,
+      "code": "T",
+      "fastq1": "T1.fastq",
+      "fastq2": "T2.fastq",
+      "control": "C",
       "genomeCode": 11
     }
   ]

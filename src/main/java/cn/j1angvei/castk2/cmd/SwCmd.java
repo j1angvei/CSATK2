@@ -64,7 +64,7 @@ public class SwCmd {
                     CONF.getSoftwareExecutable(SwType.TRIMMOMATIC),
                     SwUtil.THREAD_NUMBER,
                     phred,
-                    CONF.getDirectory(SubType.INPUT) + fastq1,
+                    fastq1,
                     outputPrefix + ".fastq",
                     faFile,
                     minLen);
@@ -76,8 +76,8 @@ public class SwCmd {
                     CONF.getSoftwareExecutable(SwType.TRIMMOMATIC),
                     SwUtil.THREAD_NUMBER,
                     phred,
-                    CONF.getDirectory(SubType.INPUT) + fastq1,
-                    CONF.getDirectory(SubType.INPUT) + fastq2,
+                    fastq1,
+                    fastq2,
                     outputPrefix + "_1.fastq",
                     outputPrefix + "_1_unpaired.fastq",
                     outputPrefix + "_2.fastq",
@@ -93,16 +93,16 @@ public class SwCmd {
         List<String> cmd = new ArrayList<>();
         cmd.add(String.format("%s -o %s -t %d %s",
                 CONF.getSoftwareExecutable(SwType.FASTQC),
-                CONF.getDirectory(OutType.TRIM),
+                CONF.getDirectory(OutType.QC_CLEAN),
                 SwUtil.THREAD_NUMBER,
-                CONF.getDirectory(OutType.QC_CLEAN) + experiment.getFastq1())
+                CONF.getDirectory(OutType.TRIM) + experiment.getFastq1())
         );
         if (experiment.getFastq2() != null) {
             cmd.add(String.format("%s -o %s -t %d %s",
                     CONF.getSoftwareExecutable(SwType.FASTQC),
-                    CONF.getDirectory(OutType.TRIM),
+                    CONF.getDirectory(OutType.QC_CLEAN),
                     SwUtil.THREAD_NUMBER,
-                    CONF.getDirectory(OutType.QC_CLEAN) + experiment.getFastq2())
+                    CONF.getDirectory(OutType.TRIM) + experiment.getFastq2())
             );
         }
         return FileUtil.listToArray(cmd);
@@ -163,7 +163,8 @@ public class SwCmd {
             gSize = FileUtil.countFileSize(CONF.getDirectory(SubType.GENOME) + genome.getFasta());
             genome.setSize(gSize);
         }
-        if (experiment.getFastq2() == null) {
+        //has no control experiment
+        if (experiment.getControl() == null) {
             //single "macs2 callpeak -t ChIP.bam -c Control.bam -f BAM -g hs -n test -B -q 0.01"
             cmd.add(String.format("%s callpeak -t %s -f BAM -g %d -n %s -B",
                     CONF.getSoftwareExecutable(SwType.MACS2),
@@ -172,7 +173,7 @@ public class SwCmd {
                     CONF.getDirectory(OutType.PEAK_CALLING) + experiment.getCode())
             );
         } else {
-            //pair end
+            //has control experiment
             cmd.add(String.format("%s callpeak -t %s -c %s -f BAM -g %d -n %s -B",
                     CONF.getSoftwareExecutable(SwType.MACS2),
                     CONF.getDirectory(OutType.BAM_SORTED) + experiment.getCode() + ".bam",

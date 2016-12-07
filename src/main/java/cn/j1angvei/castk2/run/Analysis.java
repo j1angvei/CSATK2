@@ -5,7 +5,6 @@ import cn.j1angvei.castk2.cmd.SwCmd;
 import cn.j1angvei.castk2.input.Experiment;
 import cn.j1angvei.castk2.input.Genome;
 import cn.j1angvei.castk2.util.ConfUtil;
-import cn.j1angvei.castk2.util.FileUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +81,7 @@ public class Analysis {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("Thread finished:  " + t.getName());
+            System.out.println("Thread " + t.getName() + " finished!");
         }
     }
 
@@ -106,13 +105,13 @@ public class Analysis {
             case ALIGNMENT:
                 return SwCmd.alignment(experiment);
             case CONVERT_SAM:
-                return SwCmd.sortBam(experiment);
+                return SwCmd.convertSamToBam(experiment);
             case SORT_BAM:
                 return SwCmd.sortBam(experiment);
             case QC_BAM:
                 return SwCmd.qcBam(experiment);
             case PEAK_CALLING:
-                return SwCmd.annotatePeaks(experiment);
+                return SwCmd.callPeaks(experiment);
             case PEAK_ANNOTATION:
                 return SwCmd.annotatePeaks(experiment);
             default:
