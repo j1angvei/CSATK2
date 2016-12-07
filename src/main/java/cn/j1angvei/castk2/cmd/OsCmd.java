@@ -16,7 +16,7 @@ public class OsCmd {
         } else if (archive.endsWith("tar.bz2")) {
             return tarBz2(archive, destDir);
         } else {
-            return null;
+            throw new IllegalArgumentException("Wrong compress file suffix!");
         }
     }
 

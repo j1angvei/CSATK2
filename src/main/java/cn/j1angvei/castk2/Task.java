@@ -2,6 +2,7 @@ package cn.j1angvei.castk2;
 
 
 import cn.j1angvei.castk2.cmd.InstallCmd;
+import cn.j1angvei.castk2.run.Analysis;
 import cn.j1angvei.castk2.run.Executor;
 import cn.j1angvei.castk2.type.SwType;
 
@@ -15,8 +16,12 @@ public class Task {
     public static final String BACKUP = "-b";
     public static final String FUNCTION = "-f";
 
-
     public static void pipeline() {
+        for (Function function : Function.values()) {
+            System.out.println("Start analysis, " + function.name());
+            Analysis.runFunction(function);
+            System.out.println("Analysis , " + function.name() + "finished!");
+        }
     }
 
     public static void install() {
@@ -36,7 +41,13 @@ public class Task {
 
     }
 
-    public static void function(String functionArg) {
-
+    public static void function(String keywords) {
+        String[] functions = keywords.split(",");
+        for (String keyword : functions) {
+            Function function = Function.fromKeyword(keyword);
+            System.out.println("Start analysis, " + function.name());
+            Analysis.runFunction(function);
+            System.out.println("Analysis , " + function.name() + "finished!");
+        }
     }
 }

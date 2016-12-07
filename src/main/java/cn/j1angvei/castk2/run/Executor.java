@@ -17,7 +17,7 @@ public class Executor {
     private static final ConfUtil CONF = ConfUtil.getInstance();
 
     public static int execute(String prefixName, String... cmd) {
-        String timestamp = new SimpleDateFormat("MMdd_HHmmss").format(new Date());
+        String timestamp = FileUtil.getTimestamp();
         String scriptFile = CONF.getDirectory(SubType.SCRIPT) + timestamp + "_" + prefixName + ".sh";
         String logFile = CONF.getDirectory(SubType.LOG) + timestamp + "_" + prefixName + ".log";
         File script = createScript(scriptFile, cmd);

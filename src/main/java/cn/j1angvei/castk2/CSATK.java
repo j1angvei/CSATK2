@@ -8,6 +8,9 @@ import cn.j1angvei.castk2.util.ConfUtil;
  */
 public class CSATK {
     public static void main(String[] args) {
+        for (Function function : Function.values()) {
+            System.out.printf("origin: %s, name: %s, keyword: %s", function, function.name(), function.getKeyword());
+        }
         if (args.length == 0 || args.length > 2) {
             usage();
             return;
@@ -43,7 +46,6 @@ public class CSATK {
     private static void usage() {
         System.out.printf("Program: CSATK(ChIP-Seq Analysis Toolkit)\n" +
                         "Version: 2.0\n" +
-                        "\n" +
                         "Usage:\tjava -jar CSATK.jar <task> [function1,function2,...]\n " +
                         "\n" +
                         "Tasks:\n" +

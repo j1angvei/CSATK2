@@ -4,6 +4,8 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -67,6 +69,14 @@ public class FileUtil {
         if (input != null) {
             return input.toArray(new String[input.size()]);
         }
-        return null;
+        throw new NullPointerException("String array is null");
+    }
+
+    public static String[] wrapString(String raw) {
+        return new String[]{raw};
+    }
+
+    public static String getTimestamp() {
+        return new SimpleDateFormat("yyMMdd_HHmmss").format(new Date());
     }
 }

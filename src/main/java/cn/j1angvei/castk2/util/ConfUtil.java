@@ -11,8 +11,6 @@ import cn.j1angvei.castk2.type.PfType;
 import cn.j1angvei.castk2.type.SubType;
 import cn.j1angvei.castk2.type.SwType;
 import com.google.gson.Gson;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.util.List;
@@ -54,7 +52,7 @@ public class ConfUtil {
             case R:
                 return pf.getR();
             default:
-                return null;
+                throw new IllegalArgumentException("No Platform " + type + " found!");
         }
     }
 
@@ -102,7 +100,7 @@ public class ConfUtil {
                 return genome;
             }
         }
-        return null;
+        throw new IllegalArgumentException("No Genome " + genomeCode + " found!");
     }
 
     public List<Experiment> getExperiments() {
@@ -115,7 +113,7 @@ public class ConfUtil {
                 return experiment;
             }
         }
-        return null;
+        throw new IllegalArgumentException("No Experiment " + expCode + " found!");
     }
 
 }
