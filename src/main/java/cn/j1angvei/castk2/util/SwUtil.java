@@ -18,7 +18,6 @@ public class SwUtil {
         return "2.7";
     }
 
-
     public static void parseQcZip(Experiment experiment) {
         String fastqFileNamePrefix = experiment.getFastq1().substring(0, experiment.getFastq1().lastIndexOf('.'));
         String outDir = CONF.getDirectory(OutType.PARSE_ZIP);
@@ -31,13 +30,13 @@ public class SwUtil {
             boolean inOverrepresentedBlock = false;
             String line;
             String faFileName = outDir + experiment.getCode() + ".fa";
+            //overwrite last generated fa file
+            FileUtil.overwriteFile("", faFileName);
             while ((line = reader.readLine()) != null) {
-
                 //skip comment line
                 if (line.startsWith("#")) {
                     continue;
                 }
-
                 //read encoding info
                 if (line.startsWith("Encoding")) {
                     if (line.contains("Sanger")) {
@@ -66,7 +65,7 @@ public class SwUtil {
                     continue;
                 }
                 //exit block
-                if (line.startsWith(">>END_MODULE") && inOverrepresentedBlock) {
+                if (inOverrepresentedBlock && line.startsWith(">>END_MODULE")) {
                     inOverrepresentedBlock = false;
                     continue;
                 }
@@ -79,8 +78,7 @@ public class SwUtil {
                     if (forward.contains("N") || forward.contains("n")) {
                         continue;
                     }
-                    System.out.println(forward);
-                    FileUtil.appendFile(">" + name + "\n" + forward, faFileName);
+                    FileUtil.appendFile(String.format(">%s\n%s\n", name, forward), faFileName);
                 }
             }
             //if overrepresented block is empty,so that fa file never created, then create a empty fa file
@@ -89,5 +87,4 @@ public class SwUtil {
             e.printStackTrace();
         }
     }
-
 }
