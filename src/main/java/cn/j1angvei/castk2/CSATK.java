@@ -1,5 +1,6 @@
 package cn.j1angvei.castk2;
 
+
 /**
  * Entry of the program
  * Created by Wayne on 2016/11/23.

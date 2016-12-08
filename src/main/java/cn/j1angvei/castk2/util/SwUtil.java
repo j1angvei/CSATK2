@@ -14,6 +14,9 @@ public class SwUtil {
     public static final int THREAD_NUMBER = 10;
     private static ConfUtil CONF = ConfUtil.getInstance();
 
+    public static final String INPUT_JSON = "input.json";
+    public static final String CONFIG_JSON = "config.json";
+
     public static String getPythonVersion() {
         return "2.7";
     }

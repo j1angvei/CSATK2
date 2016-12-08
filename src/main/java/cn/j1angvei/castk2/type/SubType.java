@@ -5,5 +5,5 @@ package cn.j1angvei.castk2.type;
  * represent directories under work directory
  */
 public enum SubType {
-    ARCHIVE, CONFIG, GENOME, INPUT, LOG, OUTPUT, SCRIPT, SOFTWARE
+    ARCHIVE, BACKUP, CONFIG, GENOME, INPUT, LOG, OUTPUT, SCRIPT, SOFTWARE
 }

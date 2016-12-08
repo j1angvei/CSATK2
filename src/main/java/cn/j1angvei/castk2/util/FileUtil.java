@@ -1,6 +1,8 @@
 package cn.j1angvei.castk2.util;
 
+import cn.j1angvei.castk2.CSATK;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -46,6 +48,14 @@ public class FileUtil {
         }
     }
 
+    public static File makeDirs(String filePath) {
+        File file = new File(filePath);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        return file;
+    }
+
     public static File createFileIfNotExist(String fileName) {
         File file = new File(fileName);
         if (!file.exists()) {
@@ -58,14 +68,86 @@ public class FileUtil {
         return file;
     }
 
+    public static void move(String srcPath, String destPath) {
+        File src = new File(srcPath);
+        File dest = new File(destPath);
+        try {
+            if (dest.isDirectory()) {
+                if (src.isDirectory()) {
+                    //move dir to dir
+                    FileUtils.moveDirectoryToDirectory(src, dest, true);
+                } else {
+                    //move file to dir
+                    FileUtils.moveFileToDirectory(src, dest, true);
+                }
+            } else {
+                if (src.isDirectory()) {
+                    //copy dir to file,WRONG!
+                    throw new IllegalArgumentException("Can not move Directory " + srcPath + " to File " + destPath);
+                } else {
+                    //copy file to file
+                    FileUtils.moveFile(src, dest);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void copy(String srcPath, String destPath) {
+        File src = new File(srcPath);
+        File dest = new File(destPath);
+        try {
+            if (dest.isDirectory()) {
+                if (src.isDirectory()) {
+                    //copy dir to dir
+                    FileUtils.copyDirectory(src, dest, true);
+                } else {
+                    //copy file to dir
+                    FileUtils.copyFileToDirectory(src, dest, true);
+                }
+            } else {
+                if (src.isDirectory()) {
+                    //copy dir to file,WRONG!
+                    throw new IllegalArgumentException("Can not copy Directory " + srcPath + " to File " + destPath);
+                } else {
+                    //copy file to file
+                    FileUtils.copyFile(src, dest);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static String readConfig() {
-        return readFile(WORK_DIR + "config" + File.separator + "config.json");
+        return readFile(WORK_DIR + "config" + File.separator + SwUtil.CONFIG_JSON);
     }
 
     public static String readInput() {
-        return readFile(WORK_DIR + "config" + File.separator + "input.json");
+        return readFile(WORK_DIR + "config" + File.separator + SwUtil.INPUT_JSON);
     }
 
+    public static void restoreConfig() {
+        String content = readResourceFile(SwUtil.CONFIG_JSON);
+        overwriteFile(content, WORK_DIR + "config" + File.separator + SwUtil.CONFIG_JSON);
+    }
+
+    public static void restoreInput() {
+        String content = readResourceFile(SwUtil.INPUT_JSON);
+        overwriteFile(content, WORK_DIR + "config" + File.separator + SwUtil.INPUT_JSON);
+
+    }
+
+    private static String readResourceFile(String name) {
+        String content = "";
+        try {
+            content = IOUtils.toString(CSATK.class.getClassLoader().getResourceAsStream(name), Charset.defaultCharset());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return content;
+    }
 
     public static long countFileSize(String fileName) {
         long count = 0;

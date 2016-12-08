@@ -8,7 +8,7 @@ public class Genome {
     private String name;
     private long size;
     private String fasta;
-    private String gtf;
+    private String annotation;
 
     public Genome() {
     }
@@ -33,8 +33,8 @@ public class Genome {
         return fasta;
     }
 
-    public String getGtf() {
-        return gtf;
+    public String getAnnotation() {
+        return annotation;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class Genome {
                 ", name='" + name + '\'' +
                 ", size=" + size +
                 ", fasta='" + fasta + '\'' +
-                ", gtf='" + gtf + '\'' +
+                ", annotation='" + annotation + '\'' +
                 '}';
     }
 }

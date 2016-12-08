@@ -187,17 +187,17 @@ public class SwCmd {
 
     public static String[] annotatePeaks(Experiment experiment) {
         Genome genome = CONF.getGenome(experiment.getGenomeCode());
-        String annoFileName = genome.getGtf();
+        String annoFileName = genome.getAnnotation();
         String annoFormat = annoFileName.substring(annoFileName.lastIndexOf('.') + 1);
         List<String> cmd = new ArrayList<>();
         cmd.add(OsCmd.addPath(CONF.getSoftwareFolder(SwType.HOMER) + "bin"));
-        cmd.add(String.format("%s %s %s %s %s > %s",
+        cmd.add(String.format("%s %s %s -%s %s > %s",
                 CONF.getSoftwareExecutable(SwType.HOMER),
                 CONF.getDirectory(OutType.PEAK_CALLING) + experiment.getCode() + "_peaks.bed",
                 CONF.getDirectory(SubType.GENOME) + genome.getFasta(),
                 annoFormat,
-                CONF.getDirectory(SubType.GENOME) + genome.getGtf(),
-                CONF.getDirectory(OutType.ANNOTATION))
+                CONF.getDirectory(SubType.GENOME) + genome.getAnnotation(),
+                CONF.getDirectory(OutType.ANNOTATION) + experiment.getCode() + "_annotation.bed")
         );
         return FileUtil.listToArray(cmd);
     }
