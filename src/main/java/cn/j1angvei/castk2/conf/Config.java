@@ -6,7 +6,7 @@ import java.util.List;
  * Created by mjian on 2016/11/29.
  */
 public class Config {
-    private Platform platform; 
+    private Platform platform;
     private List<Software> software;
     private Directory directory;
 

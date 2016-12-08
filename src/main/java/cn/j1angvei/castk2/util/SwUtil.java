@@ -3,7 +3,9 @@ package cn.j1angvei.castk2.util;
 import cn.j1angvei.castk2.input.Experiment;
 import cn.j1angvei.castk2.type.OutType;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -12,10 +14,9 @@ import java.util.zip.ZipFile;
  */
 public class SwUtil {
     public static final int THREAD_NUMBER = 10;
-    private static ConfUtil CONF = ConfUtil.getInstance();
-
     public static final String INPUT_JSON = "input.json";
     public static final String CONFIG_JSON = "config.json";
+    private static ConfUtil CONF = ConfUtil.getInstance();
 
     public static String getPythonVersion() {
         return "2.7";

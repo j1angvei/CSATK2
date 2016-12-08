@@ -1,6 +1,5 @@
 package cn.j1angvei.castk2.cmd;
 
-import cn.j1angvei.castk2.conf.Software;
 import cn.j1angvei.castk2.type.PfType;
 import cn.j1angvei.castk2.type.SubType;
 import cn.j1angvei.castk2.type.SwType;

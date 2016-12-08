@@ -19,8 +19,8 @@ import java.util.List;
  * Created by mjian on 2016/11/29.
  */
 public class ConfUtil {
-    private static ConfUtil INSTANCE;
     private static final Gson GSON = new Gson();
+    private static ConfUtil INSTANCE;
     private Config config;
     private Input input;
 

@@ -5,7 +5,8 @@ import cn.j1angvei.castk2.util.ConfUtil;
 import cn.j1angvei.castk2.util.FileUtil;
 import org.apache.commons.io.IOUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
 
 /**

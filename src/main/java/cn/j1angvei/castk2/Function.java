@@ -20,15 +20,6 @@ public enum Function {
         this.keyword = keyword;
     }
 
-    public String getKeyword() {
-        return keyword;
-    }
-
-    @Override
-    public String toString() {
-        return this.keyword;
-    }
-
     public static Function fromKeyword(String keyword) {
         for (Function function : Function.values()) {
             if (keyword.equalsIgnoreCase(function.getKeyword())) {
@@ -36,5 +27,14 @@ public enum Function {
             }
         }
         throw new IllegalArgumentException("No Function with keyword " + keyword + " found");
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    @Override
+    public String toString() {
+        return this.keyword;
     }
 }

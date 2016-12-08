@@ -9,10 +9,6 @@ import cn.j1angvei.castk2.type.SubType;
 import cn.j1angvei.castk2.type.SwType;
 import cn.j1angvei.castk2.util.ConfUtil;
 import cn.j1angvei.castk2.util.FileUtil;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-
-import java.io.File;
 
 
 /**
