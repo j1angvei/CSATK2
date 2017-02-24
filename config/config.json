@@ -59,7 +59,8 @@
       "log",
       "output",
       "script",
-      "software"
+      "software",
+      "lib"
     ],
     "out": [
       "index_genome",

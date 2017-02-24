@@ -6,10 +6,7 @@ import cn.j1angvei.castk2.conf.Software;
 import cn.j1angvei.castk2.input.Experiment;
 import cn.j1angvei.castk2.input.Genome;
 import cn.j1angvei.castk2.input.Input;
-import cn.j1angvei.castk2.type.OutType;
-import cn.j1angvei.castk2.type.PfType;
-import cn.j1angvei.castk2.type.SubType;
-import cn.j1angvei.castk2.type.SwType;
+import cn.j1angvei.castk2.type.*;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -84,6 +81,10 @@ public class ConfUtil {
     public String getDirectory(OutType type) {
         int index = type.ordinal();
         return getDirectory(SubType.OUTPUT) + config.getDirectory().getOut()[index] + File.separator;
+    }
+
+    public String getLib(LibType type) {
+        return getDirectory(SubType.LIB) + type.getFileName();
     }
 
     public Input getInput() {

@@ -23,7 +23,7 @@ public class SwUtil {
     }
 
     public static void parseQcZip(Experiment experiment) {
-        String fastqFileNamePrefix = experiment.getFastq1().substring(0, experiment.getFastq1().lastIndexOf('.'));
+        String fastqFileNamePrefix = StrUtil.getPrefix(experiment.getFastq1());
         String outDir = CONF.getDirectory(OutType.PARSE_ZIP);
         String phred = "-phred64";
         try {

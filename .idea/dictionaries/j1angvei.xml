@@ -7,7 +7,10 @@
       <w>castk</w>
       <w>hmmss</w>
       <w>jxvf</w>
+      <w>libblas</w>
+      <w>liblapack</w>
       <w>outdir</w>
+      <w>outformat</w>
       <w>pythonpath</w>
       <w>rxjava</w>
       <w>slib</w>

@@ -8,6 +8,7 @@ import cn.j1angvei.castk2.type.SubType;
 import cn.j1angvei.castk2.type.SwType;
 import cn.j1angvei.castk2.util.ConfUtil;
 import cn.j1angvei.castk2.util.FileUtil;
+import cn.j1angvei.castk2.util.StrUtil;
 import cn.j1angvei.castk2.util.SwUtil;
 
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class SwCmd {
         String cmd;
         String fastq1 = CONF.getDirectory(SubType.INPUT) + experiment.getFastq1();
         String inputPrefix = CONF.getDirectory(OutType.PARSE_ZIP) + experiment.getCode();
-        String outputPrefix = CONF.getDirectory(OutType.TRIM) + experiment.getCode();
+        String outputRawReadsPrefix = CONF.getDirectory(OutType.TRIM) + experiment.getCode();
         String phred = FileUtil.readFile(inputPrefix + ".phred");
         String minLen = FileUtil.readFile(inputPrefix + ".len");
         String faFile = inputPrefix + ".fa";
@@ -65,7 +66,7 @@ public class SwCmd {
                     SwUtil.THREAD_NUMBER,
                     phred,
                     fastq1,
-                    outputPrefix + ".fastq",
+                    outputRawReadsPrefix + "." + StrUtil.getSuffix(experiment.getFastq1()),
                     faFile,
                     minLen);
         } else {
@@ -78,10 +79,10 @@ public class SwCmd {
                     phred,
                     fastq1,
                     fastq2,
-                    outputPrefix + "_1.fastq",
-                    outputPrefix + "_1_unpaired.fastq",
-                    outputPrefix + "_2.fastq",
-                    outputPrefix + "_2_unpaired.fastq",
+                    outputRawReadsPrefix + "_1." + StrUtil.getSuffix(experiment.getFastq1()),
+                    outputRawReadsPrefix + "_1_unpaired." + StrUtil.getSuffix(experiment.getFastq1()),
+                    outputRawReadsPrefix + "_2." + StrUtil.getSuffix(experiment.getFastq2()),
+                    outputRawReadsPrefix + "_2_unpaired." + StrUtil.getSuffix(experiment.getFastq2()),
                     faFile,
                     minLen
             );
@@ -95,15 +96,15 @@ public class SwCmd {
                 CONF.getSoftwareExecutable(SwType.FASTQC),
                 CONF.getDirectory(OutType.QC_CLEAN),
                 SwUtil.THREAD_NUMBER,
-                CONF.getDirectory(OutType.TRIM) + experiment.getFastq1())
+                CONF.getDirectory(OutType.TRIM) + experiment.getCode()) + "_1." + StrUtil.getSuffix(experiment.getFastq1())
         );
         if (experiment.getFastq2() != null) {
             cmd.add(String.format("%s -o %s -t %d %s",
                     CONF.getSoftwareExecutable(SwType.FASTQC),
                     CONF.getDirectory(OutType.QC_CLEAN),
                     SwUtil.THREAD_NUMBER,
-                    CONF.getDirectory(OutType.TRIM) + experiment.getFastq2())
-            );
+                    CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "_2." + StrUtil.getSuffix(experiment.getFastq2())
+            ));
         }
         return FileUtil.listToArray(cmd);
     }
@@ -145,10 +146,11 @@ public class SwCmd {
     }
 
     public static String[] qcBam(Experiment experiment) {
-        String cmd = String.format("%s bamqc -bam %s -outdir %s",
+        String cmd = String.format("%s bamqc -bam %s -outdir %s -outformat PDF -outfile %s.pdf",
                 CONF.getSoftwareExecutable(SwType.QUALIMAP),
                 CONF.getDirectory(OutType.BAM_SORTED) + experiment.getCode() + ".bam",
-                CONF.getDirectory(OutType.QC_BAM));
+                CONF.getDirectory(OutType.QC_BAM),
+                experiment.getCode());
         return FileUtil.wrapString(cmd);
     }
 
