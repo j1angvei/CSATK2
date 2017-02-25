@@ -4,12 +4,10 @@ import cn.j1angvei.castk2.CSATK;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -49,6 +47,24 @@ public class FileUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static List<String> readLineIntoList(String fileName, boolean skipComment) {
+        List<String> lines = new ArrayList<>();
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)));
+            String eachLine;
+            while ((eachLine = reader.readLine()) != null) {
+                //if line start with "#", and set to skip comment, skip this line
+                if (eachLine.startsWith("#") && skipComment) continue;
+                lines.add(eachLine);
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("read lines total count: " + lines.size());
+        return lines;
     }
 
     public static File makeDirs(String filePath) {

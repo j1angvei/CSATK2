@@ -59,13 +59,14 @@ public class CSATK {
                         "\t%s,\tsort bam files\n" +
                         "\t%s,\tquality of bam files\n" +
                         "\t%s,\tpeak calling\n" +
-                        "\t%s,\tpeak calling\n" +
+                        "\t%s,\tpeak annotation\n" +
+                        "\t%s,\tannotation regroup\n" +
                         "\n"
                 ,
                 Task.PIPELINE, Task.FUNCTION, Task.INSTALL, Task.RESET, Task.BACKUP,
                 Function.GENOME_IDX, Function.QC_RAW, Function.TRIM, Function.QC_CLEAN,
                 Function.ALIGNMENT, Function.CONVERT_SAM, Function.SORT_BAM, Function.QC_BAM,
-                Function.PEAK_CALLING, Function.PEAK_ANNOTATION
+                Function.PEAK_CALLING, Function.PEAK_ANNOTATION, Function.ANNOTATION_REGROUP
         );
     }
 }

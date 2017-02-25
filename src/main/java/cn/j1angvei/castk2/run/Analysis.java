@@ -1,9 +1,11 @@
 package cn.j1angvei.castk2.run;
 
 import cn.j1angvei.castk2.Function;
+import cn.j1angvei.castk2.anno.GenomicElement;
 import cn.j1angvei.castk2.cmd.SwCmd;
 import cn.j1angvei.castk2.input.Experiment;
 import cn.j1angvei.castk2.input.Genome;
+import cn.j1angvei.castk2.type.SubType;
 import cn.j1angvei.castk2.util.ConfUtil;
 
 import java.util.ArrayList;
@@ -32,6 +34,9 @@ public class Analysis {
             case PEAK_CALLING:
             case PEAK_ANNOTATION:
                 traverseExperiment(function);
+                break;
+            case ANNOTATION_REGROUP:
+                traverseGenomes(function);
                 break;
             //illegal args
             default:
@@ -89,6 +94,10 @@ public class Analysis {
         switch (function) {
             case GENOME_IDX:
                 return SwCmd.genomeIndex(genome);
+            case ANNOTATION_REGROUP:
+                GenomicElement element = new GenomicElement(CONF.getDirectory(SubType.GENOME) + genome.getAnnotation());
+                element.storeToFile("genomicElement.txt");
+                return new String[]{"echo \"" + function.toString() + " finished! \""};
             default:
                 throw new IllegalArgumentException("Illegal Function args in genome analysis!");
         }
@@ -114,6 +123,7 @@ public class Analysis {
                 return SwCmd.callPeaks(experiment);
             case PEAK_ANNOTATION:
                 return SwCmd.annotatePeaks(experiment);
+
             default:
                 throw new IllegalArgumentException("Illegal Function args in experiment analysis!");
         }

@@ -13,7 +13,8 @@ public enum Function {
     SORT_BAM("sb"),
     QC_BAM("qb"),
     PEAK_CALLING("pc"),
-    PEAK_ANNOTATION("pa");
+    PEAK_ANNOTATION("pa"),
+    ANNOTATION_REGROUP("ar");
     private String keyword;
 
     Function(String keyword) {

@@ -2,6 +2,12 @@
   <dictionary name="Wayne">
     <words>
       <w>csatk</w>
+      <w>exon</w>
+      <w>exons</w>
+      <w>intergenic</w>
+      <w>intergenics</w>
+      <w>intron</w>
+      <w>introns</w>
     </words>
   </dictionary>
 </component>
