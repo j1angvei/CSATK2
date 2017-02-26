@@ -6,10 +6,11 @@ package cn.j1angvei.castk2.anno;
 public class Intron extends Region {
     public Intron(String chromosome, long start, long end) {
         super(chromosome, start, end);
-        setType("intron");
+        type = "intron";
     }
 
     public Intron(Exon upExon, Exon downExon) {
         super(upExon.getChromosome(), upExon.getEnd() + 1, downExon.getStart() - 1);
+        type = "intron";
     }
 }

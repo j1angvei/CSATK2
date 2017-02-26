@@ -6,10 +6,11 @@ package cn.j1angvei.castk2.anno;
 public class Upstream extends Region {
     public Upstream(String chromosome, long start, long end) {
         super(chromosome, start, end);
-        setType("upstream");
+        type = "upstream";
     }
 
     public Upstream(Gene gene) {
         super(gene.getChromosome(), gene.getStart() - 2000, gene.getStart() - 1);
+        type = "upstream";
     }
 }

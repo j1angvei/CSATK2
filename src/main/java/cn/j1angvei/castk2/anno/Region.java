@@ -7,7 +7,7 @@ public class Region implements Comparable<Region> {
     private String chromosome;
     private long start;
     private long end;
-    private String type;
+    protected String type;
 
     public Region(String chromosome, long start, long end) {
         this.chromosome = chromosome;
@@ -44,10 +44,6 @@ public class Region implements Comparable<Region> {
         return end;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
     @Override
     public int compareTo(Region o) {
         if (o == null) return 1;
@@ -65,8 +61,23 @@ public class Region implements Comparable<Region> {
         return !(a == null || b == null) && a.getChromosome().equals(b.getChromosome()) && a.getEnd() >= b.getStart() && b.getEnd() >= a.getStart();
     }
 
+    public static boolean isAInB(Region a, Region b) {
+        return a.getChromosome().equals(b.getChromosome()) && a.getStart() >= b.getStart() && a.getEnd() <= b.getEnd();
+    }
+
+    public static boolean isAWrapB(Region a, Region b) {
+        return a.getChromosome().equals(b.getChromosome()) && a.getStart() <= b.getStart() && a.getEnd() >= b.getEnd();
+    }
+
     @Override
     public String toString() {
-        return String.format("%s\t%s\t%d\t%d", chromosome, type, start, end);
+        return String.format("%s\t%d\t%d\t%s", chromosome, start, end, type);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        else if (this == obj) return true;
+        return obj instanceof Region && this.compareTo((Region) obj) == 0;
     }
 }
