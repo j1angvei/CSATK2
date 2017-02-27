@@ -11,8 +11,9 @@ public enum Function {
     ALIGNMENT("al"),
     CONVERT_SAM("cs"),
     SORT_BAM("sb"),
-    RMDUP_BAM("rb"),
     QC_BAM("qb"),
+    RMDUP_BAM("rb"),
+    UNIQUE_BAM("ub"),
     PEAK_CALLING("pc"),
     PEAK_ANNOTATION("pa"),
     ANNOTATION_REGROUP("ar");

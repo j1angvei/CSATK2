@@ -71,10 +71,11 @@
       "06.alignment",
       "07.bam_converted",
       "08.bam_sorted",
-      "09.bam_rmdup",
-      "10.peak_calling",
-      "11.annotation",
-      "12.qc_alignment"
+      "09.qc_alignment",
+      "10.bam_rmdup",
+      "11.bam_unique",
+      "12.peak_calling",
+      "13.peak_annotation"
     ]
   }
 }

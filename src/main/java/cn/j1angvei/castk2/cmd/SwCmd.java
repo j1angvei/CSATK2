@@ -10,6 +10,7 @@ import cn.j1angvei.castk2.util.ConfUtil;
 import cn.j1angvei.castk2.util.FileUtil;
 import cn.j1angvei.castk2.util.StrUtil;
 import cn.j1angvei.castk2.util.SwUtil;
+import com.sun.javafx.applet.ExperimentalExtensions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,6 +146,15 @@ public class SwCmd {
         return FileUtil.wrapString(cmd);
     }
 
+    public static String[] qcBam(Experiment experiment) {
+        String cmd = String.format("%s bamqc -bam %s -outdir %s -outformat PDF -outfile %s.pdf",
+                CONF.getSoftwareExecutable(SwType.QUALIMAP),
+                CONF.getDirectory(OutType.BAM_SORTED) + experiment.getCode() + ".sorted.bam",
+                CONF.getDirectory(OutType.QC_BAM),
+                experiment.getCode());
+        return FileUtil.wrapString(cmd);
+    }
+
     public static String[] rmdupBam(Experiment experiment) {
         String cmd = String.format("%s rmdup %s %s",
                 CONF.getSoftwareExecutable(SwType.SAMTOOLS),
@@ -154,12 +164,12 @@ public class SwCmd {
         return FileUtil.wrapString(cmd);
     }
 
-    public static String[] qcBam(Experiment experiment) {
-        String cmd = String.format("%s bamqc -bam %s -outdir %s -outformat PDF -outfile %s.pdf",
-                CONF.getSoftwareExecutable(SwType.QUALIMAP),
+    public static String[] uniqueBam(Experiment experiment) {
+        String cmd = String.format("%s view -b %s -q 30 -o %s",
+                CONF.getSoftwareExecutable(SwType.SAMTOOLS),
                 CONF.getDirectory(OutType.BAM_RMDUP) + experiment.getCode() + ".rmdup.bam",
-                CONF.getDirectory(OutType.QC_BAM),
-                experiment.getCode());
+                CONF.getDirectory(OutType.BAM_UNIQUE) + experiment.getCode() + ".unique.bam"
+        );
         return FileUtil.wrapString(cmd);
     }
 
@@ -179,7 +189,7 @@ public class SwCmd {
             //single "macs2 callpeak -t ChIP.bam -c Control.bam -f BAM -g hs -n test -B -q 0.01"
             cmd.add(String.format("%s callpeak -t %s -f BAM -g %d -n %s -B",
                     CONF.getSoftwareExecutable(SwType.MACS2),
-                    CONF.getDirectory(OutType.BAM_RMDUP) + experiment.getCode() + ".rmdup.bam",
+                    CONF.getDirectory(OutType.BAM_UNIQUE) + experiment.getCode() + ".unique.bam",
                     gSize,
                     CONF.getDirectory(OutType.PEAK_CALLING) + experiment.getCode())
             );
@@ -187,8 +197,8 @@ public class SwCmd {
             //has control experiment
             cmd.add(String.format("%s callpeak -t %s -c %s -f BAM -g %d -n %s -B",
                     CONF.getSoftwareExecutable(SwType.MACS2),
-                    CONF.getDirectory(OutType.BAM_RMDUP) + experiment.getCode() + ".rmdup.bam",
-                    CONF.getDirectory(OutType.BAM_RMDUP) + experiment.getControl() + ".rmdup.bam",
+                    CONF.getDirectory(OutType.BAM_UNIQUE) + experiment.getCode() + ".unique.bam",
+                    CONF.getDirectory(OutType.BAM_UNIQUE) + experiment.getControl() + ".unique.bam",
                     gSize,
                     CONF.getDirectory(OutType.PEAK_CALLING) + experiment.getCode())
             );

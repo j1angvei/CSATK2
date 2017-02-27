@@ -32,6 +32,7 @@ public class Analysis {
             case CONVERT_SAM:
             case SORT_BAM:
             case RMDUP_BAM:
+            case UNIQUE_BAM:
             case QC_BAM:
             case PEAK_CALLING:
             case PEAK_ANNOTATION:
@@ -118,6 +119,8 @@ public class Analysis {
                 return SwCmd.sortBam(experiment);
             case RMDUP_BAM:
                 return SwCmd.rmdupBam(experiment);
+            case UNIQUE_BAM:
+                return SwCmd.uniqueBam(experiment);
             case QC_BAM:
                 return SwCmd.qcBam(experiment);
             case PEAK_CALLING:

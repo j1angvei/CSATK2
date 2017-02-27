@@ -2,17 +2,17 @@
   "genome": [
     {
       "code": 11,
-      "name": "Arabidopsis_thaliana",
+      "name": "Species name",
       "size": 0,
-      "fasta": "Arabidopsis_thaliana.TAIR10.dna.toplevel.fa",
-      "annotation": "Arabidopsis_thaliana.TAIR10.32.gff3"
+      "fasta": "Reference sequences FASTA file name",
+      "annotation": "GFF3/GTF/ file"
     },
     {
       "code": 12,
-      "name": "Oryza_Sativa",
+      "name": "Another species name",
       "size": 0,
-      "fasta": "all.fasta",
-      "annotation": "all.gff3"
+      "fasta": "Another species reference sequence",
+      "annotation": "Another species annotation file"
     }
   ],
   "experiment": [

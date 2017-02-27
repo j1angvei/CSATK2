@@ -39,7 +39,7 @@ public class CSATK {
 
     private static void usage() {
         System.out.printf("Program: CSATK(ChIP-Seq Analysis Toolkit)\n" +
-                        "Version: 2.0\n" +
+                        "Version: 2.0-170227\n" +
                         "Usage:\tjava -jar CSATK.jar <task> [function1,function2,...]\n " +
                         "\n" +
                         "Tasks:\n" +
@@ -54,19 +54,20 @@ public class CSATK {
                         "\t%s,\tquality control of raw reads\n" +
                         "\t%s,\ttrim and filter raw reads\n" +
                         "\t%s,\tquality control of clean(filtered) reads\n" +
-                        "\t%s,\talignment of clean reads\n" +
                         "\t%s,\tconvert sam to bam files\n" +
+                        "\t%s,\talignment of clean reads\n" +
+                        "\t%s,\tquality of bam files\n" +
                         "\t%s,\tsort bam files\n" +
                         "\t%s,\tremove duplicate reads in BAM file\n" +
-                        "\t%s,\tquality of bam files\n" +
-                        "\t%s,\tpeak calling\n" +
-                        "\t%s,\tpeak annotation\n" +
-                        "\t%s,\tannotation regroup\n" +
+                        "\t%s,\tkeep unique mapped reads, store in BAM file\n" +
+                        "\t%s,\tpeak calling using MACS2\n" +
+                        "\t%s,\tpeak annotation using Homer\n" +
+                        "\t%s,\tannotation regroup as upstream, exon, intron, downstream, intergenic\n" +
                         "\n"
                 ,
                 Task.PIPELINE, Task.FUNCTION, Task.INSTALL, Task.RESET, Task.BACKUP,
                 Function.GENOME_IDX, Function.QC_RAW, Function.TRIM, Function.QC_CLEAN,
-                Function.ALIGNMENT, Function.CONVERT_SAM, Function.SORT_BAM, Function.RMDUP_BAM, Function.QC_BAM,
+                Function.ALIGNMENT, Function.CONVERT_SAM, Function.SORT_BAM, Function.QC_BAM, Function.RMDUP_BAM, Function.UNIQUE_BAM,
                 Function.PEAK_CALLING, Function.PEAK_ANNOTATION, Function.ANNOTATION_REGROUP
         );
     }
