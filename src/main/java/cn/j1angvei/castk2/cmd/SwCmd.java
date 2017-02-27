@@ -115,14 +115,14 @@ public class SwCmd {
                         CONF.getSoftwareExecutable(SwType.BWA),
                         CONF.getDirectory(OutType.IDX_GENOME) + experiment.getGenomeCode(),
                         SwUtil.THREAD_NUMBER,
-                        CONF.getDirectory(OutType.TRIM) + experiment.getCode() + ".fastq",
+                        CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "." + StrUtil.getSuffix(experiment.getFastq1()),
                         CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + ".sam") :
                 String.format("%s mem %s -t %d %s %s > %s",
                         CONF.getSoftwareExecutable(SwType.BWA),
                         CONF.getDirectory(OutType.IDX_GENOME) + experiment.getGenomeCode(),
                         SwUtil.THREAD_NUMBER,
-                        CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "_1.fastq",
-                        CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "_2.fastq",
+                        CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "_1." + StrUtil.getSuffix(experiment.getFastq1()),
+                        CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "_2." + StrUtil.getSuffix(experiment.getFastq2()),
                         CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + ".sam");
         return FileUtil.wrapString(cmd);
     }
@@ -204,7 +204,7 @@ public class SwCmd {
         cmd.add(OsCmd.addPath(CONF.getSoftwareFolder(SwType.HOMER) + "bin"));
         cmd.add(String.format("%s %s %s -%s %s > %s",
                 CONF.getSoftwareExecutable(SwType.HOMER),
-                CONF.getDirectory(OutType.PEAK_CALLING) + experiment.getCode() + "_peaks.bed",
+                CONF.getDirectory(OutType.PEAK_CALLING) + experiment.getCode() + "_peaks.narrowPeak",
                 CONF.getDirectory(SubType.GENOME) + genome.getFasta(),
                 annoFormat,
                 CONF.getDirectory(SubType.GENOME) + genome.getAnnotation(),
