@@ -19,7 +19,7 @@ import java.util.List;
  * Created by j1angvei on 2016/11/29.
  */
 public class SwCmd {
-    private static final String PARAM = "ILLUMINACLIP:%s:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 AVGQUAL:20 HEADCROP:6 MINLEN:%s";
+    private static final String PARAM = "ILLUMINACLIP:%s:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 AVGQUAL:20 MINLEN:%s";
     private static ConfUtil CONF = ConfUtil.getInstance();
 
     public static String[] genomeIndex(Genome genome) {
