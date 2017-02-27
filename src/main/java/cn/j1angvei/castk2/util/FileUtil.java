@@ -147,6 +147,10 @@ public class FileUtil {
         return readFile(WORK_DIR + "config" + File.separator + SwUtil.INPUT_JSON);
     }
 
+    public static String readAdapter() {
+        return readFile(WORK_DIR + "config" + File.separator + SwUtil.ADAPTERS_TXT);
+    }
+
     public static void restoreConfig() {
         String content = readResourceFile(SwUtil.CONFIG_JSON);
         overwriteFile(content, WORK_DIR + "config" + File.separator + SwUtil.CONFIG_JSON);
@@ -155,7 +159,11 @@ public class FileUtil {
     public static void restoreInput() {
         String content = readResourceFile(SwUtil.INPUT_JSON);
         overwriteFile(content, WORK_DIR + "config" + File.separator + SwUtil.INPUT_JSON);
+    }
 
+    public static void restoreAdapter() {
+        String content = readResourceFile(SwUtil.ADAPTERS_TXT);
+        overwriteFile(content, WORK_DIR + "config" + File.separator + SwUtil.ADAPTERS_TXT);
     }
 
     private static String readResourceFile(String name) {

@@ -82,17 +82,15 @@ public class GenomicElement {
                         break;
                 }
             }
-
         }
         //add exon to its parent gene
         for (Exon exon : mExons) {
             for (Gene gene : mGenes) {
-                if (Region.isOverlapped(exon, gene)) {
+                if (Region.isAInB(exon, gene)) {
                     gene.addExon(exon);
                 }
             }
         }
-
     }
 
     private void parseRestRegion() {

@@ -16,6 +16,8 @@ public class SwUtil {
     public static final int THREAD_NUMBER = 10;
     public static final String INPUT_JSON = "input.json";
     public static final String CONFIG_JSON = "config.json";
+    public static final String ADAPTERS_TXT = "adapters.txt";
+
     private static ConfUtil CONF = ConfUtil.getInstance();
 
     public static String getPythonVersion() {
@@ -87,6 +89,8 @@ public class SwUtil {
             }
             //if overrepresented block is empty,so that fa file never created, then create a empty fa file
             FileUtil.createFileIfNotExist(faFileName);
+            //append adapters to fa file
+            FileUtil.appendFile(FileUtil.readAdapter(), faFileName);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -21,6 +21,7 @@ public class Analysis {
         switch (function) {
             //genome analysis
             case GENOME_IDX:
+            case ANNOTATION_REGROUP:
                 traverseGenomes(function);
                 break;
             //experiment analysis
@@ -30,13 +31,11 @@ public class Analysis {
             case ALIGNMENT:
             case CONVERT_SAM:
             case SORT_BAM:
+            case RMDUP_BAM:
             case QC_BAM:
             case PEAK_CALLING:
             case PEAK_ANNOTATION:
                 traverseExperiment(function);
-                break;
-            case ANNOTATION_REGROUP:
-                traverseGenomes(function);
                 break;
             //illegal args
             default:
@@ -117,13 +116,14 @@ public class Analysis {
                 return SwCmd.convertSamToBam(experiment);
             case SORT_BAM:
                 return SwCmd.sortBam(experiment);
+            case RMDUP_BAM:
+                return SwCmd.rmdupBam(experiment);
             case QC_BAM:
                 return SwCmd.qcBam(experiment);
             case PEAK_CALLING:
                 return SwCmd.callPeaks(experiment);
             case PEAK_ANNOTATION:
                 return SwCmd.annotatePeaks(experiment);
-
             default:
                 throw new IllegalArgumentException("Illegal Function args in experiment analysis!");
         }

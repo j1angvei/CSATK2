@@ -52,6 +52,7 @@ public class Task {
         //read config file from resource to config dir
         FileUtil.restoreConfig();
         FileUtil.restoreInput();
+        FileUtil.restoreAdapter();
         System.out.println("Reset finished!");
     }
 

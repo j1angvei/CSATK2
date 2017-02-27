@@ -57,6 +57,7 @@ public class CSATK {
                         "\t%s,\talignment of clean reads\n" +
                         "\t%s,\tconvert sam to bam files\n" +
                         "\t%s,\tsort bam files\n" +
+                        "\t%s,\tremove duplicate reads in BAM file\n" +
                         "\t%s,\tquality of bam files\n" +
                         "\t%s,\tpeak calling\n" +
                         "\t%s,\tpeak annotation\n" +
@@ -65,7 +66,7 @@ public class CSATK {
                 ,
                 Task.PIPELINE, Task.FUNCTION, Task.INSTALL, Task.RESET, Task.BACKUP,
                 Function.GENOME_IDX, Function.QC_RAW, Function.TRIM, Function.QC_CLEAN,
-                Function.ALIGNMENT, Function.CONVERT_SAM, Function.SORT_BAM, Function.QC_BAM,
+                Function.ALIGNMENT, Function.CONVERT_SAM, Function.SORT_BAM, Function.RMDUP_BAM, Function.QC_BAM,
                 Function.PEAK_CALLING, Function.PEAK_ANNOTATION, Function.ANNOTATION_REGROUP
         );
     }

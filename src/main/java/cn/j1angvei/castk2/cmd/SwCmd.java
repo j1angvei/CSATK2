@@ -132,23 +132,32 @@ public class SwCmd {
                 CONF.getSoftwareExecutable(SwType.SAMTOOLS),
                 SwUtil.THREAD_NUMBER,
                 CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + ".sam",
-                CONF.getDirectory(OutType.BAM_CONVERTED) + experiment.getCode() + ".bam");
+                CONF.getDirectory(OutType.BAM_CONVERTED) + experiment.getCode() + ".sam.bam");
         return FileUtil.wrapString(cmd);
     }
 
     public static String[] sortBam(Experiment experiment) {
         String cmd = String.format("%s sort %s --threads %d -o %s",
                 CONF.getSoftwareExecutable(SwType.SAMTOOLS),
-                CONF.getDirectory(OutType.BAM_CONVERTED) + experiment.getCode() + ".bam",
+                CONF.getDirectory(OutType.BAM_CONVERTED) + experiment.getCode() + ".sam.bam",
                 SwUtil.THREAD_NUMBER,
-                CONF.getDirectory(OutType.BAM_SORTED) + experiment.getCode() + ".bam");
+                CONF.getDirectory(OutType.BAM_SORTED) + experiment.getCode() + ".sorted.bam");
+        return FileUtil.wrapString(cmd);
+    }
+
+    public static String[] rmdupBam(Experiment experiment) {
+        String cmd = String.format("%s rmdup %s %s",
+                CONF.getSoftwareExecutable(SwType.SAMTOOLS),
+                CONF.getDirectory(OutType.BAM_SORTED) + experiment.getCode() + ".sorted.bam",
+                CONF.getDirectory(OutType.BAM_RMDUP) + experiment.getCode() + ".rmdup.bam"
+        );
         return FileUtil.wrapString(cmd);
     }
 
     public static String[] qcBam(Experiment experiment) {
         String cmd = String.format("%s bamqc -bam %s -outdir %s -outformat PDF -outfile %s.pdf",
                 CONF.getSoftwareExecutable(SwType.QUALIMAP),
-                CONF.getDirectory(OutType.BAM_SORTED) + experiment.getCode() + ".bam",
+                CONF.getDirectory(OutType.BAM_RMDUP) + experiment.getCode() + ".rmdup.bam",
                 CONF.getDirectory(OutType.QC_BAM),
                 experiment.getCode());
         return FileUtil.wrapString(cmd);
@@ -170,7 +179,7 @@ public class SwCmd {
             //single "macs2 callpeak -t ChIP.bam -c Control.bam -f BAM -g hs -n test -B -q 0.01"
             cmd.add(String.format("%s callpeak -t %s -f BAM -g %d -n %s -B",
                     CONF.getSoftwareExecutable(SwType.MACS2),
-                    CONF.getDirectory(OutType.BAM_SORTED) + experiment.getCode() + ".bam",
+                    CONF.getDirectory(OutType.BAM_RMDUP) + experiment.getCode() + ".rmdup.bam",
                     gSize,
                     CONF.getDirectory(OutType.PEAK_CALLING) + experiment.getCode())
             );
@@ -178,8 +187,8 @@ public class SwCmd {
             //has control experiment
             cmd.add(String.format("%s callpeak -t %s -c %s -f BAM -g %d -n %s -B",
                     CONF.getSoftwareExecutable(SwType.MACS2),
-                    CONF.getDirectory(OutType.BAM_SORTED) + experiment.getCode() + ".bam",
-                    CONF.getDirectory(OutType.BAM_SORTED) + experiment.getControl() + ".bam",
+                    CONF.getDirectory(OutType.BAM_RMDUP) + experiment.getCode() + ".rmdup.bam",
+                    CONF.getDirectory(OutType.BAM_RMDUP) + experiment.getControl() + ".rmdup.bam",
                     gSize,
                     CONF.getDirectory(OutType.PEAK_CALLING) + experiment.getCode())
             );

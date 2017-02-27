@@ -56,23 +56,25 @@
       "config",
       "genome",
       "input",
+      "lib",
       "log",
       "output",
       "script",
       "software"
     ],
     "out": [
-      "index_genome",
-      "qc_raw",
-      "trim",
-      "qc_clean",
-      "parse_zip",
-      "alignment",
-      "bam_converted",
-      "bam_sorted",
-      "peak_calling",
-      "annotation",
-      "qc_alignment"
+      "01.index_genome",
+      "02.qc_raw",
+      "03.trim",
+      "04.qc_clean",
+      "05.parse_zip",
+      "06.alignment",
+      "07.bam_converted",
+      "08.bam_sorted",
+      "09.bam_rmdup",
+      "10.peak_calling",
+      "11.annotation",
+      "12.qc_alignment"
     ]
   }
 }

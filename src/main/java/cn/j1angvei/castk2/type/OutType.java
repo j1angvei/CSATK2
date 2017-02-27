@@ -5,5 +5,5 @@ package cn.j1angvei.castk2.type;
  * represent all directories under output directory
  */
 public enum OutType {
-    IDX_GENOME, QC_RAW, TRIM, QC_CLEAN, PARSE_ZIP, ALIGNMENT, BAM_CONVERTED, BAM_SORTED, PEAK_CALLING, ANNOTATION, QC_BAM;
+    IDX_GENOME, QC_RAW, TRIM, QC_CLEAN, PARSE_ZIP, ALIGNMENT, BAM_CONVERTED, BAM_SORTED, BAM_RMDUP, PEAK_CALLING, ANNOTATION, QC_BAM
 }
