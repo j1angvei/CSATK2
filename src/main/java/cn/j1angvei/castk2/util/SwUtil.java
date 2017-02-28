@@ -80,8 +80,9 @@ public class SwUtil {
                         continue;
                     String[] seg = line.split("\t");
                     String forward = seg[0];
-                    String name = seg[3];
-                    if (forward.contains("N") || forward.contains("n")) {
+                    String name = seg[3].trim();
+                    //ignore No Hit overrepresented reads
+                    if (name.equals("No Hit")) {
                         continue;
                     }
                     FileUtil.appendFile(String.format(">%s\n%s\n", name, forward), faFileName);
