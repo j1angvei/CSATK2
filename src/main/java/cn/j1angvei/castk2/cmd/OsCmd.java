@@ -11,7 +11,7 @@ public class OsCmd {
     public static String unpack(String archive, String destDir) {
         if (archive.endsWith(".zip")) {
             return unzip(archive, destDir);
-        } else if (archive.endsWith(".tar.gz")) {
+        } else if (archive.endsWith(".tar.gz") || archive.endsWith(".tgz")) {
             return tarGz(archive, destDir);
         } else if (archive.endsWith("tar.bz2")) {
             return tarBz2(archive, destDir);

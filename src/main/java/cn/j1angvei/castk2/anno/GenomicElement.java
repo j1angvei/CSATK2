@@ -27,7 +27,8 @@ public class GenomicElement {
         mUpstreams = new TreeSet<>();
         mDownStreams = new TreeSet<>();
         mIntergenics = new TreeSet<>();
-        parseAnnotationFile(annoFile);
+        //skip this function, cause it is not ready
+//        parseAnnotationFile(annoFile);
     }
 
     private void parseAnnotationFile(String annoFileName) {
@@ -118,15 +119,20 @@ public class GenomicElement {
             mDownStreams.add(downStream);
         }
         //parse intergenic
-        Iterator<Upstream> upstreamIterator = mUpstreams.iterator();
-        Iterator<DownStream> downstreamIterator = mDownStreams.iterator();
-        //when parse intergenic, fist upstream not needed
-        if (upstreamIterator.hasNext())
-            upstreamIterator.next();
-
-        while (upstreamIterator.hasNext() && downstreamIterator.hasNext()) {
-            Intergenic intergenic = new Intergenic(downstreamIterator.next(), upstreamIterator.next());
-            mIntergenics.add(intergenic);
+        Iterator<Gene> iterator = mGenes.iterator();
+        Gene lastGene = null, curGene;
+        while (iterator.hasNext()) {
+            curGene = iterator.next();
+            //first gene in list or two genes not in same chromosome
+            if (lastGene != null && lastGene.getChromosome().equals(curGene.getChromosome())) {
+                long start = lastGene.getEnd() + 2000;
+                long end = curGene.getStart() - 2000;
+                if (start < end) {
+                    Intergenic intergenic = new Intergenic(lastGene.getChromosome(), start, end);
+                    mIntergenics.add(intergenic);
+                }
+            }
+            lastGene = curGene;
         }
     }
 

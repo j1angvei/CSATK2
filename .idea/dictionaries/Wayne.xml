@@ -12,11 +12,14 @@
       <w>intergenics</w>
       <w>intron</w>
       <w>introns</w>
+      <w>kegg</w>
       <w>mjian</w>
       <w>nextera</w>
       <w>rmdup</w>
+      <w>seqlogo</w>
       <w>tggaattctcgg</w>
       <w>transposase</w>
+      <w>weblogo</w>
     </words>
   </dictionary>
 </component>

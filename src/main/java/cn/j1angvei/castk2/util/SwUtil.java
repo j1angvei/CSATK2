@@ -2,6 +2,7 @@ package cn.j1angvei.castk2.util;
 
 import cn.j1angvei.castk2.input.Experiment;
 import cn.j1angvei.castk2.type.OutType;
+import cn.j1angvei.castk2.type.SwType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,6 +18,8 @@ public class SwUtil {
     public static final String INPUT_JSON = "input.json";
     public static final String CONFIG_JSON = "config.json";
     public static final String ADAPTERS_TXT = "adapters.txt";
+    public static final String HOMER_ANNOTATE_PEAK_EXE = "annotatePeaks.pl";
+    public static final String HOMER_FIND_MOTIF_EXE = "findMotifsGenome.pl";
 
     private static ConfUtil CONF = ConfUtil.getInstance();
 
@@ -95,5 +98,27 @@ public class SwUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String getPath(SwType type) {
+        String folder = CONF.getSoftwareFolder(type);
+        switch (type) {
+            case FASTQC:
+            case TRIMMOMATIC:
+            case BWA:
+            case SAMTOOLS:
+            case MACS2:
+            case QUALIMAP:
+            case WEBLOGO:
+                return folder;
+            case HOMER:
+                return folder + "bin";
+            default:
+                return "";
+        }
+    }
+
+    public static String getPythonPath() {
+        return null;
     }
 }

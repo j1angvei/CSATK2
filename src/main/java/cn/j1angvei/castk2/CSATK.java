@@ -62,13 +62,18 @@ public class CSATK {
                         "\t%s,\tkeep unique mapped reads, store in BAM file\n" +
                         "\t%s,\tpeak calling using MACS2\n" +
                         "\t%s,\tpeak annotation using Homer\n" +
+                        "\t%s,\tfind motifs using Homer\n" +
+                        "\t%s,\tgene ontology analysis using panther\n" +
+                        "\t%s,\tpathway analysis(KEGG) using panther \n" +
                         "\t%s,\tannotation regroup as upstream, exon, intron, downstream, intergenic\n" +
                         "\n"
                 ,
                 Task.PIPELINE, Task.FUNCTION, Task.INSTALL, Task.RESET, Task.BACKUP,
                 Function.GENOME_IDX, Function.QC_RAW, Function.TRIM, Function.QC_CLEAN,
                 Function.ALIGNMENT, Function.CONVERT_SAM, Function.SORT_BAM, Function.QC_BAM, Function.RMDUP_BAM, Function.UNIQUE_BAM,
-                Function.PEAK_CALLING, Function.PEAK_ANNOTATION, Function.ANNOTATION_REGROUP
+                Function.PEAK_CALLING, Function.PEAK_ANNOTATION,
+                Function.MOTIF, Function.GO_ANALYSIS, Function.PATHWAY,
+                Function.ANNOTATION_REGROUP
         );
     }
 }

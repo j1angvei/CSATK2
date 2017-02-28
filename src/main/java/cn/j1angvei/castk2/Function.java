@@ -16,7 +16,11 @@ public enum Function {
     UNIQUE_BAM("ub"),
     PEAK_CALLING("pc"),
     PEAK_ANNOTATION("pa"),
+    MOTIF("mt"),
+    GO_ANALYSIS("go"),
+    PATHWAY("pw"),
     ANNOTATION_REGROUP("ar");
+
     private String keyword;
 
     Function(String keyword) {

@@ -6,6 +6,7 @@ import cn.j1angvei.castk2.cmd.SwCmd;
 import cn.j1angvei.castk2.input.Experiment;
 import cn.j1angvei.castk2.input.Genome;
 import cn.j1angvei.castk2.type.SubType;
+import cn.j1angvei.castk2.type.SwType;
 import cn.j1angvei.castk2.util.ConfUtil;
 
 import java.util.ArrayList;
@@ -36,6 +37,9 @@ public class Analysis {
             case QC_BAM:
             case PEAK_CALLING:
             case PEAK_ANNOTATION:
+            case MOTIF:
+            case GO_ANALYSIS:
+            case PATHWAY:
                 traverseExperiment(function);
                 break;
             //illegal args
@@ -127,6 +131,12 @@ public class Analysis {
                 return SwCmd.callPeaks(experiment);
             case PEAK_ANNOTATION:
                 return SwCmd.annotatePeaks(experiment);
+            case MOTIF:
+                return SwCmd.findMotifs(experiment);
+            case GO_ANALYSIS:
+                return SwCmd.geneOntology(experiment);
+            case PATHWAY:
+                return SwCmd.pathway(experiment);
             default:
                 throw new IllegalArgumentException("Illegal Function args in experiment analysis!");
         }

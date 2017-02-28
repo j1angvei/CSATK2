@@ -28,9 +28,6 @@ public class InstallCmd {
                 cmd.add(OsCmd.unpack(archive, swSubDir));
                 cmd.add(OsCmd.make(CONF.getSoftwareFolder(type)));
                 break;
-            case TRIMMOMATIC:
-                cmd.add(OsCmd.unpack(archive, swSubDir));
-                break;
             case SAMTOOLS:
                 cmd.add(OsCmd.unpack(archive, swSubDir));
                 cmd.add(OsCmd.changeDir(swFolder));
@@ -53,8 +50,11 @@ public class InstallCmd {
                         CONF.getPlatform(PfType.PERL),
                         "configureHomer.pl")
                 );
+                cmd.add(OsCmd.addX(CONF.getSoftwareExecutable(SwType.HOMER) + "*"));
                 break;
+            case TRIMMOMATIC:
             case QUALIMAP:
+            case WEBLOGO:
                 cmd.add(OsCmd.unpack(archive, swSubDir));
                 break;
             default:
