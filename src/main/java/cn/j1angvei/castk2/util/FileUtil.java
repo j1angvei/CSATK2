@@ -17,6 +17,10 @@ import java.util.List;
 public class FileUtil {
     private static String WORK_DIR = System.getProperty("user.dir") + File.separator;
 
+    public enum Unit {
+        BYTES, KB, MB, GB
+    }
+
     public static String getWorkDir() {
         return WORK_DIR;
     }
@@ -34,6 +38,7 @@ public class FileUtil {
     public static void overwriteFile(String content, String fileName) {
         File file = createFileIfNotExist(fileName);
         try {
+            assert file != null;
             FileUtils.writeStringToFile(file, content, Charset.defaultCharset(), false);
         } catch (IOException e) {
             e.printStackTrace();
@@ -43,6 +48,7 @@ public class FileUtil {
     public static void appendFile(String content, String fileName) {
         File file = createFileIfNotExist(fileName);
         try {
+            assert file != null;
             FileUtils.write(file, content, Charset.defaultCharset(), true);
         } catch (IOException e) {
             e.printStackTrace();
@@ -69,22 +75,24 @@ public class FileUtil {
 
     public static File makeDirs(String filePath) {
         File file = new File(filePath);
+        boolean success = false;
         if (!file.exists()) {
-            file.mkdirs();
+            success = file.mkdirs();
         }
-        return file;
+        return success ? file : null;
     }
 
     public static File createFileIfNotExist(String fileName) {
         File file = new File(fileName);
+        boolean success = false;
         if (!file.exists()) {
             try {
-                file.createNewFile();
+                success = file.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return file;
+        return success ? file : null;
     }
 
     public static void move(String srcPath, String destPath) {
@@ -176,7 +184,7 @@ public class FileUtil {
         return content;
     }
 
-    public static long countFileSize(String fileName) {
+    public static long countFileContentSize(String fileName) {
         long count = 0;
         BufferedReader reader;
         try {
@@ -188,8 +196,24 @@ public class FileUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("count genome size " + fileName + " " + count);
         return count;
+    }
+
+    public static long getFileSize(String fileName, Unit unit) {
+        File file = new File(fileName);
+        long lenInBytes = file.length();
+        switch (unit) {
+            case BYTES:
+                return lenInBytes;
+            case KB:
+                return lenInBytes / 1024;
+            case MB:
+                return lenInBytes / 1024 / 1024;
+            case GB:
+                return lenInBytes / 1024 / 1024 / 1024;
+            default:
+                return 0;
+        }
     }
 
     public static String[] listToArray(List<String> input) {

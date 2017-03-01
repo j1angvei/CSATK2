@@ -40,7 +40,7 @@ public class CSATK {
 
     private static void usage() {
         System.out.printf("Program: CSATK(ChIP-Seq Analysis Toolkit)\n" +
-                        "Version: 2.0-170227\n" +
+                        "Version: 2.0-170301\n" +
                         "Usage:\tjava -jar CSATK.jar <task> [function1,function2,...]\n " +
                         "\n" +
                         "Tasks:\n" +

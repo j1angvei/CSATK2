@@ -11,12 +11,9 @@ import cn.j1angvei.castk2.util.ConfUtil;
 import cn.j1angvei.castk2.util.FileUtil;
 import cn.j1angvei.castk2.util.StrUtil;
 import cn.j1angvei.castk2.util.SwUtil;
-import com.sun.javafx.applet.ExperimentalExtensions;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -122,14 +119,14 @@ public class SwCmd {
                         CONF.getDirectory(OutType.IDX_GENOME) + experiment.getGenomeCode(),
                         SwUtil.THREAD_NUMBER,
                         CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "." + StrUtil.getSuffix(experiment.getFastq1()),
-                        CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + Constant.SUFFIX_ALIGNMENT) :
+                        CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + Constant.SUFFIX_ALIGNMENT_SAM) :
                 String.format("%s mem %s -t %d %s %s > %s",
                         CONF.getSoftwareExecutable(SwType.BWA),
                         CONF.getDirectory(OutType.IDX_GENOME) + experiment.getGenomeCode(),
                         SwUtil.THREAD_NUMBER,
                         CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "_1." + StrUtil.getSuffix(experiment.getFastq1()),
                         CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "_2." + StrUtil.getSuffix(experiment.getFastq2()),
-                        CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + Constant.SUFFIX_ALIGNMENT);
+                        CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + Constant.SUFFIX_ALIGNMENT_SAM);
         return FileUtil.wrapString(cmd);
     }
 
@@ -137,34 +134,36 @@ public class SwCmd {
         String cmd = String.format("%s view --threads %d -bS %s -o %s",
                 CONF.getSoftwareExecutable(SwType.SAMTOOLS),
                 SwUtil.THREAD_NUMBER,
-                CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + Constant.SUFFIX_ALIGNMENT,
-                CONF.getDirectory(OutType.BAM_CONVERTED) + experiment.getCode() + Constant.SUFFIX_BAM_CONVERTED);
+                CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + Constant.SUFFIX_ALIGNMENT_SAM,
+                CONF.getDirectory(OutType.BAM_CONVERTED) + experiment.getCode() + Constant.SUFFIX_CONVERTED_BAM);
         return FileUtil.wrapString(cmd);
     }
 
     public static String[] sortBam(Experiment experiment) {
         String cmd = String.format("%s sort %s --threads %d -o %s",
                 CONF.getSoftwareExecutable(SwType.SAMTOOLS),
-                CONF.getDirectory(OutType.BAM_CONVERTED) + experiment.getCode() + Constant.SUFFIX_BAM_CONVERTED,
+                CONF.getDirectory(OutType.BAM_CONVERTED) + experiment.getCode() + Constant.SUFFIX_CONVERTED_BAM,
                 SwUtil.THREAD_NUMBER,
-                CONF.getDirectory(OutType.BAM_SORTED) + experiment.getCode() + Constant.SUFFIX_BAM_SORTED);
+                CONF.getDirectory(OutType.BAM_SORTED) + experiment.getCode() + Constant.SUFFIX_SORTED_BAM);
         return FileUtil.wrapString(cmd);
     }
 
     public static String[] qcBam(Experiment experiment) {
-        String cmd = String.format("%s bamqc -bam %s -outdir %s -outformat PDF -outfile %s.pdf --java-mem-size=256M",
+        String sortBamFile = CONF.getDirectory(OutType.BAM_SORTED) + experiment.getCode() + Constant.SUFFIX_SORTED_BAM;
+        long sortBamSize = FileUtil.getFileSize(sortBamFile, FileUtil.Unit.MB);
+        String cmd = String.format("%s bamqc -bam %s -outdir %s --java-mem-size=%dM",
                 CONF.getSoftwareExecutable(SwType.QUALIMAP),
-                CONF.getDirectory(OutType.BAM_SORTED) + experiment.getCode() + Constant.SUFFIX_BAM_SORTED,
-                CONF.getDirectory(OutType.QC_BAM),
-                experiment.getCode());
+                sortBamFile,
+                CONF.getDirectory(OutType.QC_BAM) + experiment.getCode(),
+                sortBamSize / 2);
         return FileUtil.wrapString(cmd);
     }
 
     public static String[] rmdupBam(Experiment experiment) {
         String cmd = String.format("%s rmdup %s %s",
                 CONF.getSoftwareExecutable(SwType.SAMTOOLS),
-                CONF.getDirectory(OutType.BAM_SORTED) + experiment.getCode() + Constant.SUFFIX_BAM_SORTED,
-                CONF.getDirectory(OutType.BAM_RMDUP) + experiment.getCode() + Constant.SUFFIX_BAM_RMDUP
+                CONF.getDirectory(OutType.BAM_SORTED) + experiment.getCode() + Constant.SUFFIX_SORTED_BAM,
+                CONF.getDirectory(OutType.BAM_RMDUP) + experiment.getCode() + Constant.SUFFIX_RMDUP_BAM
         );
         return FileUtil.wrapString(cmd);
     }
@@ -172,8 +171,8 @@ public class SwCmd {
     public static String[] uniqueBam(Experiment experiment) {
         String cmd = String.format("%s view -b %s -q 30 -o %s",
                 CONF.getSoftwareExecutable(SwType.SAMTOOLS),
-                CONF.getDirectory(OutType.BAM_RMDUP) + experiment.getCode() + Constant.SUFFIX_BAM_RMDUP,
-                CONF.getDirectory(OutType.BAM_UNIQUE) + experiment.getCode() + Constant.SUFFIX_BAM_UNIQUE
+                CONF.getDirectory(OutType.BAM_RMDUP) + experiment.getCode() + Constant.SUFFIX_RMDUP_BAM,
+                CONF.getDirectory(OutType.BAM_UNIQUE) + experiment.getCode() + Constant.SUFFIX_UNIQUE_BAM
         );
         return FileUtil.wrapString(cmd);
     }
@@ -186,14 +185,14 @@ public class SwCmd {
         Genome genome = CONF.getGenome(experiment.getGenomeCode());
         long gSize = genome.getSize();
         if (gSize == 0) {
-            gSize = FileUtil.countFileSize(CONF.getDirectory(SubType.GENOME) + genome.getFasta());
+            gSize = FileUtil.countFileContentSize(CONF.getDirectory(SubType.GENOME) + genome.getFasta());
             genome.setSize(gSize);
         }
         //has no control experiment
         //single "macs2 callpeak -t ChIP.bam -c Control.bam -f BAM -g hs -n test -B -q 0.01"
         cmd.add(String.format("%s callpeak -t %s -f BAM -g %d -n %s -B",
                 CONF.getSoftwareExecutable(SwType.MACS2),
-                CONF.getDirectory(OutType.BAM_UNIQUE) + experiment.getCode() + Constant.SUFFIX_BAM_UNIQUE,
+                CONF.getDirectory(OutType.BAM_UNIQUE) + experiment.getCode() + Constant.SUFFIX_UNIQUE_BAM,
                 gSize,
                 CONF.getDirectory(OutType.PEAK_CALLING) + experiment.getCode())
         );
@@ -212,7 +211,7 @@ public class SwCmd {
                 CONF.getDirectory(SubType.GENOME) + genome.getFasta(),
                 annoFormat,
                 CONF.getDirectory(SubType.GENOME) + genome.getAnnotation(),
-                CONF.getDirectory(OutType.ANNOTATION) + experiment.getCode() + Constant.SUFFIX_ANNOTATION)
+                CONF.getDirectory(OutType.ANNOTATION) + experiment.getCode() + Constant.SUFFIX_ANNO_BED)
         );
         return FileUtil.listToArray(cmd);
     }
