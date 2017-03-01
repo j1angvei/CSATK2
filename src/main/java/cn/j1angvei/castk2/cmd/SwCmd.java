@@ -152,7 +152,7 @@ public class SwCmd {
     }
 
     public static String[] qcBam(Experiment experiment) {
-        String cmd = String.format("%s bamqc -bam %s -outdir %s -outformat PDF -outfile %s.pdf",
+        String cmd = String.format("%s bamqc -bam %s -outdir %s -outformat PDF -outfile %s.pdf --java-mem-size=256M",
                 CONF.getSoftwareExecutable(SwType.QUALIMAP),
                 CONF.getDirectory(OutType.BAM_SORTED) + experiment.getCode() + Constant.SUFFIX_BAM_SORTED,
                 CONF.getDirectory(OutType.QC_BAM),

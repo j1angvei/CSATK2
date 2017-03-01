@@ -18,8 +18,6 @@ public class SwUtil {
     public static final String INPUT_JSON = "input.json";
     public static final String CONFIG_JSON = "config.json";
     public static final String ADAPTERS_TXT = "adapters.txt";
-    public static final String HOMER_ANNOTATE_PEAK_EXE = "annotatePeaks.pl";
-    public static final String HOMER_FIND_MOTIF_EXE = "findMotifsGenome.pl";
 
     private static ConfUtil CONF = ConfUtil.getInstance();
 

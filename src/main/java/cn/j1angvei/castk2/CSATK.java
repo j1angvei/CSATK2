@@ -1,12 +1,12 @@
 package cn.j1angvei.castk2;
 
-
 /**
  * Entry of the program
  * Created by Wayne on 2016/11/23.
  */
 public class CSATK {
     public static void main(String[] args) {
+//        Differentiate.function(new String[]{"input_peaks.narrowPeak", "thermo_peaks.narrowPeak"});
         if (args.length == 0 || args.length > 2) {
             usage();
             return;
@@ -36,6 +36,7 @@ public class CSATK {
                 throw new IllegalArgumentException("Task " + args[0] + " not found!");
         }
     }
+
 
     private static void usage() {
         System.out.printf("Program: CSATK(ChIP-Seq Analysis Toolkit)\n" +

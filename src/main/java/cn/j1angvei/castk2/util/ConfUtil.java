@@ -8,6 +8,7 @@ import cn.j1angvei.castk2.input.Genome;
 import cn.j1angvei.castk2.input.Input;
 import cn.j1angvei.castk2.type.*;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import java.io.File;
 import java.util.List;
@@ -22,8 +23,16 @@ public class ConfUtil {
     private Input input;
 
     private ConfUtil() {
-        config = GSON.fromJson(FileUtil.readConfig(), Config.class);
-        input = GSON.fromJson(FileUtil.readInput(), Input.class);
+        try {
+            config = GSON.fromJson(FileUtil.readConfig(), Config.class);
+        } catch (JsonSyntaxException e) {
+            System.err.println("ERROR: something wrong with " + SwUtil.CONFIG_JSON + ", go check it!");
+        }
+        try {
+            input = GSON.fromJson(FileUtil.readInput(), Input.class);
+        } catch (JsonSyntaxException e) {
+            System.err.println("ERROR: something wrong with " + SwUtil.INPUT_JSON + ", go check it!");
+        }
     }
 
     public static ConfUtil getInstance() {
