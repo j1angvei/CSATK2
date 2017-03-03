@@ -17,17 +17,17 @@
   ],
   "experiment": [
     {
-      "code": "C",
+      "code": "control",
       "fastq1": "C1.fastq",
       "fastq2": "C2.fastq",
       "control": null,
       "genomeCode": 11
     },
     {
-      "code": "T",
+      "code": "treatment",
       "fastq1": "T1.fastq",
       "fastq2": "T2.fastq",
-      "control": "C",
+      "control": "control",
       "genomeCode": 11
     }
   ]

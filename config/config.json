@@ -47,6 +47,12 @@
       "archive": "MACS2-2.1.1.20160309.tar.gz",
       "folder": "MACS2-2.1.1.20160309",
       "executable": "bin/macs2"
+    },
+    {
+      "name": "weblogo",
+      "archive": "weblogo.2.8.2.tar.gz",
+      "folder": "weblogo",
+      "executable": "seqlogo"
     }
   ],
   "directory": {
@@ -75,7 +81,11 @@
       "10.bam_rmdup",
       "11.bam_unique",
       "12.peak_calling",
-      "13.peak_annotation"
+      "13.peak_annotation",
+      "14.motifs_homer",
+      "15.go_panther",
+      "16.pathway_panther",
+      "17.summary"
     ]
   }
 }
