@@ -6,7 +6,6 @@ package cn.j1angvei.castk2;
  */
 public class CSATK {
     public static void main(String[] args) {
-//        Differentiate.function(new String[]{"input_peaks.narrowPeak", "thermo_peaks.narrowPeak"});
         if (args.length == 0 || args.length > 2) {
             usage();
             return;
@@ -72,9 +71,8 @@ public class CSATK {
                 Task.PIPELINE, Task.FUNCTION, Task.INSTALL, Task.RESET, Task.BACKUP,
                 Function.GENOME_IDX, Function.QC_RAW, Function.TRIM, Function.QC_CLEAN,
                 Function.ALIGNMENT, Function.CONVERT_SAM, Function.SORT_BAM, Function.QC_BAM, Function.RMDUP_BAM, Function.UNIQUE_BAM,
-                Function.PEAK_CALLING, Function.PEAK_ANNOTATION,
-                Function.MOTIF, Function.GO_ANALYSIS, Function.PATHWAY,
-                Function.ANNOTATION_REGROUP
+                Function.PEAK_CALLING, Function.PEAK_ANNOTATION, Function.MOTIF,
+                Function.GO, Function.PATHWAY, Function.ANNOTATION_REGROUP
         );
     }
 }

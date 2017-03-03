@@ -6,7 +6,6 @@ import cn.j1angvei.castk2.cmd.SwCmd;
 import cn.j1angvei.castk2.input.Experiment;
 import cn.j1angvei.castk2.input.Genome;
 import cn.j1angvei.castk2.type.SubType;
-import cn.j1angvei.castk2.type.SwType;
 import cn.j1angvei.castk2.util.ConfUtil;
 
 import java.util.ArrayList;
@@ -32,13 +31,13 @@ public class Analysis {
             case ALIGNMENT:
             case CONVERT_SAM:
             case SORT_BAM:
+            case QC_BAM:
             case RMDUP_BAM:
             case UNIQUE_BAM:
-            case QC_BAM:
             case PEAK_CALLING:
             case PEAK_ANNOTATION:
             case MOTIF:
-            case GO_ANALYSIS:
+            case GO:
             case PATHWAY:
                 traverseExperiment(function);
                 break;
@@ -133,7 +132,7 @@ public class Analysis {
                 return SwCmd.annotatePeaks(experiment);
             case MOTIF:
                 return SwCmd.findMotifs(experiment);
-            case GO_ANALYSIS:
+            case GO:
                 return SwCmd.geneOntology(experiment);
             case PATHWAY:
                 return SwCmd.pathway(experiment);

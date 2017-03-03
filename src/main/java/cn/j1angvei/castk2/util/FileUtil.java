@@ -38,7 +38,6 @@ public class FileUtil {
     public static void overwriteFile(String content, String fileName) {
         File file = createFileIfNotExist(fileName);
         try {
-            assert file != null;
             FileUtils.writeStringToFile(file, content, Charset.defaultCharset(), false);
         } catch (IOException e) {
             e.printStackTrace();
@@ -48,7 +47,6 @@ public class FileUtil {
     public static void appendFile(String content, String fileName) {
         File file = createFileIfNotExist(fileName);
         try {
-            assert file != null;
             FileUtils.write(file, content, Charset.defaultCharset(), true);
         } catch (IOException e) {
             e.printStackTrace();
@@ -75,24 +73,22 @@ public class FileUtil {
 
     public static File makeDirs(String filePath) {
         File file = new File(filePath);
-        boolean success = false;
         if (!file.exists()) {
-            success = file.mkdirs();
+            file.mkdirs();
         }
-        return success ? file : null;
+        return file;
     }
 
     public static File createFileIfNotExist(String fileName) {
         File file = new File(fileName);
-        boolean success = false;
         if (!file.exists()) {
             try {
-                success = file.createNewFile();
+                file.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return success ? file : null;
+        return file;
     }
 
     public static void move(String srcPath, String destPath) {

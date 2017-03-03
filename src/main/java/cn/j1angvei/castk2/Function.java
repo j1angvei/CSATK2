@@ -17,7 +17,7 @@ public enum Function {
     PEAK_CALLING("pc"),
     PEAK_ANNOTATION("pa"),
     MOTIF("mt"),
-    GO_ANALYSIS("go"),
+    GO("go"),
     PATHWAY("pw"),
     ANNOTATION_REGROUP("ar");
 
