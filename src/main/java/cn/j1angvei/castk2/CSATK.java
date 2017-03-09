@@ -1,6 +1,6 @@
 package cn.j1angvei.castk2;
 
-import cn.j1angvei.castk2.panther.Panther;
+import cn.j1angvei.castk2.panther.GeneAnalysis;
 
 /**
  * Entry of the program
@@ -8,7 +8,7 @@ import cn.j1angvei.castk2.panther.Panther;
  */
 public class CSATK {
     public static void main(String[] args) {
-        Panther.analysis("1", "out", 1);
+        GeneAnalysis.analysis("1", "out", 1);
         if (args.length == 0 || args.length > 2) {
             usage();
             return;

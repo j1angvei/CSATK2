@@ -9,7 +9,7 @@ import java.io.IOException;
 /**
  * Created by Wayne on 3/8 0008.
  */
-public class AddHeaderInterceptor implements Interceptor {
+public class HeaderInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request oldRequest = chain.request();
