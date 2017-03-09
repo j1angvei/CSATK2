@@ -53,14 +53,14 @@ public class FileUtil {
         }
     }
 
-    public static List<String> readLineIntoList(String fileName, boolean skipComment) {
+    public static List<String> readLineIntoList(String fileName) {
         List<String> lines = new ArrayList<>();
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)));
             String eachLine;
             while ((eachLine = reader.readLine()) != null) {
                 //if line start with "#", and set to skip comment, skip this line
-                if (eachLine.startsWith("#") && skipComment) continue;
+                if (eachLine.startsWith("#")) continue;
                 lines.add(eachLine);
             }
             reader.close();

@@ -89,7 +89,7 @@ public class SwUtil {
                     FileUtil.appendFile(String.format(">%s\n%s\n", name, forward), faFileName);
                 }
             }
-            //if overrepresented block is empty,so that fa file never created, then create a empty fa file
+            //if overrepresented block is empty,so that fa file never created, then getInstance a empty fa file
             FileUtil.createFileIfNotExist(faFileName);
             //append adapters to fa file
             FileUtil.appendFile(FileUtil.readAdapter(), faFileName);

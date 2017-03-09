@@ -63,7 +63,7 @@ public class GenomicElement {
     }
 
     private void parseGeneAndExon(String annoFileName) {
-        List<String> lines = FileUtil.readLineIntoList(annoFileName, true);
+        List<String> lines = FileUtil.readLineIntoList(annoFileName);
         for (String eachLine : lines) {
             String[] annoInfo = eachLine.split("\t");
             if (annoInfo.length >= 4) {

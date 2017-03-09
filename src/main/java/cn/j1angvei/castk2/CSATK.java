@@ -1,11 +1,14 @@
 package cn.j1angvei.castk2;
 
+import cn.j1angvei.castk2.panther.Panther;
+
 /**
  * Entry of the program
  * Created by Wayne on 2016/11/23.
  */
 public class CSATK {
     public static void main(String[] args) {
+        Panther.analysis("1", "out", 1);
         if (args.length == 0 || args.length > 2) {
             usage();
             return;
