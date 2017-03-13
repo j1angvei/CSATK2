@@ -14,6 +14,8 @@ public class Constant {
     public static final String SUFFIX_SORTED_BAM = ".sorted.bam";
     public static final String SUFFIX_RMDUP_BAM = ".rmdup.bam";
     public static final String SUFFIX_UNIQUE_BAM = ".unique.bam";
+    public static final String SUFFIX_GENE_LIST = "_geneList.txt";
+    public static final String SUFFIX_GO_PATHWAY = "_go_pathway.txt";
     public static final String EXE_HOMER_ANNOTATE_PEAK = "annotatePeaks.pl";
     public static final String EXE_HOMER_FIND_MOTIF = "findMotifsGenome.pl";
 

@@ -1,12 +1,14 @@
 package cn.j1angvei.castk2.run;
 
+import cn.j1angvei.castk2.Constant;
 import cn.j1angvei.castk2.Function;
-import cn.j1angvei.castk2.anno.GenomicElement;
 import cn.j1angvei.castk2.cmd.SwCmd;
 import cn.j1angvei.castk2.input.Experiment;
 import cn.j1angvei.castk2.input.Genome;
-import cn.j1angvei.castk2.type.SubType;
+import cn.j1angvei.castk2.panther.PantherAnalysis;
+import cn.j1angvei.castk2.type.OutType;
 import cn.j1angvei.castk2.util.ConfUtil;
+import cn.j1angvei.castk2.util.SwUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,6 @@ public class Analysis {
         switch (function) {
             //genome analysis
             case GENOME_IDX:
-            case ANNOTATION_REGROUP:
                 traverseGenomes(function);
                 break;
             //experiment analysis
@@ -35,10 +36,10 @@ public class Analysis {
             case RMDUP_BAM:
             case UNIQUE_BAM:
             case PEAK_CALLING:
-            case PEAK_ANNOTATION:
             case MOTIF:
-            case GO:
-            case PATHWAY:
+            case PEAK_ANNOTATION:
+            case GENE_LIST:
+            case GO_PATHWAY:
                 traverseExperiment(function);
                 break;
             //illegal args
@@ -97,10 +98,6 @@ public class Analysis {
         switch (function) {
             case GENOME_IDX:
                 return SwCmd.genomeIndex(genome);
-            case ANNOTATION_REGROUP:
-                GenomicElement element = new GenomicElement(CONF.getDirectory(SubType.GENOME) + genome.getAnnotation());
-                element.storeToFile("genomicElement.txt");
-                return new String[]{"echo \"" + function.toString() + " finished! \""};
             default:
                 throw new IllegalArgumentException("Illegal Function args in genome analysis!");
         }
@@ -128,14 +125,22 @@ public class Analysis {
                 return SwCmd.qcBam(experiment);
             case PEAK_CALLING:
                 return SwCmd.callPeaks(experiment);
-            case PEAK_ANNOTATION:
-                return SwCmd.annotatePeaks(experiment);
             case MOTIF:
                 return SwCmd.findMotifs(experiment);
-            case GO:
-                return SwCmd.geneOntology(experiment);
-            case PATHWAY:
-                return SwCmd.pathway(experiment);
+            case PEAK_ANNOTATION:
+                return SwCmd.annotatePeaks(experiment);
+            case GENE_LIST:
+                String annotatedPeak = CONF.getDirectory(OutType.ANNOTATION) + experiment.getCode() + Constant.SUFFIX_ANNO_BED;
+                String geneList = CONF.getDirectory(OutType.GENE_LIST) + experiment.getCode() + Constant.SUFFIX_GENE_LIST;
+                SwUtil.extractGeneList(annotatedPeak, geneList);
+                return new String[]{
+                        "echo\"GENE_LIST are located at: " + annotatedPeak + "\" "
+                };
+            case GO_PATHWAY:
+                String geneIdFile = CONF.getDirectory(OutType.GENE_LIST) + experiment.getCode() + Constant.SUFFIX_GENE_LIST;
+                String outFile = CONF.getDirectory(OutType.GO_PATHWAY) + experiment.getCode() + Constant.SUFFIX_GO_PATHWAY;
+                PantherAnalysis.newInstance().analysis(geneIdFile, outFile, experiment.getGenomeCode());
+                return new String[]{"echo \"GO_PATHWAY results are located at: " + outFile + "\""};
             default:
                 throw new IllegalArgumentException("Illegal Function args in experiment analysis!");
         }

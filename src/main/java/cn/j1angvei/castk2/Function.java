@@ -17,10 +17,9 @@ public enum Function {
     PEAK_CALLING("pc"),
     PEAK_ANNOTATION("pa"),
     MOTIF("mt"),
-    GO("go"),
-    PATHWAY("pw"),
-    ANNOTATION_REGROUP("ar");
-
+    GENE_LIST("gl"),
+    GO_PATHWAY("gp"),
+    SUMMARY("sm");
     private String keyword;
 
     Function(String keyword) {

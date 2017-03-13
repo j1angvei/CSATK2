@@ -11,15 +11,10 @@ import java.util.List;
  * Created by Wayne on 3/8 0008.
  */
 public class PantherCookieJar implements CookieJar {
-    private static final PantherCookieJar INSTANCE = new PantherCookieJar();
     private List<Cookie> mCookies;
     private static final String SESSION_KEY = "JSESSIONID";
 
-    public static PantherCookieJar getInstance() {
-        return INSTANCE;
-    }
-
-    private PantherCookieJar() {
+    public PantherCookieJar() {
         mCookies = new ArrayList<>();
     }
 

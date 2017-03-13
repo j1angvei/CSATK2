@@ -1,12 +1,16 @@
 package cn.j1angvei.castk2.util;
 
+import cn.j1angvei.castk2.Constant;
 import cn.j1angvei.castk2.input.Experiment;
 import cn.j1angvei.castk2.type.OutType;
+import cn.j1angvei.castk2.type.ResType;
+import cn.j1angvei.castk2.type.SubType;
 import cn.j1angvei.castk2.type.SwType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -15,9 +19,6 @@ import java.util.zip.ZipFile;
  */
 public class SwUtil {
     public static final int THREAD_NUMBER = 10;
-    public static final String INPUT_JSON = "input.json";
-    public static final String CONFIG_JSON = "config.json";
-    public static final String ADAPTERS_TXT = "adapters.txt";
 
     private static ConfUtil CONF = ConfUtil.getInstance();
 
@@ -89,13 +90,49 @@ public class SwUtil {
                     FileUtil.appendFile(String.format(">%s\n%s\n", name, forward), faFileName);
                 }
             }
-            //if overrepresented block is empty,so that fa file never created, then getInstance a empty fa file
+            //if overrepresented block is empty,so that fa file never created, then newInstance a empty fa file
             FileUtil.createFileIfNotExist(faFileName);
             //append adapters to fa file
-            FileUtil.appendFile(FileUtil.readAdapter(), faFileName);
+            FileUtil.appendFile(FileUtil.readFromConfigFolder(ResType.ADAPTER), faFileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void extractGeneList(String annotatedBedFile, String geneListFile) {
+        List<String> annotatedPeaks = FileUtil.readLineIntoList(annotatedBedFile);
+        FileUtil.overwriteFile("", geneListFile);
+        for (String line : annotatedPeaks) {
+            //skip the first line
+            if (line.contains(Constant.EXE_HOMER_ANNOTATE_PEAK)) continue;
+            if (line.contains(")")) {
+                String column8 = line.split("\t")[7];
+                int endIndex = column8.lastIndexOf(')');
+                if (column8.contains(",")) {
+                    endIndex = column8.indexOf(',');
+                }
+                int startIndex = column8.indexOf('(') + 1;
+                String geneId = column8.substring(startIndex, endIndex);
+                FileUtil.appendFile(geneId + "\n", geneListFile);
+            }
+        }
+    }
+
+    public static void extractAnnotationFeature() {
+    }
+
+    public static String genomeCodeToSpecies(int genomeCode) {
+        String speciesProp = CONF.getDirectory(SubType.CONFIG) + ResType.SPECIES.getFileName();
+        List<String> allSpecies = FileUtil.readLineIntoList(speciesProp);
+        for (String line : allSpecies) {
+            String[] current = line.split("=");
+            int code = Integer.parseInt(current[0]);
+            if (code == genomeCode) {
+                return current[1];
+            }
+        }
+        System.err.println("Check your genomeCode in config.json");
+        return null;
     }
 
     public static String getPath(SwType type) {

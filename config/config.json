@@ -34,7 +34,7 @@
       "name": "homer",
       "archive": "homer.v4.8.3.zip",
       "folder": "homer.v4.8.3",
-      "executable": "bin/annotatePeaks.pl"
+      "executable": "bin/"
     },
     {
       "name": "qualimap",
@@ -83,8 +83,8 @@
       "12.peak_calling",
       "13.peak_annotation",
       "14.motifs_homer",
-      "15.go_panther",
-      "16.pathway_panther",
+      "15.gene_list",
+      "16.go_pathway",
       "17.summary"
     ]
   }

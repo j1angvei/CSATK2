@@ -232,12 +232,7 @@ public class SwCmd {
         ));
         return FileUtil.listToArray(cmd);
     }
-
-    public static String[] geneOntology(Experiment experiment) {
-        return new String[]{""};
-    }
-
-    public static String[] pathway(Experiment experiment) {
+    public static String[] goAndPathway(Experiment experiment) {
         return new String[]{""};
     }
 }

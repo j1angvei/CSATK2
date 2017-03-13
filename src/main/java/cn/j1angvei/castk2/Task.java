@@ -5,6 +5,7 @@ import cn.j1angvei.castk2.cmd.InstallCmd;
 import cn.j1angvei.castk2.run.Analysis;
 import cn.j1angvei.castk2.run.Executor;
 import cn.j1angvei.castk2.type.OutType;
+import cn.j1angvei.castk2.type.ResType;
 import cn.j1angvei.castk2.type.SubType;
 import cn.j1angvei.castk2.type.SwType;
 import cn.j1angvei.castk2.util.ConfUtil;
@@ -41,18 +42,21 @@ public class Task {
 
     public static void reset() {
         System.out.println("Reset CSATK2 to default status...");
+        //read config file from resource to config dir
+        for (ResType type : ResType.values()) {
+            FileUtil.restoreConfig(type);
+            System.out.println("File " + type.getFileName() + " has been reset!");
+        }
         for (SubType sub : SubType.values()) {
             String dir = CONF.getDirectory(sub);
-            FileUtil.makeDirs(dir);
+            boolean success = FileUtil.makeDirs(dir);
+            System.out.println(success ? "Create directory " + dir + " success!" : "Skip creating " + dir + ", already exists!");
         }
         for (OutType out : OutType.values()) {
             String dir = CONF.getDirectory(out);
-            FileUtil.makeDirs(dir);
+            boolean success = FileUtil.makeDirs(dir);
+            System.out.println(success ? "Create directory " + dir + " success!" : "Skip creating " + dir + ", already exists!");
         }
-        //read config file from resource to config dir
-        FileUtil.restoreConfig();
-        FileUtil.restoreInput();
-        FileUtil.restoreAdapter();
         System.out.println("Reset finished!");
     }
 

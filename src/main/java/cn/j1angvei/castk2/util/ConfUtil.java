@@ -24,14 +24,14 @@ public class ConfUtil {
 
     private ConfUtil() {
         try {
-            config = GSON.fromJson(FileUtil.readConfig(), Config.class);
+            config = GSON.fromJson(FileUtil.readFromConfigFolder(ResType.CONFIG), Config.class);
         } catch (JsonSyntaxException e) {
-            System.err.println("ERROR: something wrong with " + SwUtil.CONFIG_JSON + ", go check it!");
+            System.err.println("ERROR: something wrong with " + ResType.CONFIG.getFileName() + ", go check it!");
         }
         try {
-            input = GSON.fromJson(FileUtil.readInput(), Input.class);
+            input = GSON.fromJson(FileUtil.readFromConfigFolder(ResType.INPUT), Input.class);
         } catch (JsonSyntaxException e) {
-            System.err.println("ERROR: something wrong with " + SwUtil.INPUT_JSON + ", go check it!");
+            System.err.println("ERROR: something wrong with " + ResType.INPUT.getFileName() + ", go check it!");
         }
     }
 

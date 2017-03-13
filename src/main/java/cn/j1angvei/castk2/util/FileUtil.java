@@ -1,6 +1,7 @@
 package cn.j1angvei.castk2.util;
 
 import cn.j1angvei.castk2.CSATK;
+import cn.j1angvei.castk2.type.ResType;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -67,16 +68,16 @@ public class FileUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("read lines total count: " + lines.size());
         return lines;
     }
 
-    public static File makeDirs(String filePath) {
+    public static boolean makeDirs(String filePath) {
+        boolean success = false;
         File file = new File(filePath);
         if (!file.exists()) {
-            file.mkdirs();
+            success = file.mkdirs();
         }
-        return file;
+        return success;
     }
 
     public static File createFileIfNotExist(String fileName) {
@@ -143,41 +144,23 @@ public class FileUtil {
         }
     }
 
-    public static String readConfig() {
-        return readFile(WORK_DIR + "config" + File.separator + SwUtil.CONFIG_JSON);
+    public static String readFromConfigFolder(ResType type) {
+        return readFile(WORK_DIR + "config" + File.separator + type.getFileName());
     }
 
-    public static String readInput() {
-        return readFile(WORK_DIR + "config" + File.separator + SwUtil.INPUT_JSON);
-    }
-
-    public static String readAdapter() {
-        return readFile(WORK_DIR + "config" + File.separator + SwUtil.ADAPTERS_TXT);
-    }
-
-    public static void restoreConfig() {
-        String content = readResourceFile(SwUtil.CONFIG_JSON);
-        overwriteFile(content, WORK_DIR + "config" + File.separator + SwUtil.CONFIG_JSON);
-    }
-
-    public static void restoreInput() {
-        String content = readResourceFile(SwUtil.INPUT_JSON);
-        overwriteFile(content, WORK_DIR + "config" + File.separator + SwUtil.INPUT_JSON);
-    }
-
-    public static void restoreAdapter() {
-        String content = readResourceFile(SwUtil.ADAPTERS_TXT);
-        overwriteFile(content, WORK_DIR + "config" + File.separator + SwUtil.ADAPTERS_TXT);
-    }
-
-    private static String readResourceFile(String name) {
+    private static String readFromResourceFolder(ResType type) {
         String content = "";
         try {
-            content = IOUtils.toString(CSATK.class.getClassLoader().getResourceAsStream(name), Charset.defaultCharset());
+            content = IOUtils.toString(CSATK.class.getClassLoader().getResourceAsStream(type.getFileName()), Charset.defaultCharset());
         } catch (IOException e) {
             e.printStackTrace();
         }
         return content;
+    }
+
+    public static void restoreConfig(ResType type) {
+        String content = readFromResourceFolder(type);
+        overwriteFile(content, WORK_DIR + "config" + File.separator + type.getFileName());
     }
 
     public static long countFileContentSize(String fileName) {
