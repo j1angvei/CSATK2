@@ -20,19 +20,17 @@ import java.util.zip.ZipFile;
 public class SwUtil {
     public static final int THREAD_NUMBER = 10;
 
-    private static ConfUtil CONF = ConfUtil.getInstance();
-
     public static String getPythonVersion() {
         return "2.7";
     }
 
     public static void parseQcZip(Experiment experiment) {
         String fastqFileNamePrefix = StrUtil.getPrefix(experiment.getFastq1());
-        String outDir = CONF.getDirectory(OutType.PARSE_ZIP);
+        String outDir = ConfUtil.getInstance().getDirectory(OutType.PARSE_ZIP);
         String phred = "-phred64";
         try {
             //open zip file
-            ZipFile zip = new ZipFile(CONF.getDirectory(OutType.QC_RAW) + fastqFileNamePrefix + "_fastqc.zip");
+            ZipFile zip = new ZipFile(ConfUtil.getInstance().getDirectory(OutType.QC_RAW) + fastqFileNamePrefix + "_fastqc.zip");
             ZipEntry entry = zip.getEntry(fastqFileNamePrefix + "_fastqc/fastqc_data.txt");
             BufferedReader reader = new BufferedReader(new InputStreamReader(zip.getInputStream(entry)));
             boolean inOverrepresentedBlock = false;
@@ -122,7 +120,7 @@ public class SwUtil {
     }
 
     public static String genomeCodeToSpecies(int genomeCode) {
-        String speciesProp = CONF.getDirectory(SubType.CONFIG) + ResType.SPECIES.getFileName();
+        String speciesProp = ConfUtil.getInstance().getDirectory(SubType.CONFIG) + ResType.SPECIES.getFileName();
         List<String> allSpecies = FileUtil.readLineIntoList(speciesProp);
         for (String line : allSpecies) {
             String[] current = line.split("=");
@@ -136,7 +134,7 @@ public class SwUtil {
     }
 
     public static String getPath(SwType type) {
-        String folder = CONF.getSoftwareFolder(type);
+        String folder = ConfUtil.getInstance().getSoftwareFolder(type);
         switch (type) {
             case FASTQC:
             case TRIMMOMATIC:

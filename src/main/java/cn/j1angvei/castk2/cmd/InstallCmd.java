@@ -12,21 +12,20 @@ import java.util.List;
  * Created by j1angvei on 2016/11/30.
  */
 public class InstallCmd {
-    private static ConfUtil CONF = ConfUtil.getInstance();
 
     public static String[] install(SwType type) {
-        String archive = CONF.getSoftwareArchive(type);
-        String swSubDir = CONF.getDirectory(SubType.SOFTWARE);
-        String swFolder = CONF.getSoftwareFolder(type);
+        String archive = ConfUtil.getInstance().getSoftwareArchive(type);
+        String swSubDir = ConfUtil.getInstance().getDirectory(SubType.SOFTWARE);
+        String swFolder = ConfUtil.getInstance().getSoftwareFolder(type);
         List<String> cmd = new ArrayList<>();
         switch (type) {
             case FASTQC:
                 cmd.add(OsCmd.unpack(archive, swSubDir));
-                cmd.add(OsCmd.addX(CONF.getSoftwareExecutable(type)));
+                cmd.add(OsCmd.addX(ConfUtil.getInstance().getSoftwareExecutable(type)));
                 break;
             case BWA:
                 cmd.add(OsCmd.unpack(archive, swSubDir));
-                cmd.add(OsCmd.make(CONF.getSoftwareFolder(type)));
+                cmd.add(OsCmd.make(ConfUtil.getInstance().getSoftwareFolder(type)));
                 break;
             case SAMTOOLS:
                 cmd.add(OsCmd.unpack(archive, swSubDir));
@@ -37,7 +36,7 @@ public class InstallCmd {
                 cmd.add(OsCmd.unpack(archive, swSubDir));
                 cmd.add(OsCmd.changeDir(swFolder));
                 String install = String.format("%s setup.py install --prefix %s",
-                        CONF.getPlatform(PfType.PYTHON),
+                        ConfUtil.getInstance().getPlatform(PfType.PYTHON),
                         swFolder);
                 cmd.add(install);
                 cmd.add(OsCmd.addPythonPath(swFolder));
@@ -47,10 +46,10 @@ public class InstallCmd {
                 cmd.add(OsCmd.unpack(archive, swFolder));
                 cmd.add(OsCmd.changeDir(swFolder));
                 cmd.add(String.format("%s %s -make",
-                        CONF.getPlatform(PfType.PERL),
+                        ConfUtil.getInstance().getPlatform(PfType.PERL),
                         "configureHomer.pl")
                 );
-                cmd.add(OsCmd.addX(CONF.getSoftwareExecutable(SwType.HOMER) + "*"));
+                cmd.add(OsCmd.addX(ConfUtil.getInstance().getSoftwareExecutable(SwType.HOMER) + "*"));
                 break;
             case TRIMMOMATIC:
             case QUALIMAP:

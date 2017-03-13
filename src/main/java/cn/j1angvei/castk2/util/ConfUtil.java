@@ -17,27 +17,23 @@ import java.util.List;
  * Created by mjian on 2016/11/29.
  */
 public class ConfUtil {
-    private static final Gson GSON = new Gson();
     private static ConfUtil INSTANCE;
     private Config config;
     private Input input;
 
-    private ConfUtil() {
+    private ConfUtil(Gson gson) {
         try {
-            config = GSON.fromJson(FileUtil.readFromConfigFolder(ResType.CONFIG), Config.class);
+            config = gson.fromJson(FileUtil.readFromConfigFolder(ResType.CONFIG), Config.class);
+            input = gson.fromJson(FileUtil.readFromConfigFolder(ResType.INPUT), Input.class);
         } catch (JsonSyntaxException e) {
-            System.err.println("ERROR: something wrong with " + ResType.CONFIG.getFileName() + ", go check it!");
-        }
-        try {
-            input = GSON.fromJson(FileUtil.readFromConfigFolder(ResType.INPUT), Input.class);
-        } catch (JsonSyntaxException e) {
-            System.err.println("ERROR: something wrong with " + ResType.INPUT.getFileName() + ", go check it!");
+            System.err.println("Error with " + ResType.CONFIG + " or " + ResType.INPUT + ", go check it!");
         }
     }
 
     public static ConfUtil getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new ConfUtil();
+            Gson gson = new Gson();
+            INSTANCE = new ConfUtil(gson);
         }
         return INSTANCE;
     }

@@ -13,12 +13,11 @@ import java.nio.charset.Charset;
  * Created by j1angvei on 2016/11/30.
  */
 public class Executor {
-    private static final ConfUtil CONF = ConfUtil.getInstance();
 
     public static int execute(String prefixName, String... cmd) {
         String timestamp = FileUtil.getTimestamp();
-        String scriptFile = CONF.getDirectory(SubType.SCRIPT) + timestamp + "_" + prefixName + ".sh";
-        String logFile = CONF.getDirectory(SubType.LOG) + timestamp + "_" + prefixName + ".log";
+        String scriptFile = ConfUtil.getInstance().getDirectory(SubType.SCRIPT) + timestamp + "_" + prefixName + ".sh";
+        String logFile = ConfUtil.getInstance().getDirectory(SubType.LOG) + timestamp + "_" + prefixName + ".log";
         File script = createScript(scriptFile, cmd);
         int exitValue = 0;
         try {

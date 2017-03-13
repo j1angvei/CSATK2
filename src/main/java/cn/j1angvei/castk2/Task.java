@@ -21,7 +21,6 @@ public class Task {
     public static final String RESET = "-r";
     public static final String BACKUP = "-b";
     public static final String FUNCTION = "-f";
-    private static ConfUtil CONF = ConfUtil.getInstance();
 
     public static void pipeline() {
         for (Function function : Function.values()) {
@@ -48,12 +47,12 @@ public class Task {
             System.out.println("File " + type.getFileName() + " has been reset!");
         }
         for (SubType sub : SubType.values()) {
-            String dir = CONF.getDirectory(sub);
+            String dir = ConfUtil.getInstance().getDirectory(sub);
             boolean success = FileUtil.makeDirs(dir);
             System.out.println(success ? "Create directory " + dir + " success!" : "Skip creating " + dir + ", already exists!");
         }
         for (OutType out : OutType.values()) {
-            String dir = CONF.getDirectory(out);
+            String dir = ConfUtil.getInstance().getDirectory(out);
             boolean success = FileUtil.makeDirs(dir);
             System.out.println(success ? "Create directory " + dir + " success!" : "Skip creating " + dir + ", already exists!");
         }
@@ -67,16 +66,16 @@ public class Task {
         backupSubDir(timestamp, SubType.LOG);
         backupSubDir(timestamp, SubType.SCRIPT);
         backupSubDir(timestamp, SubType.OUTPUT);
-        System.out.println("Backup at: " + CONF.getDirectory(SubType.BACKUP) + timestamp);
+        System.out.println("Backup at: " + ConfUtil.getInstance().getDirectory(SubType.BACKUP) + timestamp);
         //reset directories
         reset();
 
     }
 
     private static void backupSubDir(String timestamp, SubType type) {
-        String destPath = CONF.getDirectory(SubType.BACKUP) + timestamp;
+        String destPath = ConfUtil.getInstance().getDirectory(SubType.BACKUP) + timestamp;
         FileUtil.makeDirs(destPath);
-        FileUtil.move(CONF.getDirectory(type), destPath);
+        FileUtil.move(ConfUtil.getInstance().getDirectory(type), destPath);
     }
 
     public static void function(String keywords) {

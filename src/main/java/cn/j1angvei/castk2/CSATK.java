@@ -28,11 +28,11 @@ public class CSATK {
                 if (args.length == 2) {
                     Task.function(args[1]);
                 } else {
-                    throw new IllegalArgumentException("Function keywords are not in function1,function2,function... format!");
+                    throw new IllegalArgumentException("\nFunction keywords are not in function1,function2,function... format!");
                 }
                 break;
             default:
-                throw new IllegalArgumentException("Task " + args[0] + " not found!");
+                throw new IllegalArgumentException("\nTask " + args[0] + " not found!");
         }
     }
 

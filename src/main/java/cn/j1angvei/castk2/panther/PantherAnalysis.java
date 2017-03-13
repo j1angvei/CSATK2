@@ -2,7 +2,11 @@ package cn.j1angvei.castk2.panther;
 
 import cn.j1angvei.castk2.util.FileUtil;
 import cn.j1angvei.castk2.util.SwUtil;
-import okhttp3.*;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -11,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * using pantherdb.org to do GO_PATHWAY and KEGG analysis
@@ -29,7 +34,7 @@ public class PantherAnalysis {
         mPantherApi = initApi();
     }
 
-    public void analysis(String geneList, String outFileName, int genomeCode) {
+    public synchronized void analysis(String geneList, String outFileName, int genomeCode) {
         if (geneList == null || outFileName == null || genomeCode == 0) {
             System.err.println("ERROR: check input argument!");
         }
@@ -45,8 +50,9 @@ public class PantherAnalysis {
     }
 
     private void initCookies() {
+        Call<String> call = mPantherApi.initiate();
         try {
-            Response<String> response = mPantherApi.initiate().execute();
+            Response<String> response = call.execute();
             printStatus("initCookies", response.code());
         } catch (IOException e) {
             e.printStackTrace();
@@ -121,19 +127,19 @@ public class PantherAnalysis {
     }
 
     private void printStatus(String job, int code) {
-        String description;
+        String description = mCookieJar.getJSessionId();
         switch (code) {
             case 200:
-                description = "Connection success!";
+                description += " connection success!";
                 break;
             case 400:
-                description = "Local request error!";
+                description += "local request error!";
                 break;
             case 500:
-                description = "Remote server error!";
+                description += "remote server error!";
                 break;
             default:
-                description = "Unknown error!";
+                description += "unknown error!";
         }
         System.out.println(job + "\t" + description);
     }
@@ -142,6 +148,8 @@ public class PantherAnalysis {
         OkHttpClient client = new OkHttpClient.Builder()
                 .cookieJar(mCookieJar)
                 .addInterceptor(new HeaderInterceptor())
+                .readTimeout(0, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)
                 .build();
         Retrofit retrofit = new Retrofit.Builder()
                 .client(client)
