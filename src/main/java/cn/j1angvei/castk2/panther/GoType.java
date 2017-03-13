@@ -1,14 +1,16 @@
 package cn.j1angvei.castk2.panther;
 
 /**
- * Created by Wayne on 3/10 0010.
+ * gene ontology analysis type
+ * Created by Wayne on 3/10 2017.
  */
 
 public enum GoType {
     MOLECULAR_FUNCTION(1, "Molecular Function"),
     BIOLOGICAL_PROCESS(2, "Biological Process"),
-    PATHWAY(3, "Pathway"),
-    CELLULAR_COMPONENT(4, "Cellular Component");
+    CELLULAR_COMPONENT(4, "Cellular Component"),
+    PATHWAY(3, "Pathway");
+
     private int type;
     private String description;
 

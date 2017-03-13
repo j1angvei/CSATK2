@@ -7,7 +7,7 @@ import retrofit2.http.*;
 import java.util.Map;
 
 /**
- * Created by Wayne on 3/10 0010.
+ * Created by Wayne on 3/10 2017.
  */
 public interface PantherApi {
     String URL_BASE = "http://pantherdb.org";

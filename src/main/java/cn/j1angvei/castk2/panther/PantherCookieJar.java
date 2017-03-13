@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Wayne on 3/8 0008.
+ * Created by Wayne on 3/8 2017.
  */
 public class PantherCookieJar implements CookieJar {
     private List<Cookie> mCookies;

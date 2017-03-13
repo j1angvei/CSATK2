@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * using pantherdb.org to do GO_PATHWAY and KEGG analysis
- * Created by Wayne on 3/7 0007.
+ * Created by Wayne on 3/7 2017.
  */
 public class PantherAnalysis {
     private PantherCookieJar mCookieJar;
@@ -91,7 +91,6 @@ public class PantherAnalysis {
         return null;
     }
 
-
     private RequestBody createUploadBody(String fileName, String species) {
         File geneListFile = new File(fileName);
         return new MultipartBody.Builder("----WebKitFormBoundaryEcgA6Z4z3AgJXQH1")
@@ -158,5 +157,4 @@ public class PantherAnalysis {
                 .build();
         return retrofit.create(PantherApi.class);
     }
-
 }

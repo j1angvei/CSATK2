@@ -232,6 +232,11 @@ public class SwCmd {
         ));
         return FileUtil.listToArray(cmd);
     }
+
+    public static String[] flagstat(Experiment experiment) {
+        return null;
+    }
+
     public static String[] goAndPathway(Experiment experiment) {
         return new String[]{""};
     }
