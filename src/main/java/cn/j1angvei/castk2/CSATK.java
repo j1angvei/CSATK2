@@ -49,17 +49,17 @@ public class CSATK {
     private static void usage() {
         System.out.printf("Program: CSATK(ChIP-Seq Analysis Toolkit)\n" +
                         "Version: 2.0-170317 by j1angvei\n" +
-                        "Project: https://github.com/j1angvei/CSATK2" +
-                        "Usage:\tjava -jar CSATK.jar <task> [function1,function2,...]\n " +
+                        "Project: https://github.com/j1angvei/CSATK2\n" +
                         "\n" +
-                        "Tasks:\n" +
+                        "Tasks:\nCMD:\tjava -jar CSATK.jar <task keyword>\n" +
                         "\t%s,\tChIP-Seq analysis pipeline\n" +
                         "\t%s,\trun function(s) in order\n" +
+                        "\t%s,\trun solely function with arguments\n" +
                         "\t%s,\t(re)install all software\n" +
                         "\t%s,\treset project to original state\n" +
-                        "\t%s,\tbackup all file of last analysis, ready for next analysis\n" +
+                        "\t%s,\tbackup all file of last analysis\n" +
                         "\n" +
-                        "Functions:\n" +
+                        "Functions:\nCMD:\tjava -jar CSATK.jar -f <function1,function2,...>\n" +
                         "\t%s,\tgenerate genome index\n" +
                         "\t%s,\tQC of raw reads\n" +
                         "\t%s,\ttrim and filter raw reads\n" +
@@ -77,13 +77,12 @@ public class CSATK {
                         "\t%s,\tgo & pathway analysis using panther\n" +
                         "\t%s,\tgenerate analysis summary in HTML format\n" +
                         "\n" +
-                        "Run function solely:\n" +
-                        "java -jar CSATK.jar " + Task.SOLELY + " <function keyword> [arg1] [arg2] [arg3] ...\n" +
-                        "\t%s [species code] [gene list file] [output file]\n" +
+                        "Sole function:\nCMD:\tjava -jar CSATK.jar -s <function keyword> [arg1] [arg2] ...\n" +
+                        "\tGO & Pathway analysis:\t%s [species code] [gene list] [output]\n" +
                         "\n"
                 ,
                 //task
-                Task.PIPELINE, Task.FUNCTION, Task.INSTALL, Task.RESET, Task.BACKUP,
+                Task.PIPELINE, Task.FUNCTION, Task.SOLELY, Task.INSTALL, Task.RESET, Task.BACKUP,
                 //function
                 Function.GENOME_IDX, Function.QC_RAW, Function.TRIM, Function.QC_CLEAN,
                 Function.ALIGNMENT, Function.CONVERT_SAM, Function.SORT_BAM, Function.QC_BAM, Function.RMDUP_BAM, Function.UNIQUE_BAM,
