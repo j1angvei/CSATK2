@@ -2,7 +2,10 @@ package cn.j1angvei.castk2.peaks;
 
 import cn.j1angvei.castk2.anno.Region;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 

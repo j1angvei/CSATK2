@@ -71,9 +71,9 @@
     "out": [
       "1_1.index_genome",
       "2_1.qc_raw",
-      "2_2.trim",
-      "2_3.qc_clean",
-      "2_4.parse_zip",
+      "2_2.parse_zip",
+      "2_3.trim",
+      "2_4.qc_clean",
       "3_1.alignment",
       "3_2.bam_converted",
       "3_3.bam_sorted",

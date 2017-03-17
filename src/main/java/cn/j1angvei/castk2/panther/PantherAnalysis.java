@@ -24,29 +24,51 @@ import java.util.concurrent.TimeUnit;
 public class PantherAnalysis {
     private PantherCookieJar mCookieJar;
     private PantherApi mPantherApi;
+    private String mExpCode, mSpecies;
+    private String mGeneList, mOutFileName;
 
-    public static PantherAnalysis newInstance() {
-        return new PantherAnalysis();
-    }
-
-    private PantherAnalysis() {
-        mCookieJar = new PantherCookieJar();
-        mPantherApi = initApi();
-    }
-
-    public synchronized void analysis(String geneList, String outFileName, int genomeCode) {
-        if (geneList == null || outFileName == null || genomeCode == 0) {
+    private PantherAnalysis(String expCode, int genomeCode, String geneList, String outFileName) {
+        if (geneList == null || outFileName == null || genomeCode == 0 || expCode == null) {
             System.err.println("ERROR: check input argument!");
         }
+        mCookieJar = new PantherCookieJar();
+        mPantherApi = initApi();
+        mExpCode = expCode;
+        mSpecies = SwUtil.genomeCodeToSpecies(genomeCode);
+        mGeneList = geneList;
+        mOutFileName = outFileName;
+    }
+
+    public static PantherAnalysis newInstance(String expCode, int genomeCode, String geneList, String outFileName) {
+        if (expCode == null) {
+            System.out.println("WARNING: run go analysis from solely function");
+            expCode = "solely";
+        }
+        return new PantherAnalysis(expCode, genomeCode, geneList, outFileName);
+    }
+
+    public void analysis() {
         initCookies();
-        uploadGeneList(geneList, genomeCode);
-        FileUtil.overwriteFile("", outFileName);
+        uploadGeneList(mGeneList);
+        FileUtil.overwriteFile("", mOutFileName);
         for (GoType goType : GoType.values()) {
             calculateChart(goType.getType());
-            String content = "#" + goType.getDescription() + "\n";
-            content += exportChart(goType.getType()) + "\n";
-            FileUtil.appendFile(content, outFileName);
+            String content = exportChart(goType.getType());
+            if (content == null || content.isEmpty()) {
+                continue;
+            }
+            String modified = addColumn(goType.getDescription(), content);
+            FileUtil.appendFile(modified, mOutFileName);
         }
+    }
+
+    private String addColumn(String goType, String originalContent) {
+        String modified = "";
+        for (String line : originalContent.split("\n")) {
+            modified += line.replaceFirst("^", mExpCode + "\t" + goType + "\t");
+            modified += "\n";
+        }
+        return modified;
     }
 
     private void initCookies() {
@@ -55,18 +77,17 @@ public class PantherAnalysis {
             Response<String> response = call.execute();
             printStatus("initCookies", response.code());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("initCookies failed");
         }
     }
 
-    private void uploadGeneList(String fileName, int genomeCode) {
+    private void uploadGeneList(String fileName) {
         try {
-            String species = SwUtil.genomeCodeToSpecies(genomeCode);
-            RequestBody uploadGeneBody = createUploadBody(fileName, species);
+            RequestBody uploadGeneBody = createUploadBody(fileName, mSpecies);
             Response<String> response = mPantherApi.uploadGene(uploadGeneBody).execute();
             printStatus("uploadGeneList", response.code());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("ERROR: " + fileName + " not found!");
         }
     }
 
@@ -75,7 +96,7 @@ public class PantherAnalysis {
             Response<String> response = mPantherApi.calculateChart(createChartQueryMap(goType)).execute();
             printStatus("calculateChart ", response.code());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("calculateChart failed");
         }
     }
 
@@ -86,7 +107,7 @@ public class PantherAnalysis {
             printStatus("exportChart", response.code());
             return response.body();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("exportChart failed");
         }
         return null;
     }
@@ -126,7 +147,7 @@ public class PantherAnalysis {
     }
 
     private void printStatus(String job, int code) {
-        String description = mCookieJar.getJSessionId();
+        String description = mSpecies + "\t" + mExpCode + "\t";
         switch (code) {
             case 200:
                 description += " connection success!";

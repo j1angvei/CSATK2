@@ -4,7 +4,6 @@ import cn.j1angvei.castk2.Constant;
 import cn.j1angvei.castk2.input.Experiment;
 import cn.j1angvei.castk2.type.OutType;
 import cn.j1angvei.castk2.type.ResType;
-import cn.j1angvei.castk2.type.SubType;
 import cn.j1angvei.castk2.type.SwType;
 
 import java.io.BufferedReader;
@@ -120,13 +119,12 @@ public class SwUtil {
     }
 
     public static String genomeCodeToSpecies(int genomeCode) {
-        String speciesProp = ConfUtil.getInstance().getDirectory(SubType.CONFIG) + ResType.SPECIES.getFileName();
-        List<String> allSpecies = FileUtil.readLineIntoList(speciesProp);
-        for (String line : allSpecies) {
+        String speciesProp = FileUtil.readFromResourceFolder(ResType.SPECIES);
+        for (String line : speciesProp.split("\n")) {
             String[] current = line.split("=");
             int code = Integer.parseInt(current[0]);
             if (code == genomeCode) {
-                return current[1];
+                return current[1].trim();
             }
         }
         System.err.println("Check your genomeCode in config.json");

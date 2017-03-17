@@ -11,8 +11,8 @@ import java.util.List;
  * Created by Wayne on 3/8 2017.
  */
 public class PantherCookieJar implements CookieJar {
-    private List<Cookie> mCookies;
     private static final String SESSION_KEY = "JSESSIONID";
+    private List<Cookie> mCookies;
 
     public PantherCookieJar() {
         mCookies = new ArrayList<>();

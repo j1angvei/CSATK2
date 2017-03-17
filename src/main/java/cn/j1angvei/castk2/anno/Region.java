@@ -4,10 +4,10 @@ package cn.j1angvei.castk2.anno;
  * Created by Wayne on 2/26 0026.
  */
 public class Region implements Comparable<Region> {
+    protected String type;
     private String chromosome;
     private long start;
     private long end;
-    protected String type;
 
     public Region(String chromosome, long start, long end) {
         this.chromosome = chromosome;
@@ -26,6 +26,21 @@ public class Region implements Comparable<Region> {
             this.start = -1;
             this.end = -1;
         }
+    }
+
+    public static boolean isOverlapped(Region a, Region b) {
+        //if at least one of the region is null, not overlapped
+        //if chromosome not the same, not overlapped
+        //If one region's end is before the other's start, not overlapped
+        return !(a == null || b == null) && a.getChromosome().equals(b.getChromosome()) && a.getEnd() >= b.getStart() && b.getEnd() >= a.getStart();
+    }
+
+    public static boolean isAInB(Region a, Region b) {
+        return a.getChromosome().equals(b.getChromosome()) && a.getStart() >= b.getStart() && a.getEnd() <= b.getEnd();
+    }
+
+    public static boolean isAWrapB(Region a, Region b) {
+        return a.getChromosome().equals(b.getChromosome()) && a.getStart() <= b.getStart() && a.getEnd() >= b.getEnd();
     }
 
     public String getChromosome() {
@@ -52,21 +67,6 @@ public class Region implements Comparable<Region> {
         } else if (o.getStart() != this.getStart()) {
             return (int) (this.getStart() - o.getStart());
         } else return (int) (this.getEnd() - o.getEnd());
-    }
-
-    public static boolean isOverlapped(Region a, Region b) {
-        //if at least one of the region is null, not overlapped
-        //if chromosome not the same, not overlapped
-        //If one region's end is before the other's start, not overlapped
-        return !(a == null || b == null) && a.getChromosome().equals(b.getChromosome()) && a.getEnd() >= b.getStart() && b.getEnd() >= a.getStart();
-    }
-
-    public static boolean isAInB(Region a, Region b) {
-        return a.getChromosome().equals(b.getChromosome()) && a.getStart() >= b.getStart() && a.getEnd() <= b.getEnd();
-    }
-
-    public static boolean isAWrapB(Region a, Region b) {
-        return a.getChromosome().equals(b.getChromosome()) && a.getStart() <= b.getStart() && a.getEnd() >= b.getEnd();
     }
 
     @Override

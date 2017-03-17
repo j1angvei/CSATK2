@@ -9,7 +9,7 @@ public enum GoType {
     MOLECULAR_FUNCTION(1, "Molecular Function"),
     BIOLOGICAL_PROCESS(2, "Biological Process"),
     CELLULAR_COMPONENT(4, "Cellular Component"),
-    PATHWAY(3, "Pathway");
+    PATHWAY(3, "KEGG Pathway");
 
     private int type;
     private String description;

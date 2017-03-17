@@ -6,7 +6,7 @@ package cn.j1angvei.castk2.type;
  */
 public enum OutType {
     IDX_GENOME,
-    QC_RAW, TRIM, QC_CLEAN, PARSE_ZIP,
+    QC_RAW, PARSE_ZIP, TRIM, QC_CLEAN,
     ALIGNMENT, BAM_CONVERTED, BAM_SORTED, QC_BAM,
     BAM_RMDUP, BAM_UNIQUE, PEAK_CALLING,
     MOTIF,

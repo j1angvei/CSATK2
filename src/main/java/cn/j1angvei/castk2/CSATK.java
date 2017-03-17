@@ -6,7 +6,7 @@ package cn.j1angvei.castk2;
  */
 public class CSATK {
     public static void main(String[] args) {
-        if (args.length == 0 || args.length > 2) {
+        if (args.length == 0) {
             usage();
             return;
         }
@@ -28,7 +28,17 @@ public class CSATK {
                 if (args.length == 2) {
                     Task.function(args[1]);
                 } else {
-                    throw new IllegalArgumentException("\nFunction keywords are not in function1,function2,function... format!");
+                    System.err.println("Function keywords are not in function1,function2,function... format!");
+                }
+                break;
+            case Task.SOLELY:
+                if (args.length > 2) {
+                    String functionKeyword = args[1];
+                    String[] paramArgs = new String[args.length - 2];
+                    System.arraycopy(args, 2, paramArgs, 0, paramArgs.length);
+                    Task.solely(functionKeyword, paramArgs);
+                } else {
+                    System.err.println("Lack of solely function arguments, java -jar CSATK.jar -s [function keyword] [arg0] [arg0] ...");
                 }
                 break;
             default:
@@ -36,10 +46,10 @@ public class CSATK {
         }
     }
 
-
     private static void usage() {
         System.out.printf("Program: CSATK(ChIP-Seq Analysis Toolkit)\n" +
-                        "Version: 2.0-170313\n" +
+                        "Version: 2.0-170317 by j1angvei\n" +
+                        "Project: https://github.com/j1angvei/CSATK2" +
                         "Usage:\tjava -jar CSATK.jar <task> [function1,function2,...]\n " +
                         "\n" +
                         "Tasks:\n" +
@@ -66,13 +76,21 @@ public class CSATK {
                         "\t%s,\tget gene list  from annotation result\n" +
                         "\t%s,\tgo & pathway analysis using panther\n" +
                         "\t%s,\tgenerate analysis summary in HTML format\n" +
+                        "\n" +
+                        "Run function solely:\n" +
+                        "java -jar CSATK.jar " + Task.SOLELY + " <function keyword> [arg1] [arg2] [arg3] ...\n" +
+                        "\t%s [species code] [gene list file] [output file]\n" +
                         "\n"
                 ,
+                //task
                 Task.PIPELINE, Task.FUNCTION, Task.INSTALL, Task.RESET, Task.BACKUP,
+                //function
                 Function.GENOME_IDX, Function.QC_RAW, Function.TRIM, Function.QC_CLEAN,
                 Function.ALIGNMENT, Function.CONVERT_SAM, Function.SORT_BAM, Function.QC_BAM, Function.RMDUP_BAM, Function.UNIQUE_BAM,
                 Function.PEAK_CALLING, Function.MOTIF,
-                Function.PEAK_ANNOTATION, Function.GENE_LIST, Function.GO_PATHWAY, Function.SUMMARY
+                Function.PEAK_ANNOTATION, Function.GENE_LIST, Function.GO_PATHWAY, Function.SUMMARY,
+                //solely function
+                Function.GO_PATHWAY
         );
     }
 }

@@ -233,7 +233,7 @@ public class SwCmd {
         return FileUtil.listToArray(cmd);
     }
 
-    public static String[] flagstat(Experiment experiment) {
+    public static String[] flagStat(Experiment experiment) {
         return null;
     }
 

@@ -6,11 +6,11 @@ package cn.j1angvei.castk2.anno;
 public class Exon extends Region {
     public Exon(String chromosome, long start, long end) {
         super(chromosome, start, end);
-        type="exon";
+        type = "exon";
     }
 
     public Exon(String chromosome, String strStart, String strEnd) {
         super(chromosome, strStart, strEnd);
-        type="exon";
+        type = "exon";
     }
 }

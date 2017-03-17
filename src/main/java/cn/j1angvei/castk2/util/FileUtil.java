@@ -18,10 +18,6 @@ import java.util.List;
 public class FileUtil {
     private static String WORK_DIR = System.getProperty("user.dir") + File.separator;
 
-    public enum Unit {
-        BYTES, KB, MB, GB
-    }
-
     public static String getWorkDir() {
         return WORK_DIR;
     }
@@ -148,7 +144,7 @@ public class FileUtil {
         return readFile(WORK_DIR + "config" + File.separator + type.getFileName());
     }
 
-    private static String readFromResourceFolder(ResType type) {
+    public static String readFromResourceFolder(ResType type) {
         String content = "";
         try {
             content = IOUtils.toString(CSATK.class.getClassLoader().getResourceAsStream(type.getFileName()), Charset.defaultCharset());
@@ -208,5 +204,9 @@ public class FileUtil {
 
     public static String getTimestamp() {
         return new SimpleDateFormat("yyMMdd_HHmmss").format(new Date());
+    }
+
+    public enum Unit {
+        BYTES, KB, MB, GB
     }
 }

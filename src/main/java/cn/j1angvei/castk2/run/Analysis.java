@@ -104,6 +104,7 @@ public class Analysis {
     }
 
     private static String[] getCommands(Experiment experiment, Function function) {
+        String geneList = CONF.getDirectory(OutType.GENE_LIST) + experiment.getCode() + Constant.SUFFIX_GENE_LIST;
         switch (function) {
             case QC_RAW:
                 return SwCmd.qcRawReads(experiment);
@@ -131,16 +132,14 @@ public class Analysis {
                 return SwCmd.annotatePeaks(experiment);
             case GENE_LIST:
                 String annotatedPeak = CONF.getDirectory(OutType.ANNOTATION) + experiment.getCode() + Constant.SUFFIX_ANNO_BED;
-                String geneList = CONF.getDirectory(OutType.GENE_LIST) + experiment.getCode() + Constant.SUFFIX_GENE_LIST;
                 SwUtil.extractGeneList(annotatedPeak, geneList);
                 return new String[]{
                         "echo\"GENE_LIST are located at: " + annotatedPeak + "\" "
                 };
             case GO_PATHWAY:
-                String geneIdFile = CONF.getDirectory(OutType.GENE_LIST) + experiment.getCode() + Constant.SUFFIX_GENE_LIST;
-                String outFile = CONF.getDirectory(OutType.GO_PATHWAY) + experiment.getCode() + Constant.SUFFIX_GO_PATHWAY;
-                PantherAnalysis.newInstance().analysis(geneIdFile, outFile, experiment.getGenomeCode());
-                return new String[]{"echo \"GO_PATHWAY results are located at: " + outFile + "\""};
+                String outGoFile = CONF.getDirectory(OutType.GO_PATHWAY) + experiment.getCode() + Constant.SUFFIX_GO_PATHWAY;
+                PantherAnalysis.newInstance(experiment.getCode(), experiment.getGenomeCode(), geneList, outGoFile).analysis();
+                return new String[]{"echo \"GO_PATHWAY results are located at: " + outGoFile + "\""};
             default:
                 throw new IllegalArgumentException("Illegal Function args in experiment analysis!");
         }

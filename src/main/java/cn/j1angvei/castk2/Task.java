@@ -2,6 +2,7 @@ package cn.j1angvei.castk2;
 
 
 import cn.j1angvei.castk2.cmd.InstallCmd;
+import cn.j1angvei.castk2.panther.PantherAnalysis;
 import cn.j1angvei.castk2.run.Analysis;
 import cn.j1angvei.castk2.run.Executor;
 import cn.j1angvei.castk2.type.OutType;
@@ -21,6 +22,7 @@ public class Task {
     public static final String RESET = "-r";
     public static final String BACKUP = "-b";
     public static final String FUNCTION = "-f";
+    public static final String SOLELY = "-s";
 
     public static void pipeline() {
         for (Function function : Function.values()) {
@@ -86,5 +88,21 @@ public class Task {
             Analysis.runFunction(function);
             System.out.println("Analysis " + function.name() + " finished!");
         }
+    }
+
+    public static void solely(String functionKeyword, String[] paramArgs) {
+        Function function = Function.fromKeyword(functionKeyword);
+        switch (function) {
+            case GO_PATHWAY:
+                int genomeCode = Integer.parseInt(paramArgs[0]);
+                String geneList = paramArgs[1];
+                String outFile = paramArgs[2];
+                PantherAnalysis.newInstance(null, genomeCode, geneList, outFile).analysis();
+                break;
+            default:
+                System.err.println("Function under construction...");
+                break;
+        }
+
     }
 }
