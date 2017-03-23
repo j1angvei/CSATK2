@@ -114,7 +114,7 @@ public class SwCmd {
 
     public static String[] alignment(Experiment experiment) {
         String cmd = experiment.getFastq2() == null ?
-                String.format("%s mem %s -t %d %s > %s",
+                String.format("%s mem -M %s -t %d %s > %s",
                         CONF.getSoftwareExecutable(SwType.BWA),
                         CONF.getDirectory(OutType.IDX_GENOME) + experiment.getGenomeCode(),
                         SwUtil.THREAD_NUMBER,
