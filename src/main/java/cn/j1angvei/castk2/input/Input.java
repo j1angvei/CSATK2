@@ -1,13 +1,18 @@
 package cn.j1angvei.castk2.input;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
  * Created by mjian on 2016/11/29.
  */
 public class Input {
+    @SerializedName("genome")
     private List<Genome> genome;
+    @SerializedName("experiment")
     private List<Experiment> experiment;
+    @SerializedName("broadPeaks")
     private List<String> broadPeaks;
 
     public Input() {
@@ -27,9 +32,12 @@ public class Input {
 
     public void initBroadPeaks() {
         for (Experiment e : this.experiment) {
-            if (broadPeaks.contains(e.getCode())) {
-                e.setBroadPeak(true);
-            }
+            e.setBroadPeak(broadPeaks.contains(e.getCode()));
+//            if (broadPeaks.contains(e.getCode())) {
+//                e.setBroadPeak(true);
+//            } else {
+//                e.setBroadPeak(false);
+//            }
         }
     }
 
