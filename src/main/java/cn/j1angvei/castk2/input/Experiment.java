@@ -9,6 +9,7 @@ public class Experiment {
     private String fastq2;
     private String control;
     private int genomeCode;
+    private boolean isBroadPeak = false;
 
     public Experiment() {
     }
@@ -33,6 +34,14 @@ public class Experiment {
         return genomeCode;
     }
 
+    public boolean isBroadPeak() {
+        return isBroadPeak;
+    }
+
+    public void setBroadPeak(boolean broadPeak) {
+        isBroadPeak = broadPeak;
+    }
+
     @Override
     public String toString() {
         return "Experiment{" +
@@ -41,6 +50,7 @@ public class Experiment {
                 ", fastq2='" + fastq2 + '\'' +
                 ", control='" + control + '\'' +
                 ", genomeCode='" + genomeCode + '\'' +
+                ", isBroadPeak='" + isBroadPeak + '\'' +
                 '}';
     }
 }

@@ -30,5 +30,9 @@
       "control": "control",
       "genomeCode": 11
     }
+  ],
+  "broadPeaks": [
+    "treatment",
+    "control"
   ]
 }

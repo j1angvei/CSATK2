@@ -185,17 +185,23 @@ public class SwCmd {
         Genome genome = CONF.getGenome(experiment.getGenomeCode());
         long gSize = genome.getSize();
         if (gSize == 0) {
+            System.err.println("Genome size not specified! calculate genome FASTA file size instead!");
             gSize = FileUtil.countFileContentSize(CONF.getDirectory(SubType.GENOME) + genome.getFasta());
             genome.setSize(gSize);
+            System.err.println("Calculated genome size is:" + gSize);
         }
         //has no control experiment
         //single "macs2 callpeak -t ChIP.bam -c Control.bam -f BAM -g hs -n test -B -q 0.01"
-        cmd.add(String.format("%s callpeak -t %s -f BAM -g %d -n %s -B",
+        String callPeakCmd = String.format("%s callpeak -t %s -f BAM -g %d -n %s -B",
                 CONF.getSoftwareExecutable(SwType.MACS2),
                 CONF.getDirectory(OutType.BAM_UNIQUE) + experiment.getCode() + Constant.SUFFIX_UNIQUE_BAM,
                 gSize,
-                CONF.getDirectory(OutType.PEAK_CALLING) + experiment.getCode())
-        );
+                CONF.getDirectory(OutType.PEAK_CALLING) + experiment.getCode());
+        //broad peaks need to set '--broad' parameter
+        if (experiment.isBroadPeak()) {
+            callPeakCmd += " --broad";
+        }
+        cmd.add(callPeakCmd);
         return FileUtil.listToArray(cmd);
     }
 

@@ -25,6 +25,7 @@ public class ConfUtil {
         try {
             config = gson.fromJson(FileUtil.readFromConfigFolder(ResType.CONFIG), Config.class);
             input = gson.fromJson(FileUtil.readFromConfigFolder(ResType.INPUT), Input.class);
+            input.initBroadPeaks();
         } catch (JsonSyntaxException e) {
             System.err.println("Error with " + ResType.CONFIG + " or " + ResType.INPUT + ", go check it!");
         }

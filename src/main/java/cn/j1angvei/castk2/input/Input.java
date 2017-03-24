@@ -8,6 +8,7 @@ import java.util.List;
 public class Input {
     private List<Genome> genome;
     private List<Experiment> experiment;
+    private List<String> broadPeaks;
 
     public Input() {
     }
@@ -20,11 +21,24 @@ public class Input {
         return experiment;
     }
 
+    public List<String> getBroadPeaks() {
+        return broadPeaks;
+    }
+
+    public void initBroadPeaks() {
+        for (Experiment e : this.experiment) {
+            if (broadPeaks.contains(e.getCode())) {
+                e.setBroadPeak(true);
+            }
+        }
+    }
+
     @Override
     public String toString() {
         return "Input{" +
                 "genome=" + genome +
                 ", experiment=" + experiment +
+                ", broadPeaks=" + broadPeaks +
                 '}';
     }
 }
