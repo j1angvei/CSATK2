@@ -59,9 +59,9 @@ public class SwUtil {
                 if (line.startsWith("Sequence length")) {
                     String len = line.split("\t")[1];
                     if (len.contains("-")) {
-                        len = len.split("-")[0];
+                        len = len.split("-")[1];
                     }
-                    len = String.valueOf(Integer.parseInt(len) / 3);
+                    len = String.valueOf(Integer.parseInt(len));
                     FileUtil.overwriteFile(len, outDir + experiment.getCode() + ".len");
                 }
                 //in overrepresented block

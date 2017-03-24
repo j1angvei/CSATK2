@@ -21,7 +21,7 @@ import java.util.List;
  * Created by j1angvei on 2016/11/29.
  */
 public class SwCmd {
-    private static final String PARAM = "ILLUMINACLIP:%s:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 AVGQUAL:20 MINLEN:%s";
+    private static final String PARAM = "ILLUMINACLIP:%s:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 AVGQUAL:20 MINLEN:%d";
     private static ConfUtil CONF = ConfUtil.getInstance();
 
     public static String[] genomeIndex(Genome genome) {
@@ -61,6 +61,7 @@ public class SwCmd {
         String phred = FileUtil.readFile(inputPrefix + Constant.SUFFIX_PHRED);
         String minLen = FileUtil.readFile(inputPrefix + Constant.SUFFIX_LEN);
         String faFile = inputPrefix + Constant.SUFFIX_FA;
+        int len = Integer.parseInt(minLen) / 3;
         if (experiment.getFastq2() == null) {
             //single end
             cmd = String.format("%s -Xmx256m -jar %s SE -threads %d %s %s %s " + PARAM,
@@ -71,7 +72,7 @@ public class SwCmd {
                     fastq1,
                     outputRawReadsPrefix + "." + StrUtil.getSuffix(experiment.getFastq1()),
                     faFile,
-                    minLen);
+                    len);
         } else {
             //pair end
             String fastq2 = CONF.getDirectory(SubType.INPUT) + experiment.getFastq2();
@@ -87,7 +88,7 @@ public class SwCmd {
                     outputRawReadsPrefix + "_2." + StrUtil.getSuffix(experiment.getFastq2()),
                     outputRawReadsPrefix + "_2_unpaired." + StrUtil.getSuffix(experiment.getFastq2()),
                     faFile,
-                    minLen
+                    len
             );
         }
         return FileUtil.wrapString(cmd);
