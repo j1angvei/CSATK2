@@ -33,11 +33,6 @@ public class Input {
     public void initBroadPeaks() {
         for (Experiment e : this.experiment) {
             e.setBroadPeak(broadPeaks.contains(e.getCode()));
-//            if (broadPeaks.contains(e.getCode())) {
-//                e.setBroadPeak(true);
-//            } else {
-//                e.setBroadPeak(false);
-//            }
         }
     }
 

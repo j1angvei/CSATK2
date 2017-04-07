@@ -4,7 +4,8 @@ package cn.j1angvei.castk2;
  * Created by Wayne on 2/28 0028.
  */
 public class Constant {
-    public static final String SUFFIX_PEAKS = "_peaks.narrowPeak";
+    public static final String SFX_NARROW_PEAKS = "_peaks.narrowPeak";
+    public static final String SFX_BROAD_PEAKS = "_peaks.broadPeak";
     public static final String SUFFIX_ANNO_BED = "_annotation.bed";
     public static final String SUFFIX_PHRED = ".phred";
     public static final String SUFFIX_LEN = ".len";

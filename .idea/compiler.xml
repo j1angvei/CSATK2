@@ -4,6 +4,7 @@
     <bytecodeTargetLevel>
       <module name="CSATK2_main" target="1.7" />
       <module name="CSATK2_test" target="1.7" />
+      <module name="IdeaProjects-CSATK2_test" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>

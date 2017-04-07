@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/CSATK2.iml" filepath="$PROJECT_DIR$/.idea/modules/CSATK2.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/CSATK2_main.iml" filepath="$PROJECT_DIR$/.idea/modules/CSATK2_main.iml" group="CSATK2" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/CSATK2_test.iml" filepath="$PROJECT_DIR$/.idea/modules/CSATK2_test.iml" group="CSATK2" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/IdeaProjects-CSATK2_test.iml" filepath="$PROJECT_DIR$/.idea/modules/IdeaProjects-CSATK2_test.iml" group="CSATK2" />
     </modules>
   </component>
 </project>

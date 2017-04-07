@@ -207,6 +207,7 @@ public class SwCmd {
     }
 
     public static String[] annotatePeaks(Experiment experiment) {
+        String sfxPeakFile = experiment.isBroadPeak() ? Constant.SFX_BROAD_PEAKS : Constant.SFX_NARROW_PEAKS;
         Genome genome = CONF.getGenome(experiment.getGenomeCode());
         String annoFileName = genome.getAnnotation();
         String annoFormat = StrUtil.getSuffix(annoFileName);
@@ -214,7 +215,7 @@ public class SwCmd {
         cmd.add(OsCmd.addPath(SwUtil.getPath(SwType.HOMER)));
         cmd.add(String.format("%s %s %s -%s %s > %s",
                 CONF.getSoftwareExecutable(SwType.HOMER) + Constant.EXE_HOMER_ANNOTATE_PEAK,
-                CONF.getDirectory(OutType.PEAK_CALLING) + experiment.getCode() + Constant.SUFFIX_PEAKS,
+                CONF.getDirectory(OutType.PEAK_CALLING) + experiment.getCode() + sfxPeakFile,
                 CONF.getDirectory(SubType.GENOME) + genome.getFasta(),
                 annoFormat,
                 CONF.getDirectory(SubType.GENOME) + genome.getAnnotation(),
@@ -224,6 +225,7 @@ public class SwCmd {
     }
 
     public static String[] findMotifs(Experiment experiment) {
+        String sfxPeakFile = experiment.isBroadPeak() ? Constant.SFX_BROAD_PEAKS : Constant.SFX_NARROW_PEAKS;
         Genome genome = CONF.getGenome(experiment.getGenomeCode());
         List<String> cmd = new ArrayList<>();
         //add homer to environment path
@@ -233,7 +235,7 @@ public class SwCmd {
         //Usage: findMotifsGenome.pl <pos file> <genome> <output directory> [additional options]
         cmd.add(String.format("%s %s %s %s -size 200 -len 8",
                 CONF.getSoftwareExecutable(SwType.HOMER) + Constant.EXE_HOMER_FIND_MOTIF,
-                CONF.getDirectory(OutType.PEAK_CALLING) + experiment.getCode() + Constant.SUFFIX_PEAKS,
+                CONF.getDirectory(OutType.PEAK_CALLING) + experiment.getCode() + sfxPeakFile,
                 CONF.getDirectory(SubType.GENOME) + genome.getFasta(),
                 CONF.getDirectory(OutType.MOTIF) + File.separator + experiment.getCode()
         ));
