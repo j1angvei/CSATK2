@@ -27,4 +27,9 @@ public class Constant {
     public static final String SAM_SFX = ".sam";
     public static final String SAI_SFX = ".sai";
 
+    /**
+     * specific suffix for intermediate file generated in analysis
+     */
+    public static final String FLAGSTAT_SFX = ".flagstat";
+
 }

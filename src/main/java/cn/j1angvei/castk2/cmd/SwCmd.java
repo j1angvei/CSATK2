@@ -135,12 +135,12 @@ public class SwCmd {
         String sai1, sai2 = null;
         if (experiment.getFastq2() == null) {
             fastq1 = CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "." + StrUtil.getSuffix(experiment.getFastq1());
-            sai1 = CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + Constant.SAM_SFX;
+            sai1 = CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + Constant.SAI_SFX;
         } else {
             fastq1 = CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "_1." + StrUtil.getSuffix(experiment.getFastq1());
             fastq2 = CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "_2." + StrUtil.getSuffix(experiment.getFastq2());
-            sai1 = CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + "_1" + Constant.SAM_SFX;
-            sai2 = CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + "_2" + Constant.SAM_SFX;
+            sai1 = CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + "_1" + Constant.SAI_SFX;
+            sai2 = CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + "_2" + Constant.SAI_SFX;
         }
         //alignment result SAM file's absolute path
         String sam = CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + Constant.SAM_SFX;
@@ -291,10 +291,18 @@ public class SwCmd {
     }
 
     public static String[] flagStat(Experiment experiment) {
-        return null;
-    }
-
-    public static String[] goAndPathway(Experiment experiment) {
-        return new String[]{""};
+        //for sorted bam, rmdup bam, q>30 bam
+        String[] commands = new String[3];
+        String exe = CONF.getSoftwareExecutable(SwType.SAMTOOLS);
+        //sorted bam file
+        String sortedBam = CONF.getDirectory(OutType.BAM_SORTED) + experiment.getCode() + Constant.SUFFIX_SORTED_BAM;
+        commands[0] = String.format("%s flagstat %s > %s", exe, sortedBam, sortedBam + Constant.FLAGSTAT_SFX);
+        //rmdup bam file
+        String rmdupBam = CONF.getDirectory(OutType.BAM_RMDUP) + experiment.getCode() + Constant.SUFFIX_RMDUP_BAM;
+        commands[1] = String.format("%s flagstat %s > %s", exe, rmdupBam, rmdupBam + Constant.FLAGSTAT_SFX);
+        //q>30 bam file
+        String q30Bam = CONF.getDirectory(OutType.BAM_RMDUP) + experiment.getCode() + Constant.SUFFIX_RMDUP_BAM;
+        commands[1] = String.format("%s flagstat %s > %s", exe, q30Bam, q30Bam + Constant.FLAGSTAT_SFX);
+        return commands;
     }
 }
