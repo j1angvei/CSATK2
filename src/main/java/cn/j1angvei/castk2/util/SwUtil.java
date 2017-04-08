@@ -42,18 +42,18 @@ public class SwUtil {
                     continue;
                 }
                 //read encoding info
-                if (line.startsWith("Encoding")) {
-                    if (line.contains("Sanger")) {
-                        phred = "-phred33";
-                    } else if (line.contains("Illumina")) {
-                        String[] segment = line.split("[ \t/]");
-                        float value = Float.parseFloat(segment[segment.length - 1]);
-                        if (value >= 1.8f) {
-                            phred = "-phred33";
-                        }
-                    }
-                    FileUtil.overwriteFile(phred, outDir + experiment.getCode() + ".phred");
-                }
+//                if (line.startsWith("Encoding")) {
+//                    if (line.contains("Sanger")) {
+//                        phred = "-phred33";
+//                    } else if (line.contains("Illumina")) {
+//                        String[] segment = line.split("[ \t/]");
+//                        float value = Float.parseFloat(segment[segment.length - 1]);
+//                        if (value >= 1.8f) {
+//                            phred = "-phred33";
+//                        }
+//                    }
+//                    FileUtil.overwriteFile(phred, outDir + experiment.getCode() + ".phred");
+//                }
                 //read reads length
                 if (line.startsWith("Sequence length")) {
                     String len = line.split("\t")[1];

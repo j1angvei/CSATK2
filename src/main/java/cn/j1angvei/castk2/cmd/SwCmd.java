@@ -3,16 +3,17 @@ package cn.j1angvei.castk2.cmd;
 import cn.j1angvei.castk2.Constant;
 import cn.j1angvei.castk2.input.Experiment;
 import cn.j1angvei.castk2.input.Genome;
+import cn.j1angvei.castk2.qc.QCInfo;
 import cn.j1angvei.castk2.type.OutType;
 import cn.j1angvei.castk2.type.PfType;
 import cn.j1angvei.castk2.type.SubType;
 import cn.j1angvei.castk2.type.SwType;
-import cn.j1angvei.castk2.util.ConfUtil;
-import cn.j1angvei.castk2.util.FileUtil;
-import cn.j1angvei.castk2.util.StrUtil;
-import cn.j1angvei.castk2.util.SwUtil;
+import cn.j1angvei.castk2.util.*;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +62,15 @@ public class SwCmd {
         String outputRawReadsPrefix = CONF.getDirectory(OutType.TRIM) + experiment.getCode();
         String phred = FileUtil.readFile(inputPrefix + Constant.SUFFIX_PHRED);
         String minLen = FileUtil.readFile(inputPrefix + Constant.SUFFIX_LEN);
-        String faFile = inputPrefix + Constant.SUFFIX_FA;
+        String faFile = inputPrefix + Constant.FA_SFX;
+        File qcFile = new File(CONF.getDirectory(OutType.PARSE_ZIP) + experiment.getCode() + Constant.QC_ZIP_SFX);
+        String qcContent = null;
+        try {
+            qcContent = FileUtils.readFileToString(qcFile, Charset.defaultCharset());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        QCInfo info = GsonUtil.fromJson(qcContent);
         int len = Integer.parseInt(minLen) / 3;
         if (experiment.getFastq2() == null) {
             //single end

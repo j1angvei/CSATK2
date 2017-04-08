@@ -1,12 +1,15 @@
 package cn.j1angvei.castk2.qc;
 
-import java.util.HashMap;
+import javafx.util.Pair;
+
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
 /**
- * Created by Wayne on 4/8 0008.
+ * a Object store info retrieved from FastQC zip report
+ * Created by Wayne on 4/8 2017.
  */
 public class QCInfo {
     private String encoding;//fastq encode format
@@ -14,11 +17,13 @@ public class QCInfo {
     private int length;//reads length
     private int percentGC;// GC percentage
     private int headCrop;//the number of how many base show cut from the start
-    private Map<String, String> overrepresentedSequence;//overrepresented sequences, sequence as key, sequence name as value
-    private Set<String> adapter;//adapters exceed 5% of all sequences
+    private List<Pair<String, String>> overrepresentedSeq;//overrepresented sequences, sequence as key, sequence name as value
+    private Set<Adapter> adapter;//adapters exceed 5% of all sequences
+    private String faFilePath;//store overrepresented sequences in FASTA/FA format
+    private String phred; // phred33 or phred64
 
     public QCInfo() {
-        overrepresentedSequence = new HashMap<>();
+        overrepresentedSeq = new ArrayList<>();
         adapter = new HashSet<>();
     }
 
@@ -62,19 +67,37 @@ public class QCInfo {
         this.headCrop = headCrop;
     }
 
-    public Map<String, String> getOverrepresentedSequence() {
-        return overrepresentedSequence;
+
+    public List<Pair<String, String>> getOverrepresentedSeq() {
+        return overrepresentedSeq;
     }
 
-    public void setOverrepresentedSequence(Map<String, String> overrepresentedSequence) {
-        this.overrepresentedSequence = overrepresentedSequence;
+    public void setOverrepresentedSeq(List<Pair<String, String>> overrepresentedSeq) {
+        this.overrepresentedSeq = overrepresentedSeq;
     }
 
-    public Set<String> getAdapter() {
+    public Set<Adapter> getAdapter() {
         return adapter;
     }
 
-    public void setAdapter(Set<String> adapter) {
+    public void setAdapter(Set<Adapter> adapter) {
         this.adapter = adapter;
     }
+
+    public String getFaFilePath() {
+        return faFilePath;
+    }
+
+    public void setFaFilePath(String faFilePath) {
+        this.faFilePath = faFilePath;
+    }
+
+    public String getPhred() {
+        return phred;
+    }
+
+    public void setPhred(String phred) {
+        this.phred = phred;
+    }
+
 }

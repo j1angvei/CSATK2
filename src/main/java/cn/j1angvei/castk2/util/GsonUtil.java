@@ -13,4 +13,8 @@ public class GsonUtil {
     public static String toJson(QCInfo qcInfo) {
         return GSON.toJson(qcInfo);
     }
+
+    public static QCInfo fromJson(String qcContent) {
+        return GSON.fromJson(qcContent, QCInfo.class);
+    }
 }
