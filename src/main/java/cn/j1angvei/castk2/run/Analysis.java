@@ -103,8 +103,8 @@ public class Analysis {
         }
     }
 
-    private static String[] getCommands(Experiment experiment, Function function) {
-        String geneList = CONF.getDirectory(OutType.GENE_LIST) + experiment.getCode() + Constant.SUFFIX_GENE_LIST;
+    private static String[] getCommands(final Experiment experiment, Function function) {
+        final String geneList = CONF.getDirectory(OutType.GENE_LIST) + experiment.getCode() + Constant.SUFFIX_GENE_LIST;
         switch (function) {
             case QC_RAW:
                 return SwCmd.qcRawReads(experiment);
@@ -137,9 +137,18 @@ public class Analysis {
                         "echo\"GENE_LIST are located at: " + annotatedPeak + "\" "
                 };
             case GO_PATHWAY:
-                String outGoFile = CONF.getDirectory(OutType.GO_PATHWAY) + experiment.getCode() + Constant.SUFFIX_GO_PATHWAY;
-                PantherAnalysis.newInstance(experiment.getCode(), experiment.getGenomeCode(), geneList, outGoFile).analysis();
-                return new String[]{"echo \"GO_PATHWAY results are located at: " + outGoFile + "\""};
+                final String outGoFile = CONF.getDirectory(OutType.GO_PATHWAY) + experiment.getCode() + Constant.SUFFIX_GO_PATHWAY;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("run go & pathway in background!");
+                        PantherAnalysis.newInstance(experiment.getCode(), experiment.getGenomeCode(), geneList, outGoFile).analysis();
+                    }
+                }).start();
+                return new String[]{
+                        "echo \"GO_PATHWAY results are located at: " + outGoFile + "\"",
+                        "echo \"genome code is: " + experiment.getGenomeCode() + "\"",
+                        "echo \"gene list file at: " + geneList + "\""};
             default:
                 throw new IllegalArgumentException("Illegal Function args in experiment analysis!");
         }

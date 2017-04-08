@@ -1,5 +1,7 @@
 package cn.j1angvei.castk2;
 
+import cn.j1angvei.castk2.qc.ParseZip;
+
 /**
  * Entry of the program
  * Created by Wayne on 2016/11/23.

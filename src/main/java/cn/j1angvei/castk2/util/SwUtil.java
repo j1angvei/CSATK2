@@ -17,7 +17,6 @@ import java.util.zip.ZipFile;
  * Created by j1angvei on 2016/11/29.
  */
 public class SwUtil {
-    public static final int THREAD_NUMBER = 10;
 
     public static String getPythonVersion() {
         return "2.7";

@@ -23,6 +23,7 @@ import java.util.List;
 public class SwCmd {
     private static final String PARAM = "ILLUMINACLIP:%s:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 AVGQUAL:20 MINLEN:%d";
     private static ConfUtil CONF = ConfUtil.getInstance();
+    private static final int THREAD_NUMBER = 10;
 
     public static String[] genomeIndex(Genome genome) {
         String cmd = String.format("%s index -p %s %s",
@@ -37,14 +38,14 @@ public class SwCmd {
         cmd.add(String.format("%s -o %s -t %d %s",
                 CONF.getSoftwareExecutable(SwType.FASTQC),
                 CONF.getDirectory(OutType.QC_RAW),
-                SwUtil.THREAD_NUMBER,
+                THREAD_NUMBER,
                 CONF.getDirectory(SubType.INPUT) + experiment.getFastq1())
         );
         if (experiment.getFastq2() != null) {
             cmd.add(String.format("%s -o %s -t %d %s",
                     CONF.getSoftwareExecutable(SwType.FASTQC),
                     CONF.getDirectory(OutType.QC_RAW),
-                    SwUtil.THREAD_NUMBER,
+                    THREAD_NUMBER,
                     CONF.getDirectory(SubType.INPUT) + experiment.getFastq2())
             );
         }
@@ -67,7 +68,7 @@ public class SwCmd {
             cmd = String.format("%s -Xmx256m -jar %s SE -threads %d %s %s %s " + PARAM,
                     CONF.getPlatform(PfType.JAVA),
                     CONF.getSoftwareExecutable(SwType.TRIMMOMATIC),
-                    SwUtil.THREAD_NUMBER,
+                    THREAD_NUMBER,
                     phred,
                     fastq1,
                     outputRawReadsPrefix + "." + StrUtil.getSuffix(experiment.getFastq1()),
@@ -79,7 +80,7 @@ public class SwCmd {
             cmd = String.format("%s -Xmx256m -jar %s PE -threads %d %s %s %s %s %s %s %s " + PARAM,
                     CONF.getPlatform(PfType.JAVA),
                     CONF.getSoftwareExecutable(SwType.TRIMMOMATIC),
-                    SwUtil.THREAD_NUMBER,
+                    THREAD_NUMBER,
                     phred,
                     fastq1,
                     fastq2,
@@ -99,14 +100,14 @@ public class SwCmd {
         cmd.add(String.format("%s -o %s -t %d %s",
                 CONF.getSoftwareExecutable(SwType.FASTQC),
                 CONF.getDirectory(OutType.QC_CLEAN),
-                SwUtil.THREAD_NUMBER,
+                THREAD_NUMBER,
                 CONF.getDirectory(OutType.TRIM) + experiment.getCode()) + "_1." + StrUtil.getSuffix(experiment.getFastq1())
         );
         if (experiment.getFastq2() != null) {
             cmd.add(String.format("%s -o %s -t %d %s",
                     CONF.getSoftwareExecutable(SwType.FASTQC),
                     CONF.getDirectory(OutType.QC_CLEAN),
-                    SwUtil.THREAD_NUMBER,
+                    THREAD_NUMBER,
                     CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "_2." + StrUtil.getSuffix(experiment.getFastq2())
             ));
         }
@@ -118,13 +119,13 @@ public class SwCmd {
                 String.format("%s mem -M %s -t %d %s > %s",
                         CONF.getSoftwareExecutable(SwType.BWA),
                         CONF.getDirectory(OutType.IDX_GENOME) + experiment.getGenomeCode(),
-                        SwUtil.THREAD_NUMBER,
+                        THREAD_NUMBER,
                         CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "." + StrUtil.getSuffix(experiment.getFastq1()),
                         CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + Constant.SUFFIX_ALIGNMENT_SAM) :
                 String.format("%s mem %s -t %d %s %s > %s",
                         CONF.getSoftwareExecutable(SwType.BWA),
                         CONF.getDirectory(OutType.IDX_GENOME) + experiment.getGenomeCode(),
-                        SwUtil.THREAD_NUMBER,
+                        THREAD_NUMBER,
                         CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "_1." + StrUtil.getSuffix(experiment.getFastq1()),
                         CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "_2." + StrUtil.getSuffix(experiment.getFastq2()),
                         CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + Constant.SUFFIX_ALIGNMENT_SAM);
@@ -134,7 +135,7 @@ public class SwCmd {
     public static String[] convertSamToBam(Experiment experiment) {
         String cmd = String.format("%s view --threads %d -bS %s -o %s",
                 CONF.getSoftwareExecutable(SwType.SAMTOOLS),
-                SwUtil.THREAD_NUMBER,
+                THREAD_NUMBER,
                 CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + Constant.SUFFIX_ALIGNMENT_SAM,
                 CONF.getDirectory(OutType.BAM_CONVERTED) + experiment.getCode() + Constant.SUFFIX_CONVERTED_BAM);
         return FileUtil.wrapString(cmd);
@@ -144,7 +145,7 @@ public class SwCmd {
         String cmd = String.format("%s sort %s --threads %d -o %s",
                 CONF.getSoftwareExecutable(SwType.SAMTOOLS),
                 CONF.getDirectory(OutType.BAM_CONVERTED) + experiment.getCode() + Constant.SUFFIX_CONVERTED_BAM,
-                SwUtil.THREAD_NUMBER,
+                THREAD_NUMBER,
                 CONF.getDirectory(OutType.BAM_SORTED) + experiment.getCode() + Constant.SUFFIX_SORTED_BAM);
         return FileUtil.wrapString(cmd);
     }
