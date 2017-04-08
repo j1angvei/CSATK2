@@ -122,8 +122,9 @@ public class ParseZip {
                 }
                 // get "HEADCROP"(aka cut base from start to end in a sequence) information in Per base sequence content Module
                 else if (moduleFail && inPerBaseSequenceContent) {
-                    //TO BE MODIFIED LATER
-                    qcInfo.setHeadCrop(0);
+                    //default value
+                    qcInfo.setHeadCrop(qcInfo.getLength() / 10);
+
                 }
 
                 //get "fa file content" information in Overrepresented Sequence Module
@@ -220,19 +221,18 @@ public class ParseZip {
             default:
                 break;
         }
-
     }
 
     /**
      * four boolean value representing 4 modules in QC content text file
      */
-    private boolean inBasicStatistics = false;
-    private boolean inPerBaseSequenceContent = false;
-    private boolean inOverrepresentedSequences = false;
-    private boolean inAdapterContent = false;
+    private boolean inBasicStatistics;
+    private boolean inPerBaseSequenceContent;
+    private boolean inOverrepresentedSequences;
+    private boolean inAdapterContent;
     /**
      * if current module flag status is "fail", we retrieve info from that module and store in QCInfo
      * else we ignore it
      */
-    private boolean moduleFail = false;
+    private boolean moduleFail;
 }

@@ -53,16 +53,7 @@ public class SwCmd {
         return FileUtil.listToArray(cmd);
     }
 
-    public static String[] trimReads(Experiment experiment) {
-        //before trim reads, get phred, minLen and fa file from qc results in zip file
-        SwUtil.parseQcZip(experiment);
-        String cmd;
-        String fastq1 = CONF.getDirectory(SubType.INPUT) + experiment.getFastq1();
-        String inputPrefix = CONF.getDirectory(OutType.PARSE_ZIP) + experiment.getCode();
-        String outputRawReadsPrefix = CONF.getDirectory(OutType.TRIM) + experiment.getCode();
-        String phred = FileUtil.readFile(inputPrefix + Constant.SUFFIX_PHRED);
-        String minLen = FileUtil.readFile(inputPrefix + Constant.SUFFIX_LEN);
-        String faFile = inputPrefix + Constant.FA_SFX;
+    private static QCInfo getQCInfo(Experiment experiment) {
         File qcFile = new File(CONF.getDirectory(OutType.PARSE_ZIP) + experiment.getCode() + Constant.QC_ZIP_SFX);
         String qcContent = null;
         try {
@@ -70,19 +61,27 @@ public class SwCmd {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        QCInfo info = GsonUtil.fromJson(qcContent);
-        int len = Integer.parseInt(minLen) / 3;
+        return GsonUtil.fromJson(qcContent);
+    }
+
+    public static String[] trimReads(Experiment experiment) {
+        //before trim reads, get phred, minLen and fa file from qc results in zip file
+        String cmd;
+        String fastq1 = CONF.getDirectory(SubType.INPUT) + experiment.getFastq1();
+        String outputPrefix = CONF.getDirectory(OutType.TRIM) + experiment.getCode();
+
+        QCInfo qcInfo = getQCInfo(experiment);
         if (experiment.getFastq2() == null) {
             //single end
             cmd = String.format("%s -Xmx256m -jar %s SE -threads %d %s %s %s " + PARAM,
                     CONF.getPlatform(PfType.JAVA),
                     CONF.getSoftwareExecutable(SwType.TRIMMOMATIC),
                     THREAD_NUMBER,
-                    phred,
+                    qcInfo.getPhred(),
                     fastq1,
-                    outputRawReadsPrefix + "." + StrUtil.getSuffix(experiment.getFastq1()),
-                    faFile,
-                    len);
+                    outputPrefix + "." + StrUtil.getSuffix(experiment.getFastq1()),
+                    qcInfo.getFaFilePath(),
+                    qcInfo.getLength() / 3);
         } else {
             //pair end
             String fastq2 = CONF.getDirectory(SubType.INPUT) + experiment.getFastq2();
@@ -90,15 +89,15 @@ public class SwCmd {
                     CONF.getPlatform(PfType.JAVA),
                     CONF.getSoftwareExecutable(SwType.TRIMMOMATIC),
                     THREAD_NUMBER,
-                    phred,
+                    qcInfo.getPhred(),
                     fastq1,
                     fastq2,
-                    outputRawReadsPrefix + "_1." + StrUtil.getSuffix(experiment.getFastq1()),
-                    outputRawReadsPrefix + "_1_unpaired." + StrUtil.getSuffix(experiment.getFastq1()),
-                    outputRawReadsPrefix + "_2." + StrUtil.getSuffix(experiment.getFastq2()),
-                    outputRawReadsPrefix + "_2_unpaired." + StrUtil.getSuffix(experiment.getFastq2()),
-                    faFile,
-                    len
+                    outputPrefix + "_1." + StrUtil.getSuffix(experiment.getFastq1()),
+                    outputPrefix + "_1_unpaired." + StrUtil.getSuffix(experiment.getFastq1()),
+                    outputPrefix + "_2." + StrUtil.getSuffix(experiment.getFastq2()),
+                    outputPrefix + "_2_unpaired." + StrUtil.getSuffix(experiment.getFastq2()),
+                    qcInfo.getFaFilePath(),
+                    qcInfo.getLength() / 3
             );
         }
         return FileUtil.wrapString(cmd);
@@ -124,28 +123,67 @@ public class SwCmd {
     }
 
     public static String[] alignment(Experiment experiment) {
-        String cmd = experiment.getFastq2() == null ?
-                String.format("%s mem -M %s -t %d %s > %s",
-                        CONF.getSoftwareExecutable(SwType.BWA),
-                        CONF.getDirectory(OutType.IDX_GENOME) + experiment.getGenomeCode(),
-                        THREAD_NUMBER,
-                        CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "." + StrUtil.getSuffix(experiment.getFastq1()),
-                        CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + Constant.SUFFIX_ALIGNMENT_SAM) :
-                String.format("%s mem %s -t %d %s %s > %s",
-                        CONF.getSoftwareExecutable(SwType.BWA),
-                        CONF.getDirectory(OutType.IDX_GENOME) + experiment.getGenomeCode(),
-                        THREAD_NUMBER,
-                        CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "_1." + StrUtil.getSuffix(experiment.getFastq1()),
-                        CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "_2." + StrUtil.getSuffix(experiment.getFastq2()),
-                        CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + Constant.SUFFIX_ALIGNMENT_SAM);
-        return FileUtil.wrapString(cmd);
+        QCInfo qcInfo = getQCInfo(experiment);
+        //BWA executable absolute path
+        String exe = CONF.getSoftwareExecutable(SwType.BWA);
+        //reference genome index prefix with absolute path
+        String ref = CONF.getDirectory(OutType.IDX_GENOME) + experiment.getGenomeCode();
+
+        //two FastQ file,fastq2 is null if is SINGLE-END data
+        String fastq1, fastq2 = null;
+        //if sequence length short than 70bp,using BWA-ALN algorithm will generate SAI temporary index file
+        String sai1, sai2 = null;
+        if (experiment.getFastq2() == null) {
+            fastq1 = CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "." + StrUtil.getSuffix(experiment.getFastq1());
+            sai1 = CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + Constant.SAM_SFX;
+        } else {
+            fastq1 = CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "_1." + StrUtil.getSuffix(experiment.getFastq1());
+            fastq2 = CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "_2." + StrUtil.getSuffix(experiment.getFastq2());
+            sai1 = CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + "_1" + Constant.SAM_SFX;
+            sai2 = CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + "_2" + Constant.SAM_SFX;
+        }
+        //alignment result SAM file's absolute path
+        String sam = CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + Constant.SAM_SFX;
+        int length = qcInfo.getLength();
+        //do BWA-ALN algorithm
+        if (length <= 70) {
+            String[] commands;
+            //single end
+            if (experiment.getFastq2() == null) {
+                commands = new String[2];
+                //bwa aln ref.fa short_read.fq > aln_sa.sai
+                commands[0] = String.format("%s aln %s %s > %s", exe, ref, fastq1, sai1);
+                //bwa samse ref.fa aln_sa.sai short_read.fq > aln-se.sam
+                commands[1] = String.format("%s samse %s %s > %s", exe, ref, sai1, sam);
+            }
+            //pair end
+            else {
+                commands = new String[3];
+                //bwa aln ref.fa short_read.fq > aln_sa.sai
+                commands[0] = String.format("%s aln %s %s > %s", exe, ref, fastq1, sai1);
+                commands[1] = String.format("%s aln %s %s > %s", exe, ref, fastq2, sai2);
+                //bwa sampe ref.fa aln_sa1.sai aln_sa2.sai read1.fq read2.fq > aln-pe.sam
+                commands[2] = String.format("%s sampe %s %s %s %s %s > %s", exe, ref, sai1, sai2, fastq1, fastq2, sam);
+            }
+            return commands;
+        }
+        //do BWA-MEM algorithm
+        else {
+            String cmd = experiment.getFastq2() == null ?
+                    //single end
+                    String.format("%s mem -M %s -t %d %s > %s", exe, ref, THREAD_NUMBER, fastq1, sam) :
+                    //pair end
+                    String.format("%s mem -M %s -t %d %s %s > %s", exe, ref, THREAD_NUMBER, fastq1, fastq2, sam);
+            return FileUtil.wrapString(cmd);
+        }
+
     }
 
     public static String[] convertSamToBam(Experiment experiment) {
         String cmd = String.format("%s view --threads %d -bS %s -o %s",
                 CONF.getSoftwareExecutable(SwType.SAMTOOLS),
                 THREAD_NUMBER,
-                CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + Constant.SUFFIX_ALIGNMENT_SAM,
+                CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + Constant.SAM_SFX,
                 CONF.getDirectory(OutType.BAM_CONVERTED) + experiment.getCode() + Constant.SUFFIX_CONVERTED_BAM);
         return FileUtil.wrapString(cmd);
     }

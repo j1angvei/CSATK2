@@ -27,4 +27,8 @@ public class StrUtil {
         }
         return phred;
     }
+
+//    public static Double[] strArrayToDouble(String[] in) {
+//
+//    }
 }

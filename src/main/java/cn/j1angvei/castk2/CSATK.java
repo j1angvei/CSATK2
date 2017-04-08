@@ -1,14 +1,11 @@
 package cn.j1angvei.castk2;
 
-import cn.j1angvei.castk2.qc.ParseZip;
-
 /**
  * Entry of the program
  * Created by Wayne on 2016/11/23.
  */
 public class CSATK {
     public static void main(String[] args) {
-        ParseZip.getInstance().parse("C:\\Users\\Wayne\\IdeaProjects\\CSATK2\\O3_2.fq_fastqc.zip", "C:\\Users\\Wayne\\IdeaProjects\\CSATK2", "ty");
         if (args.length == 0) {
             usage();
             return;
