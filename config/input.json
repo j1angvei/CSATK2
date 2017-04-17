@@ -16,7 +16,7 @@
       "control": "Input",
       "genomeCode": 1
     },
-        {
+    {
       "code": "4729_2",
       "fastq1": "WGC078785-4729-2_combined_R1.fastq",
       "fastq2": "WGC078785-4729-2_combined_R2.fastq",

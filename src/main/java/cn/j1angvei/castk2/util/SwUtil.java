@@ -1,17 +1,10 @@
 package cn.j1angvei.castk2.util;
 
 import cn.j1angvei.castk2.Constant;
-import cn.j1angvei.castk2.input.Experiment;
-import cn.j1angvei.castk2.type.OutType;
 import cn.j1angvei.castk2.type.ResType;
 import cn.j1angvei.castk2.type.SwType;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 /**
  * Created by j1angvei on 2016/11/29.

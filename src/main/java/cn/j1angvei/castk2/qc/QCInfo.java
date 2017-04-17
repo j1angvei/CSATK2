@@ -1,10 +1,8 @@
 package cn.j1angvei.castk2.qc;
 
-import javafx.util.Pair;
-
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -17,13 +15,13 @@ public class QCInfo {
     private int length;//reads length
     private int percentGC;// GC percentage
     private int headCrop;//the number of how many base show cut from the start
-    private List<Pair<String, String>> overrepresentedSeq;//overrepresented sequences, sequence as key, sequence name as value
+    private Map<String, String> overrepresentedSeq;//overrepresented sequences, sequence as key, sequence name as value
     private Set<Adapter> adapter;//adapters exceed 5% of all sequences
     private String faFilePath;//store overrepresented sequences in FASTA/FA format
     private String phred; // phred33 or phred64
 
     public QCInfo() {
-        overrepresentedSeq = new ArrayList<>();
+        overrepresentedSeq = new HashMap<>();
         adapter = new HashSet<>();
     }
 
@@ -67,12 +65,11 @@ public class QCInfo {
         this.headCrop = headCrop;
     }
 
-
-    public List<Pair<String, String>> getOverrepresentedSeq() {
+    public Map<String, String> getOverrepresentedSeq() {
         return overrepresentedSeq;
     }
 
-    public void setOverrepresentedSeq(List<Pair<String, String>> overrepresentedSeq) {
+    public void setOverrepresentedSeq(Map<String, String> overrepresentedSeq) {
         this.overrepresentedSeq = overrepresentedSeq;
     }
 

@@ -23,8 +23,8 @@ import java.util.List;
  */
 public class SwCmd {
     private static final String PARAM = "ILLUMINACLIP:%s:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 AVGQUAL:20 MINLEN:%d";
-    private static ConfUtil CONF = ConfUtil.getInstance();
     private static final int THREAD_NUMBER = 10;
+    private static ConfUtil CONF = ConfUtil.getInstance();
 
     public static String[] genomeIndex(Genome genome) {
         String cmd = String.format("%s index -p %s %s",
@@ -54,7 +54,7 @@ public class SwCmd {
     }
 
     private static QCInfo getQCInfo(Experiment experiment) {
-        File qcFile = new File(CONF.getDirectory(OutType.PARSE_ZIP) + experiment.getCode() + Constant.QC_ZIP_SFX);
+        File qcFile = new File(CONF.getDirectory(OutType.PARSE_ZIP) + experiment.getCode() + Constant.JSON_SFX);
         String qcContent = null;
         try {
             qcContent = FileUtils.readFileToString(qcFile, Charset.defaultCharset());

@@ -4,7 +4,6 @@ import cn.j1angvei.castk2.Constant;
 import cn.j1angvei.castk2.util.FileUtil;
 import cn.j1angvei.castk2.util.GsonUtil;
 import cn.j1angvei.castk2.util.StrUtil;
-import javafx.util.Pair;
 import org.apache.commons.io.FileUtils;
 
 import java.io.BufferedReader;
@@ -12,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -34,14 +34,25 @@ public class ParseZip {
     private static final String FLAG_IN_OVERREPRESENTED_SEQUENCES = ">>Overrepresented sequences";
     private static final String FLAG_ADAPTER_CONTENT = ">>Adapter Content";
     private static final String FLAG_END_MODULE = ">>END_MODULE";
+    private static final ParseZip INSTANCE = new ParseZip();
+    /**
+     * four boolean value representing 4 modules in QC content text file
+     */
+    private boolean inBasicStatistics;
+    private boolean inPerBaseSequenceContent;
+    private boolean inOverrepresentedSequences;
+    private boolean inAdapterContent;
+    /**
+     * if current module flag status is "fail", we retrieve info from that module and store in QCInfo
+     * else we ignore it
+     */
+    private boolean moduleFail;
+
+    private ParseZip() {
+    }
 
     public static ParseZip getInstance() {
         return INSTANCE;
-    }
-
-    private static final ParseZip INSTANCE = new ParseZip();
-
-    private ParseZip() {
     }
 
     /**
@@ -49,6 +60,7 @@ public class ParseZip {
      * @param outDir      where JSON result and FA file will store in
      */
     public void parse(String zipFilePath, String outDir, String expCode) {
+        System.out.printf("zipfilepath %s\n outdir %s\n expcode %s\n", zipFilePath, outDir, expCode);
         //add File.separator to outdir if absent
         if (!outDir.endsWith(File.separator)) {
             outDir += File.separator;
@@ -136,8 +148,7 @@ public class ParseZip {
                     if (item[3].equals("No Hit")) {
                         continue;
                     }
-                    Pair<String, String> pair = new Pair<>(item[3], item[0]);
-                    qcInfo.getOverrepresentedSeq().add(pair);
+                    qcInfo.getOverrepresentedSeq().put(item[0], item[3]);
                 }
                 // get "adapter" information in Adapter Content Module
                 else if (moduleFail && inAdapterContent) {
@@ -167,9 +178,17 @@ public class ParseZip {
 
         }
         //overrepresented sequences
-        for (Pair<String, String> pair : qcInfo.getOverrepresentedSeq()) {
-            faContent.append(">").append(pair.getKey()).append("\n")
-                    .append(pair.getValue()).append("\n");
+        for (Map.Entry<String, String> entry : qcInfo.getOverrepresentedSeq().entrySet()) {
+            //forward sequence
+            String seq = entry.getKey();
+            String name = entry.getValue();
+            faContent.append(">").append(name).append("\n")
+                    .append(seq).append("\n");
+            //reverse sequence
+            String revSeq = "";
+            String revName = name + "_rv";
+            faContent.append(">").append(revName).append("\n")
+                    .append(revSeq).append("\n");
         }
         try {
             FileUtils.writeStringToFile(new File(faFilePath), faContent.toString(), Charset.defaultCharset(), false);
@@ -222,17 +241,4 @@ public class ParseZip {
                 break;
         }
     }
-
-    /**
-     * four boolean value representing 4 modules in QC content text file
-     */
-    private boolean inBasicStatistics;
-    private boolean inPerBaseSequenceContent;
-    private boolean inOverrepresentedSequences;
-    private boolean inAdapterContent;
-    /**
-     * if current module flag status is "fail", we retrieve info from that module and store in QCInfo
-     * else we ignore it
-     */
-    private boolean moduleFail;
 }

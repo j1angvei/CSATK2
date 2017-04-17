@@ -139,9 +139,12 @@ public class PantherAnalysis {
 
     private String createChartReferer(int goType) {
         Map<String, String> queryMap = createChartQueryMap(goType);
-        String referer = PantherApi.URL_BASE + PantherApi.SFX_CHART + "?";
+        StringBuilder referer = new StringBuilder(PantherApi.URL_BASE + PantherApi.CHART + "?");
         for (Map.Entry<String, String> entry : queryMap.entrySet()) {
-            referer += entry.getKey() + "=" + entry.getValue() + "&";
+            referer.append(entry.getKey())
+                    .append("=")
+                    .append(entry.getValue())
+                    .append("&");
         }
         return referer.substring(0, referer.length() - 1);
     }

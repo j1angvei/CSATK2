@@ -8,7 +8,6 @@ import cn.j1angvei.castk2.input.Genome;
 import cn.j1angvei.castk2.panther.PantherAnalysis;
 import cn.j1angvei.castk2.qc.ParseZip;
 import cn.j1angvei.castk2.type.OutType;
-import cn.j1angvei.castk2.type.SubType;
 import cn.j1angvei.castk2.util.ConfUtil;
 import cn.j1angvei.castk2.util.SwUtil;
 
@@ -111,8 +110,9 @@ public class Analysis {
             case QC_RAW:
                 return SwCmd.qcRawReads(experiment);
             case TRIM:
+                String rawFastqPfx = experiment.getFastq1().substring(0, experiment.getFastq1().lastIndexOf('.'));
                 //before trim, parse info from qc zip file to JSON QCInfo Object
-                ParseZip.getInstance().parse(CONF.getDirectory(SubType.INPUT) + experiment.getFastq1() + Constant.QC_ZIP_SFX,
+                ParseZip.getInstance().parse(CONF.getDirectory(OutType.QC_RAW) + rawFastqPfx + Constant.QC_ZIP_SFX,
                         CONF.getDirectory(OutType.PARSE_ZIP), experiment.getCode());
                 return SwCmd.trimReads(experiment);
             case QC_CLEAN:

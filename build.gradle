@@ -1,5 +1,5 @@
 group 'j1angvei'
-version '170408'
+version '170417'
 
 apply plugin: 'java'
 
@@ -10,12 +10,8 @@ repositories {
     mavenCentral()
 }
 jar {
-    manifest {
-        attributes 'Main-Class': 'cn.j1angvei.castk2.CSATK'
-    }
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    }
+    manifest { attributes 'Main-Class': 'cn.j1angvei.castk2.CSATK' }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 dependencies {
     compile group: 'com.google.code.gson', name: 'gson', version: '2.7'
