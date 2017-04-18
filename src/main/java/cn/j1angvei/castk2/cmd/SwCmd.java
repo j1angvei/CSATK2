@@ -154,7 +154,7 @@ public class SwCmd {
                 //bwa aln ref.fa short_read.fq > aln_sa.sai
                 commands[0] = String.format("%s aln %s %s > %s", exe, ref, fastq1, sai1);
                 //bwa samse ref.fa aln_sa.sai short_read.fq > aln-se.sam
-                commands[1] = String.format("%s samse %s %s > %s", exe, ref, sai1, sam);
+                commands[1] = String.format("%s samse %s %s %s > %s", exe, ref, sai1, fastq1, sam);
             }
             //pair end
             else {
