@@ -25,7 +25,6 @@ public class ConfUtil {
         try {
             config = gson.fromJson(FileUtil.readFromConfigFolder(ResType.CONFIG), Config.class);
             input = gson.fromJson(FileUtil.readFromConfigFolder(ResType.INPUT), Input.class);
-            input.initBroadPeaks();
         } catch (JsonSyntaxException e) {
             System.err.println("Error with " + ResType.CONFIG + " or " + ResType.INPUT + ", go check it!");
         }
@@ -33,7 +32,7 @@ public class ConfUtil {
 
     public static ConfUtil getInstance() {
         if (INSTANCE == null) {
-            Gson gson = new Gson();
+            Gson gson =GsonUtil.getGson();
             INSTANCE = new ConfUtil(gson);
         }
         return INSTANCE;
@@ -98,7 +97,7 @@ public class ConfUtil {
     }
 
     public List<Genome> getGenomes() {
-        return input.getGenome();
+        return input.getGenomes();
     }
 
     public Genome getGenome(int genomeCode) {
@@ -111,7 +110,7 @@ public class ConfUtil {
     }
 
     public List<Experiment> getExperiments() {
-        return input.getExperiment();
+        return input.getExperiments();
     }
 
     public Experiment getExperiment(String expCode) {

@@ -1,5 +1,9 @@
 package cn.j1angvei.castk2.qc;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -10,7 +14,6 @@ import java.util.Set;
  * Created by Wayne on 4/8 2017.
  */
 public class QCInfo {
-    private String encoding;//fastq encode format
     private long totalReads;//totalReads reads
     private int length;//reads length
     private int percentGC;// GC percentage
@@ -23,14 +26,6 @@ public class QCInfo {
     public QCInfo() {
         overrepresentedSeq = new HashMap<>();
         adapter = new HashSet<>();
-    }
-
-    public String getEncoding() {
-        return encoding;
-    }
-
-    public void setEncoding(String encoding) {
-        this.encoding = encoding;
     }
 
     public long getTotalReads() {
@@ -97,4 +92,18 @@ public class QCInfo {
         this.phred = phred;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
 }

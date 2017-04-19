@@ -22,7 +22,7 @@ import java.util.List;
  * Created by j1angvei on 2016/11/29.
  */
 public class SwCmd {
-    private static final String PARAM = "ILLUMINACLIP:%s:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 AVGQUAL:20 MINLEN:%d";
+    private static final String TRIM_PARAM = "ILLUMINACLIP:%s:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 AVGQUAL:20 MINLEN:%d HEADCROP:%d";
     private static final int THREAD_NUMBER = 10;
     private static ConfUtil CONF = ConfUtil.getInstance();
 
@@ -42,7 +42,7 @@ public class SwCmd {
                 THREAD_NUMBER,
                 CONF.getDirectory(SubType.INPUT) + experiment.getFastq1())
         );
-        if (experiment.getFastq2() != null) {
+        if (isPairEnd(experiment)) {
             cmd.add(String.format("%s -o %s -t %d %s",
                     CONF.getSoftwareExecutable(SwType.FASTQC),
                     CONF.getDirectory(OutType.QC_RAW),
@@ -71,21 +71,10 @@ public class SwCmd {
         String outputPrefix = CONF.getDirectory(OutType.TRIM) + experiment.getCode();
 
         QCInfo qcInfo = getQCInfo(experiment);
-        if (experiment.getFastq2() == null) {
-            //single end
-            cmd = String.format("%s -Xmx256m -jar %s SE -threads %d %s %s %s " + PARAM,
-                    CONF.getPlatform(PfType.JAVA),
-                    CONF.getSoftwareExecutable(SwType.TRIMMOMATIC),
-                    THREAD_NUMBER,
-                    qcInfo.getPhred(),
-                    fastq1,
-                    outputPrefix + "." + StrUtil.getSuffix(experiment.getFastq1()),
-                    qcInfo.getFaFilePath(),
-                    qcInfo.getLength() / 3);
-        } else {
+        if (isPairEnd(experiment)) {
             //pair end
             String fastq2 = CONF.getDirectory(SubType.INPUT) + experiment.getFastq2();
-            cmd = String.format("%s -Xmx256m -jar %s PE -threads %d %s %s %s %s %s %s %s " + PARAM,
+            cmd = String.format("%s -Xmx256m -jar %s PE -threads %d %s %s %s %s %s %s %s " + TRIM_PARAM,
                     CONF.getPlatform(PfType.JAVA),
                     CONF.getSoftwareExecutable(SwType.TRIMMOMATIC),
                     THREAD_NUMBER,
@@ -97,8 +86,21 @@ public class SwCmd {
                     outputPrefix + "_2." + StrUtil.getSuffix(experiment.getFastq2()),
                     outputPrefix + "_2_unpaired." + StrUtil.getSuffix(experiment.getFastq2()),
                     qcInfo.getFaFilePath(),
-                    qcInfo.getLength() / 3
-            );
+                    qcInfo.getLength() / 3,
+                    qcInfo.getHeadCrop());
+
+        } else {
+            //single end
+            cmd = String.format("%s -Xmx256m -jar %s SE -threads %d %s %s %s " + TRIM_PARAM,
+                    CONF.getPlatform(PfType.JAVA),
+                    CONF.getSoftwareExecutable(SwType.TRIMMOMATIC),
+                    THREAD_NUMBER,
+                    qcInfo.getPhred(),
+                    fastq1,
+                    outputPrefix + "." + StrUtil.getSuffix(experiment.getFastq1()),
+                    qcInfo.getFaFilePath(),
+                    qcInfo.getLength() / 3,
+                    qcInfo.getHeadCrop());
         }
         return FileUtil.wrapString(cmd);
     }
@@ -111,7 +113,7 @@ public class SwCmd {
                 THREAD_NUMBER,
                 CONF.getDirectory(OutType.TRIM) + experiment.getCode()) + "_1." + StrUtil.getSuffix(experiment.getFastq1())
         );
-        if (experiment.getFastq2() != null) {
+        if (isPairEnd(experiment)) {
             cmd.add(String.format("%s -o %s -t %d %s",
                     CONF.getSoftwareExecutable(SwType.FASTQC),
                     CONF.getDirectory(OutType.QC_CLEAN),
@@ -133,14 +135,17 @@ public class SwCmd {
         String fastq1, fastq2 = null;
         //if sequence length short than 70bp,using BWA-ALN algorithm will generate SAI temporary index file
         String sai1, sai2 = null;
-        if (experiment.getFastq2() == null) {
-            fastq1 = CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "." + StrUtil.getSuffix(experiment.getFastq1());
-            sai1 = CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + Constant.SAI_SFX;
-        } else {
+        if (isPairEnd(experiment)) {
+            //pair end data
             fastq1 = CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "_1." + StrUtil.getSuffix(experiment.getFastq1());
             fastq2 = CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "_2." + StrUtil.getSuffix(experiment.getFastq2());
             sai1 = CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + "_1" + Constant.SAI_SFX;
             sai2 = CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + "_2" + Constant.SAI_SFX;
+
+        } else {
+            //single end data
+            fastq1 = CONF.getDirectory(OutType.TRIM) + experiment.getCode() + "." + StrUtil.getSuffix(experiment.getFastq1());
+            sai1 = CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + Constant.SAI_SFX;
         }
         //alignment result SAM file's absolute path
         String sam = CONF.getDirectory(OutType.ALIGNMENT) + experiment.getCode() + Constant.SAM_SFX;
@@ -148,32 +153,32 @@ public class SwCmd {
         //do BWA-ALN algorithm
         if (length <= 70) {
             String[] commands;
-            //single end
-            if (experiment.getFastq2() == null) {
-                commands = new String[2];
-                //bwa aln ref.fa short_read.fq > aln_sa.sai
-                commands[0] = String.format("%s aln %s %s > %s", exe, ref, fastq1, sai1);
-                //bwa samse ref.fa aln_sa.sai short_read.fq > aln-se.sam
-                commands[1] = String.format("%s samse %s %s %s > %s", exe, ref, sai1, fastq1, sam);
-            }
-            //pair end
-            else {
+            if (isPairEnd(experiment)) {
+                //pair end
                 commands = new String[3];
                 //bwa aln ref.fa short_read.fq > aln_sa.sai
                 commands[0] = String.format("%s aln %s %s > %s", exe, ref, fastq1, sai1);
                 commands[1] = String.format("%s aln %s %s > %s", exe, ref, fastq2, sai2);
                 //bwa sampe ref.fa aln_sa1.sai aln_sa2.sai read1.fq read2.fq > aln-pe.sam
                 commands[2] = String.format("%s sampe %s %s %s %s %s > %s", exe, ref, sai1, sai2, fastq1, fastq2, sam);
+            } else {
+                //single end
+                commands = new String[2];
+                //bwa aln ref.fa short_read.fq > aln_sa.sai
+                commands[0] = String.format("%s aln %s %s > %s", exe, ref, fastq1, sai1);
+                //bwa samse ref.fa aln_sa.sai short_read.fq > aln-se.sam
+                commands[1] = String.format("%s samse %s %s %s > %s", exe, ref, sai1, fastq1, sam);
+
             }
             return commands;
         }
         //do BWA-MEM algorithm
         else {
-            String cmd = experiment.getFastq2() == null ?
-                    //single end
-                    String.format("%s mem -M %s -t %d %s > %s", exe, ref, THREAD_NUMBER, fastq1, sam) :
+            String cmd = isPairEnd(experiment) ?
                     //pair end
-                    String.format("%s mem -M %s -t %d %s %s > %s", exe, ref, THREAD_NUMBER, fastq1, fastq2, sam);
+                    String.format("%s mem -M %s -t %d %s %s > %s", exe, ref, THREAD_NUMBER, fastq1, fastq2, sam) :
+                    //single end
+                    String.format("%s mem -M %s -t %d %s > %s", exe, ref, THREAD_NUMBER, fastq1, sam);
             return FileUtil.wrapString(cmd);
         }
 
@@ -232,16 +237,11 @@ public class SwCmd {
         cmd.add(OsCmd.addPythonPath(CONF.getSoftwareFolder(SwType.MACS2)));
         //set genome size
         Genome genome = CONF.getGenome(experiment.getGenomeCode());
-        long gSize = genome.getSize();
-        if (gSize == 0) {
-            System.err.println("Genome size not specified! calculate genome FASTA file size instead!");
-            gSize = FileUtil.countFileContentSize(CONF.getDirectory(SubType.GENOME) + genome.getFasta());
-            genome.setSize(gSize);
-            System.err.println("Calculated genome size is:" + gSize);
-        }
+        double gSize = Double.parseDouble(genome.getSize());
+
         //has no control experiment
         //single "macs2 callpeak -t ChIP.bam -c Control.bam -f BAM -g hs -n test -B -q 0.01"
-        String callPeakCmd = String.format("%s callpeak -t %s -f BAM -g %d -n %s -B",
+        String callPeakCmd = String.format("%s callpeak -t %s -f BAM -g %s -n %s -B",
                 CONF.getSoftwareExecutable(SwType.MACS2),
                 CONF.getDirectory(OutType.BAM_UNIQUE) + experiment.getCode() + Constant.SUFFIX_UNIQUE_BAM,
                 gSize,
@@ -304,5 +304,9 @@ public class SwCmd {
         String q30Bam = CONF.getDirectory(OutType.BAM_RMDUP) + experiment.getCode() + Constant.SUFFIX_RMDUP_BAM;
         commands[1] = String.format("%s flagstat %s > %s", exe, q30Bam, q30Bam + Constant.FLAGSTAT_SFX);
         return commands;
+    }
+
+    private static boolean isPairEnd(Experiment experiment) {
+        return StrUtil.isValid(experiment.getFastq2());
     }
 }

@@ -1,5 +1,9 @@
 package cn.j1angvei.castk2.input;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * Created by mjian on 2016/11/29.
  */
@@ -9,7 +13,7 @@ public class Experiment {
     private String fastq2;
     private String control;
     private int genomeCode;
-    private boolean isBroadPeak = false;
+    private boolean broadPeak;
 
     public Experiment() {
     }
@@ -35,22 +39,45 @@ public class Experiment {
     }
 
     public boolean isBroadPeak() {
-        return isBroadPeak;
+        return broadPeak;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setFastq1(String fastq1) {
+        this.fastq1 = fastq1;
+    }
+
+    public void setFastq2(String fastq2) {
+        this.fastq2 = fastq2;
+    }
+
+    public void setControl(String control) {
+        this.control = control;
+    }
+
+    public void setGenomeCode(int genomeCode) {
+        this.genomeCode = genomeCode;
     }
 
     public void setBroadPeak(boolean broadPeak) {
-        isBroadPeak = broadPeak;
+        this.broadPeak = broadPeak;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override
     public String toString() {
-        return "Experiment{" +
-                "code='" + code + '\'' +
-                ", fastq1='" + fastq1 + '\'' +
-                ", fastq2='" + fastq2 + '\'' +
-                ", control='" + control + '\'' +
-                ", genomeCode='" + genomeCode + '\'' +
-                ", isBroadPeak='" + isBroadPeak + '\'' +
-                '}';
+        return ToStringBuilder.reflectionToString(this);
     }
 }

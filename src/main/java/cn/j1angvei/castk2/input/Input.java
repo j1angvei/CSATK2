@@ -1,47 +1,52 @@
 package cn.j1angvei.castk2.input;
 
-import com.google.gson.annotations.SerializedName;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by mjian on 2016/11/29.
  */
 public class Input {
-    @SerializedName("genome")
-    private List<Genome> genome;
-    @SerializedName("experiment")
-    private List<Experiment> experiment;
-    @SerializedName("broadPeaks")
-    private List<String> broadPeaks;
+    private List<Genome> genomes;
+    private List<Experiment> experiments;
 
     public Input() {
+        genomes = new ArrayList<>();
+        experiments = new ArrayList<>();
     }
 
-    public List<Genome> getGenome() {
-        return genome;
+    public List<Genome> getGenomes() {
+        return genomes;
     }
 
-    public List<Experiment> getExperiment() {
-        return experiment;
+    public List<Experiment> getExperiments() {
+        return experiments;
     }
 
-    public List<String> getBroadPeaks() {
-        return broadPeaks;
+    public void setGenomes(List<Genome> genomes) {
+        this.genomes = genomes;
     }
 
-    public void initBroadPeaks() {
-        for (Experiment e : this.experiment) {
-            e.setBroadPeak(broadPeaks.contains(e.getCode()));
-        }
+    public void setExperiments(List<Experiment> experiments) {
+        this.experiments = experiments;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override
     public String toString() {
-        return "Input{" +
-                "genome=" + genome +
-                ", experiment=" + experiment +
-                ", broadPeaks=" + broadPeaks +
-                '}';
+        return ToStringBuilder.reflectionToString(this);
     }
 }
