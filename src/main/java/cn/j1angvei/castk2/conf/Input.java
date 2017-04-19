@@ -1,4 +1,4 @@
-package cn.j1angvei.castk2.input;
+package cn.j1angvei.castk2.conf;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * a java bean support input.json file
  * Created by mjian on 2016/11/29.
  */
 public class Input {

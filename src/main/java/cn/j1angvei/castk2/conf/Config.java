@@ -1,41 +1,62 @@
 package cn.j1angvei.castk2.conf;
 
-import com.google.gson.annotations.SerializedName;
-
-import java.util.List;
-
 /**
+ * a java bean support with conf.json file
  * Created by mjian on 2016/11/29.
  */
 public class Config {
-    @SerializedName("platform")
-    private Platform platform;
-    @SerializedName("software")
-    private List<Software> software;
-    @SerializedName("directory")
-    private Directory directory;
+    private String java;
+    private String python;
+    private String perl;
+    private int thread;
+    private int mappingQuality;
 
     public Config() {
     }
 
-    public Platform getPlatform() {
-        return platform;
+    public String getJava() {
+        return java;
     }
 
-    public List<Software> getSoftware() {
-        return software;
+    public void setJava(String java) {
+        this.java = java;
     }
 
-    public Directory getDirectory() {
-        return directory;
+    public String getPython() {
+        return python;
+    }
+
+    public void setPython(String python) {
+        this.python = python;
+    }
+
+    public String getPerl() {
+        return perl;
+    }
+
+    public void setPerl(String perl) {
+        this.perl = perl;
+    }
+
+    public int getThread() {
+        return thread;
+    }
+
+    public void setThread(int thread) {
+        this.thread = thread;
+    }
+
+    public int getMappingQuality() {
+        return mappingQuality;
+    }
+
+    public void setMappingQuality(int mappingQuality) {
+        this.mappingQuality = mappingQuality;
     }
 
     @Override
     public String toString() {
         return "Config{" +
-                "platform=" + platform +
-                ", software=" + software +
-                ", directory=" + directory +
                 '}';
     }
 }

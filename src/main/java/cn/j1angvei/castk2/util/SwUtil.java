@@ -1,8 +1,9 @@
 package cn.j1angvei.castk2.util;
 
 import cn.j1angvei.castk2.Constant;
-import cn.j1angvei.castk2.type.ResType;
-import cn.j1angvei.castk2.type.SwType;
+import cn.j1angvei.castk2.ConfigInitializer;
+import cn.j1angvei.castk2.conf.Resource;
+import cn.j1angvei.castk2.conf.Software;
 
 import java.util.List;
 
@@ -79,7 +80,7 @@ public class SwUtil {
 //            //if overrepresented block is empty,so that fa file never created, then newInstance a empty fa file
 //            FileUtil.createFileIfNotExist(faFileName);
 //            //append adapters to fa file
-//            FileUtil.appendFile(FileUtil.readFromConfigFolder(ResType.ADAPTER), faFileName);
+//            FileUtil.appendFile(FileUtil.readFromConfigFolder(Resource.ADAPTER), faFileName);
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
@@ -108,7 +109,7 @@ public class SwUtil {
     }
 
     public static String genomeCodeToSpecies(int genomeCode) {
-        String speciesProp = FileUtil.readFromResourceFolder(ResType.SPECIES);
+        String speciesProp = FileUtil.readFromResourceFolder(Resource.SPECIES);
         for (String line : speciesProp.split("\n")) {
             String[] current = line.split("=");
             int code = Integer.parseInt(current[0]);
@@ -116,13 +117,13 @@ public class SwUtil {
                 return current[1].trim();
             }
         }
-        System.err.println("Check your genomeCode in config.json");
+        System.err.println("Check your genomeCode in conf.json");
         return null;
     }
 
-    public static String getPath(SwType type) {
-        String folder = ConfUtil.getInstance().getSoftwareFolder(type);
-        switch (type) {
+    public static String getPath(Software sw) {
+        String folder = ConfigInitializer.getInstance().getSwDestFolder(sw);
+        switch (sw) {
             case FASTQC:
             case TRIMMOMATIC:
             case BWA:

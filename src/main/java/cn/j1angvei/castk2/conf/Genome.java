@@ -1,4 +1,4 @@
-package cn.j1angvei.castk2.input;
+package cn.j1angvei.castk2.conf;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

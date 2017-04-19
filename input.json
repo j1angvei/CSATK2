@@ -1,0 +1,36 @@
+{
+  "genomes": [
+    {
+      "code": 11,
+      "name": "Species name",
+      "size": "genome size(format can be 12344 or 3.3e8)",
+      "fasta": "Reference sequences FASTA file name",
+      "annotation": "GFF3/GTF file"
+    },
+    {
+      "code": 12,
+      "name": "Another species name",
+      "size": "Another genome size",
+      "fasta": "Another species reference sequence",
+      "annotation": "Another species annotation file"
+    }
+  ],
+  "experiment": [
+    {
+      "code": "control",
+      "fastq1": "C1.fastq",
+      "fastq2": "C2.fastq",
+      "control": "",
+      "broad_peak": "false",
+      "genome_code": 11
+    },
+    {
+      "code": "treatment",
+      "fastq1": "T1.fastq",
+      "fastq2": "T2.fastq",
+      "control": "control",
+      "broad_peak": "false",
+      "genome_code": 11
+    }
+  ]
+}

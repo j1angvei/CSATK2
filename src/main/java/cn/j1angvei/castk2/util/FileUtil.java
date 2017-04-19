@@ -1,7 +1,7 @@
 package cn.j1angvei.castk2.util;
 
 import cn.j1angvei.castk2.CSATK;
-import cn.j1angvei.castk2.type.ResType;
+import cn.j1angvei.castk2.conf.Resource;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -103,7 +103,7 @@ public class FileUtil {
             } else {
                 if (src.isDirectory()) {
                     //copy dir to file,WRONG!
-                    throw new IllegalArgumentException("Can not move Directory " + srcPath + " to File " + destPath);
+                    throw new IllegalArgumentException("Can not move  " + srcPath + " to File " + destPath);
                 } else {
                     //copy file to file
                     FileUtils.moveFile(src, dest);
@@ -129,7 +129,7 @@ public class FileUtil {
             } else {
                 if (src.isDirectory()) {
                     //copy dir to file,WRONG!
-                    throw new IllegalArgumentException("Can not copy Directory " + srcPath + " to File " + destPath);
+                    throw new IllegalArgumentException("Can not copy  " + srcPath + " to File " + destPath);
                 } else {
                     //copy file to file
                     FileUtils.copyFile(src, dest);
@@ -140,11 +140,11 @@ public class FileUtil {
         }
     }
 
-    public static String readFromConfigFolder(ResType type) {
-        return readFile(WORK_DIR + "config" + File.separator + type.getFileName());
+    public static String readFromConfigFolder(Resource type) {
+        return readFile(WORK_DIR + "conf" + File.separator + type.getFileName());
     }
 
-    public static String readFromResourceFolder(ResType type) {
+    public static String readFromResourceFolder(Resource type) {
         String content = "";
         try {
             content = IOUtils.toString(CSATK.class.getClassLoader().getResourceAsStream(type.getFileName()), Charset.defaultCharset());
@@ -154,9 +154,9 @@ public class FileUtil {
         return content;
     }
 
-    public static void restoreConfig(ResType type) {
+    public static void restoreConfig(Resource type) {
         String content = readFromResourceFolder(type);
-        overwriteFile(content, WORK_DIR + "config" + File.separator + type.getFileName());
+        overwriteFile(content, WORK_DIR + "conf" + File.separator + type.getFileName());
     }
 
     public static long countFileContentSize(String fileName) {

@@ -1,7 +1,6 @@
 package cn.j1angvei.castk2;
 
-import cn.j1angvei.castk2.type.Directory;
-import cn.j1angvei.castk2.util.ConfUtil;
+import cn.j1angvei.castk2.conf.Software;
 
 /**
  * Entry of the program
@@ -9,6 +8,11 @@ import cn.j1angvei.castk2.util.ConfUtil;
  */
 public class CSATK {
     public static void main(String[] args) {
+        ConfigInitializer initializer = ConfigInitializer.getInstance();
+        for (Software software : Software.values()) {
+            System.out.println(software.getSwName());
+            System.out.printf("archive\t%s\nexecutable\t%s\nfolder\t%s\n", initializer.getSwArchive(software), initializer.getSwExecutable(software), initializer.getSwDestFolder(software));
+        }
         if (args.length == 0) {
             usage();
             return;

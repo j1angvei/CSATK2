@@ -3,40 +3,82 @@ package cn.j1angvei.castk2.conf;
 import java.io.File;
 
 /**
- * Created by mjian on 2016/11/29.
+ * Created by Wayne on 2016/11/11.
+ * represent all software used in ChIP_Seq analysis
  */
-public class Software {
-    private String name;
+public enum Software {
+    /**
+     * as software swName,
+     * archive compressed archive file swName,
+     * software archive destination folder after uncompress,
+     * software executable
+     */
+    FASTQC(
+            "fastqc",
+            "FastQC_v0.11.5.zip",
+            "FastQC",
+            "fastqc"),
+    TRIMMOMATIC(
+            "trimmomatic",
+            "Trimmomatic-0.36.zip",
+            "Trimmomatic-0.36",
+            "trimmomatic-0.36.jar"),
+    BWA(
+            "bwa",
+            "bwa-0.7.13.tar.bz2",
+            "bwa-0.7.13",
+            "bwa"),
+    SAMTOOLS(
+            "samtools",
+            "samtools-1.3.1.tar.bz2",
+            "samtools-1.3.1",
+            "samtools"),
+    HOMER(
+            "homer",
+            "homer.v4.8.3.zip",
+            "homer.v4.8.3",
+            "bin" + File.separator),
+    QUALIMAP(
+            "qualimap",
+            "qualimap_v2.2.zip",
+            "qualimap_v2.2",
+            "qualimap"),
+    MACS2(
+            "macs2",
+            "MACS2-2.1.1.20160309.tar.gz",
+            "MACS2-2.1.1.20160309",
+            "bin" + File.separator + "macs2"),
+    WEBLOGO(
+            "weblogo",
+            "weblogo.2.8.2.tar.gz",
+            "weblogo",
+            "seqlogo");
+
+    private String swName;
     private String archive;
-    private String folder;
+    private String destFolder;
     private String executable;
 
-    public Software() {
+    Software(String swName, String archive, String destFolder, String executable) {
+        this.swName = swName;
+        this.archive = archive;
+        this.destFolder = destFolder;
+        this.executable = executable;
     }
 
-    public String getName() {
-        return name;
+    public String getSwName() {
+        return swName;
     }
 
     public String getArchive() {
         return archive;
     }
 
-    public String getFolder() {
-        return folder + File.separator;
+    public String getDestFolder() {
+        return destFolder;
     }
 
     public String getExecutable() {
         return executable;
-    }
-
-    @Override
-    public String toString() {
-        return "Software{" +
-                "name='" + name + '\'' +
-                ", archive='" + archive + '\'' +
-                ", folder='" + folder + '\'' +
-                ", executable='" + executable + '\'' +
-                '}';
     }
 }

@@ -1,9 +1,8 @@
 package cn.j1angvei.castk2.cmd;
 
-import cn.j1angvei.castk2.type.Directory;
-import cn.j1angvei.castk2.type.PfType;
-import cn.j1angvei.castk2.type.SwType;
-import cn.j1angvei.castk2.util.ConfUtil;
+import cn.j1angvei.castk2.conf.Directory;
+import cn.j1angvei.castk2.conf.Software;
+import cn.j1angvei.castk2.ConfigInitializer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,19 +12,19 @@ import java.util.List;
  */
 public class InstallCmd {
 
-    public static String[] install(SwType type) {
-        String archive = ConfUtil.getInstance().getSoftwareArchive(type);
-        String swSubDir = ConfUtil.getPath(Directory.Sub.SOFTWARE);
-        String swFolder = ConfUtil.getInstance().getSoftwareFolder(type);
+    public static String[] install(Software sw) {
+        String archive = ConfigInitializer.getInstance().getSwArchive(sw);
+        String swSubDir = ConfigInitializer.getPath(Directory.Sub.SOFTWARE);
+        String swFolder = ConfigInitializer.getInstance().getSwDestFolder(sw);
         List<String> cmd = new ArrayList<>();
-        switch (type) {
+        switch (sw) {
             case FASTQC:
                 cmd.add(OsCmd.unpack(archive, swSubDir));
-                cmd.add(OsCmd.addX(ConfUtil.getInstance().getSoftwareExecutable(type)));
+                cmd.add(OsCmd.addX(ConfigInitializer.getInstance().getSwExecutable(sw)));
                 break;
             case BWA:
                 cmd.add(OsCmd.unpack(archive, swSubDir));
-                cmd.add(OsCmd.make(ConfUtil.getInstance().getSoftwareFolder(type)));
+                cmd.add(OsCmd.make(ConfigInitializer.getInstance().getSwDestFolder(sw)));
                 break;
             case SAMTOOLS:
                 cmd.add(OsCmd.unpack(archive, swSubDir));
@@ -36,7 +35,7 @@ public class InstallCmd {
                 cmd.add(OsCmd.unpack(archive, swSubDir));
                 cmd.add(OsCmd.changeDir(swFolder));
                 String install = String.format("%s setup.py install --prefix %s",
-                        ConfUtil.getInstance().getPlatform(PfType.PYTHON),
+                        ConfigInitializer.getInstance().getPython(),
                         swFolder);
                 cmd.add(install);
                 cmd.add(OsCmd.addPythonPath(swFolder));
@@ -46,10 +45,10 @@ public class InstallCmd {
                 cmd.add(OsCmd.unpack(archive, swFolder));
                 cmd.add(OsCmd.changeDir(swFolder));
                 cmd.add(String.format("%s %s -make",
-                        ConfUtil.getInstance().getPlatform(PfType.PERL),
+                        ConfigInitializer.getInstance().getPerl(),
                         "configureHomer.pl")
                 );
-                cmd.add(OsCmd.addX(ConfUtil.getInstance().getSoftwareExecutable(SwType.HOMER) + "*"));
+                cmd.add(OsCmd.addX(ConfigInitializer.getInstance().getSwExecutable(Software.HOMER) + "*"));
                 break;
             case TRIMMOMATIC:
             case QUALIMAP:

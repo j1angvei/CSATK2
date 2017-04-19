@@ -1,7 +1,7 @@
 package cn.j1angvei.castk2.run;
 
-import cn.j1angvei.castk2.type.Directory;
-import cn.j1angvei.castk2.util.ConfUtil;
+import cn.j1angvei.castk2.conf.Directory;
+import cn.j1angvei.castk2.ConfigInitializer;
 import cn.j1angvei.castk2.util.FileUtil;
 import org.apache.commons.io.IOUtils;
 
@@ -16,8 +16,8 @@ public class Executor {
 
     public static int execute(String prefixName, String... cmd) {
         String timestamp = FileUtil.getTimestamp();
-        String scriptFile = ConfUtil.getPath(Directory.Sub.SCRIPT) + timestamp + "_" + prefixName + ".sh";
-        String logFile = ConfUtil.getPath(Directory.Sub.LOG) + timestamp + "_" + prefixName + ".log";
+        String scriptFile = ConfigInitializer.getPath(Directory.Sub.SCRIPT) + timestamp + "_" + prefixName + ".sh";
+        String logFile = ConfigInitializer.getPath(Directory.Sub.LOG) + timestamp + "_" + prefixName + ".log";
         File script = createScript(scriptFile, cmd);
         int exitValue = 0;
         try {

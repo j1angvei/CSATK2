@@ -3,23 +3,23 @@ package cn.j1angvei.castk2.run;
 import cn.j1angvei.castk2.Constant;
 import cn.j1angvei.castk2.Function;
 import cn.j1angvei.castk2.cmd.SwCmd;
-import cn.j1angvei.castk2.input.Experiment;
-import cn.j1angvei.castk2.input.Genome;
+import cn.j1angvei.castk2.conf.Experiment;
+import cn.j1angvei.castk2.conf.Genome;
 import cn.j1angvei.castk2.panther.PantherAnalysis;
 import cn.j1angvei.castk2.qc.ParseZip;
-import cn.j1angvei.castk2.util.ConfUtil;
+import cn.j1angvei.castk2.ConfigInitializer;
 import cn.j1angvei.castk2.util.SwUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static cn.j1angvei.castk2.type.Directory.Out;
+import static cn.j1angvei.castk2.conf.Directory.Out;
 
 /**
  * Created by j1angvei on 2016/12/7.
  */
 public class Analysis {
-    private static ConfUtil CONF = ConfUtil.getInstance();
+    private static ConfigInitializer CONF = ConfigInitializer.getInstance();
 
     public static void runFunction(Function function) {
         switch (function) {
@@ -106,15 +106,15 @@ public class Analysis {
     }
 
     private static String[] getCommands(final Experiment exp, Function function) {
-        final String geneList = ConfUtil.getPath(Out.GENE_LIST) + exp.getCode() + Constant.SUFFIX_GENE_LIST;
+        final String geneList = ConfigInitializer.getPath(Out.GENE_LIST) + exp.getCode() + Constant.SUFFIX_GENE_LIST;
         switch (function) {
             case QC_RAW:
                 return SwCmd.qcRawReads(exp);
             case TRIM:
                 String rawFastqPfx = exp.getFastq1().substring(0, exp.getFastq1().lastIndexOf('.'));
                 //before trim, parse info from qc zip file to JSON QCInfo Object
-                ParseZip.newInstance().parse(ConfUtil.getPath(Out.QC_RAW) + rawFastqPfx + Constant.QC_ZIP_SFX,
-                        ConfUtil.getPath(Out.PARSE_ZIP), exp.getCode());
+                ParseZip.newInstance().parse(ConfigInitializer.getPath(Out.QC_RAW) + rawFastqPfx + Constant.QC_ZIP_SFX,
+                        ConfigInitializer.getPath(Out.PARSE_ZIP), exp.getCode());
                 return SwCmd.trimReads(exp);
             case QC_CLEAN:
                 return SwCmd.qcCleanReads(exp);
@@ -137,13 +137,13 @@ public class Analysis {
             case PEAK_ANNOTATION:
                 return SwCmd.annotatePeaks(exp);
             case GENE_LIST:
-                String annotatedPeak = ConfUtil.getPath(Out.ANNOTATION) + exp.getCode() + Constant.SUFFIX_ANNO_BED;
+                String annotatedPeak = ConfigInitializer.getPath(Out.ANNOTATION) + exp.getCode() + Constant.SUFFIX_ANNO_BED;
                 SwUtil.extractGeneList(annotatedPeak, geneList);
                 return new String[]{
                         "echo\"GENE_LIST are located at: " + annotatedPeak + "\" "
                 };
             case GO_PATHWAY:
-                final String outGoFile = ConfUtil.getPath(Out.GO_PATHWAY) + exp.getCode() + Constant.SUFFIX_GO_PATHWAY;
+                final String outGoFile = ConfigInitializer.getPath(Out.GO_PATHWAY) + exp.getCode() + Constant.SUFFIX_GO_PATHWAY;
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
