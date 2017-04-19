@@ -5,13 +5,13 @@ import cn.j1angvei.castk2.cmd.InstallCmd;
 import cn.j1angvei.castk2.panther.PantherAnalysis;
 import cn.j1angvei.castk2.run.Analysis;
 import cn.j1angvei.castk2.run.Executor;
-import cn.j1angvei.castk2.type.OutType;
+import cn.j1angvei.castk2.type.Directory;
 import cn.j1angvei.castk2.type.ResType;
-import cn.j1angvei.castk2.type.SubType;
 import cn.j1angvei.castk2.type.SwType;
 import cn.j1angvei.castk2.util.ConfUtil;
 import cn.j1angvei.castk2.util.FileUtil;
 
+import static cn.j1angvei.castk2.type.Directory.Sub;
 
 /**
  * Created by Wayne on 2016/11/23.
@@ -48,13 +48,13 @@ public class Task {
             FileUtil.restoreConfig(type);
             System.out.println("File " + type.getFileName() + " has been reset!");
         }
-        for (SubType sub : SubType.values()) {
-            String dir = ConfUtil.getInstance().getDirectory(sub);
+        for (Directory.Sub sub : Directory.Sub.values()) {
+            String dir = ConfUtil.getPath(sub);
             boolean success = FileUtil.makeDirs(dir);
             System.out.println(success ? "Create directory " + dir + " success!" : "Skip creating " + dir + ", already exists!");
         }
-        for (OutType out : OutType.values()) {
-            String dir = ConfUtil.getInstance().getDirectory(out);
+        for (Directory.Out out : Directory.Out.values()) {
+            String dir = ConfUtil.getPath(out);
             boolean success = FileUtil.makeDirs(dir);
             System.out.println(success ? "Create directory " + dir + " success!" : "Skip creating " + dir + ", already exists!");
         }
@@ -64,20 +64,20 @@ public class Task {
     public static void backup() {
         String timestamp = FileUtil.getTimestamp();
         //backup files and dirs
-        backupSubDir(timestamp, SubType.CONFIG);
-        backupSubDir(timestamp, SubType.LOG);
-        backupSubDir(timestamp, SubType.SCRIPT);
-        backupSubDir(timestamp, SubType.OUTPUT);
-        System.out.println("Backup at: " + ConfUtil.getInstance().getDirectory(SubType.BACKUP) + timestamp);
+        backupSubDir(timestamp, Sub.CONFIG);
+        backupSubDir(timestamp, Sub.LOG);
+        backupSubDir(timestamp, Sub.SCRIPT);
+        backupSubDir(timestamp, Sub.OUTPUT);
+        System.out.println("Backup at: " + ConfUtil.getPath(Sub.BACKUP) + timestamp);
         //reset directories
         reset();
 
     }
 
-    private static void backupSubDir(String timestamp, SubType type) {
-        String destPath = ConfUtil.getInstance().getDirectory(SubType.BACKUP) + timestamp;
+    private static void backupSubDir(String timestamp, Sub sub) {
+        String destPath = ConfUtil.getPath(Sub.BACKUP) + timestamp;
         FileUtil.makeDirs(destPath);
-        FileUtil.move(ConfUtil.getInstance().getDirectory(type), destPath);
+        FileUtil.move(ConfUtil.getPath(sub), destPath);
     }
 
     public static void function(String keywords) {

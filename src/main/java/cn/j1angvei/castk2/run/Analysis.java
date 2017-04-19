@@ -7,12 +7,13 @@ import cn.j1angvei.castk2.input.Experiment;
 import cn.j1angvei.castk2.input.Genome;
 import cn.j1angvei.castk2.panther.PantherAnalysis;
 import cn.j1angvei.castk2.qc.ParseZip;
-import cn.j1angvei.castk2.type.OutType;
 import cn.j1angvei.castk2.util.ConfUtil;
 import cn.j1angvei.castk2.util.SwUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static cn.j1angvei.castk2.type.Directory.Out;
 
 /**
  * Created by j1angvei on 2016/12/7.
@@ -104,55 +105,55 @@ public class Analysis {
         }
     }
 
-    private static String[] getCommands(final Experiment experiment, Function function) {
-        final String geneList = CONF.getDirectory(OutType.GENE_LIST) + experiment.getCode() + Constant.SUFFIX_GENE_LIST;
+    private static String[] getCommands(final Experiment exp, Function function) {
+        final String geneList = ConfUtil.getPath(Out.GENE_LIST) + exp.getCode() + Constant.SUFFIX_GENE_LIST;
         switch (function) {
             case QC_RAW:
-                return SwCmd.qcRawReads(experiment);
+                return SwCmd.qcRawReads(exp);
             case TRIM:
-                String rawFastqPfx = experiment.getFastq1().substring(0, experiment.getFastq1().lastIndexOf('.'));
+                String rawFastqPfx = exp.getFastq1().substring(0, exp.getFastq1().lastIndexOf('.'));
                 //before trim, parse info from qc zip file to JSON QCInfo Object
-                ParseZip.newInstance().parse(CONF.getDirectory(OutType.QC_RAW) + rawFastqPfx + Constant.QC_ZIP_SFX,
-                        CONF.getDirectory(OutType.PARSE_ZIP), experiment.getCode());
-                return SwCmd.trimReads(experiment);
+                ParseZip.newInstance().parse(ConfUtil.getPath(Out.QC_RAW) + rawFastqPfx + Constant.QC_ZIP_SFX,
+                        ConfUtil.getPath(Out.PARSE_ZIP), exp.getCode());
+                return SwCmd.trimReads(exp);
             case QC_CLEAN:
-                return SwCmd.qcCleanReads(experiment);
+                return SwCmd.qcCleanReads(exp);
             case ALIGNMENT:
-                return SwCmd.alignment(experiment);
+                return SwCmd.alignment(exp);
             case CONVERT_SAM:
-                return SwCmd.convertSamToBam(experiment);
+                return SwCmd.convertSamToBam(exp);
             case SORT_BAM:
-                return SwCmd.sortBam(experiment);
+                return SwCmd.sortBam(exp);
             case RMDUP_BAM:
-                return SwCmd.rmdupBam(experiment);
+                return SwCmd.rmdupBam(exp);
             case UNIQUE_BAM:
-                return SwCmd.uniqueBam(experiment);
+                return SwCmd.uniqueBam(exp);
             case QC_BAM:
-                return SwCmd.qcBam(experiment);
+                return SwCmd.qcBam(exp);
             case PEAK_CALLING:
-                return SwCmd.callPeaks(experiment);
+                return SwCmd.callPeaks(exp);
             case MOTIF:
-                return SwCmd.findMotifs(experiment);
+                return SwCmd.findMotifs(exp);
             case PEAK_ANNOTATION:
-                return SwCmd.annotatePeaks(experiment);
+                return SwCmd.annotatePeaks(exp);
             case GENE_LIST:
-                String annotatedPeak = CONF.getDirectory(OutType.ANNOTATION) + experiment.getCode() + Constant.SUFFIX_ANNO_BED;
+                String annotatedPeak = ConfUtil.getPath(Out.ANNOTATION) + exp.getCode() + Constant.SUFFIX_ANNO_BED;
                 SwUtil.extractGeneList(annotatedPeak, geneList);
                 return new String[]{
                         "echo\"GENE_LIST are located at: " + annotatedPeak + "\" "
                 };
             case GO_PATHWAY:
-                final String outGoFile = CONF.getDirectory(OutType.GO_PATHWAY) + experiment.getCode() + Constant.SUFFIX_GO_PATHWAY;
+                final String outGoFile = ConfUtil.getPath(Out.GO_PATHWAY) + exp.getCode() + Constant.SUFFIX_GO_PATHWAY;
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         System.out.println("run go & pathway in background!");
-                        PantherAnalysis.newInstance(experiment.getCode(), experiment.getGenomeCode(), geneList, outGoFile).analysis();
+                        PantherAnalysis.newInstance(exp.getCode(), exp.getGenomeCode(), geneList, outGoFile).analysis();
                     }
                 }).start();
                 return new String[]{
                         "echo \"GO_PATHWAY results are located at: " + outGoFile + "\"",
-                        "echo \"genome code is: " + experiment.getGenomeCode() + "\"",
+                        "echo \"genome code is: " + exp.getGenomeCode() + "\"",
                         "echo \"gene list file at: " + geneList + "\""};
             default:
                 throw new IllegalArgumentException("Illegal Function args in experiment analysis!");

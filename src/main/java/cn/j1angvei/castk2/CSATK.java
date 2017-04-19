@@ -1,5 +1,8 @@
 package cn.j1angvei.castk2;
 
+import cn.j1angvei.castk2.type.Directory;
+import cn.j1angvei.castk2.util.ConfUtil;
+
 /**
  * Entry of the program
  * Created by Wayne on 2016/11/23.

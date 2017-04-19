@@ -16,12 +16,9 @@ public class SwUtil {
     }
 
 //    public static void parseQcZip(Experiment experiment) {
-//        String fastqFileNamePrefix = StrUtil.getPrefix(experiment.getFastq1());
-//        String outDir = ConfUtil.newInstance().getDirectory(OutType.PARSE_ZIP);
 //        String phred = "-phred64";
 //        try {
 //            //open zip file
-//            ZipFile zip = new ZipFile(ConfUtil.newInstance().getDirectory(OutType.QC_RAW) + fastqFileNamePrefix + "_fastqc.zip");
 //            ZipEntry entry = zip.getEntry(fastqFileNamePrefix + "_fastqc/fastqc_data.txt");
 //            BufferedReader reader = new BufferedReader(new InputStreamReader(zip.getInputStream(entry)));
 //            boolean inOverrepresentedBlock = false;

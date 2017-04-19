@@ -1,7 +1,7 @@
 package cn.j1angvei.castk2.cmd;
 
+import cn.j1angvei.castk2.type.Directory;
 import cn.j1angvei.castk2.type.PfType;
-import cn.j1angvei.castk2.type.SubType;
 import cn.j1angvei.castk2.type.SwType;
 import cn.j1angvei.castk2.util.ConfUtil;
 
@@ -15,7 +15,7 @@ public class InstallCmd {
 
     public static String[] install(SwType type) {
         String archive = ConfUtil.getInstance().getSoftwareArchive(type);
-        String swSubDir = ConfUtil.getInstance().getDirectory(SubType.SOFTWARE);
+        String swSubDir = ConfUtil.getPath(Directory.Sub.SOFTWARE);
         String swFolder = ConfUtil.getInstance().getSoftwareFolder(type);
         List<String> cmd = new ArrayList<>();
         switch (type) {

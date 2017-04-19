@@ -13,6 +13,8 @@ import com.google.gson.JsonSyntaxException;
 import java.io.File;
 import java.util.List;
 
+import static cn.j1angvei.castk2.type.Directory.Sub;
+
 /**
  * Created by mjian on 2016/11/29.
  */
@@ -32,7 +34,7 @@ public class ConfUtil {
 
     public static ConfUtil getInstance() {
         if (INSTANCE == null) {
-            Gson gson =GsonUtil.getGson();
+            Gson gson = GsonUtil.getGson();
             INSTANCE = new ConfUtil(gson);
         }
         return INSTANCE;
@@ -65,12 +67,12 @@ public class ConfUtil {
 
     public String getSoftwareArchive(SwType type) {
         Software software = config.getSoftware().get(type.ordinal());
-        return getDirectory(SubType.ARCHIVE) + software.getArchive();
+        return getPath(Sub.ARCHIVE) + software.getArchive();
     }
 
     public String getSoftwareFolder(SwType type) {
         Software software = config.getSoftware().get(type.ordinal());
-        return getDirectory(SubType.SOFTWARE) + software.getFolder();
+        return getPath(Sub.SOFTWARE) + software.getFolder();
     }
 
     public String getSoftwareExecutable(SwType type) {
@@ -78,18 +80,12 @@ public class ConfUtil {
         return getSoftwareFolder(type) + software.getExecutable();
     }
 
-    public String getDirectory(SubType type) {
-        int index = type.ordinal();
-        return FileUtil.getWorkDir() + config.getDirectory().getSub()[index] + File.separator;
+    public static String getPath(Directory.Sub sub) {
+        return FileUtil.getWorkDir() + sub.getName() + File.separator;
     }
 
-    public String getDirectory(OutType type) {
-        int index = type.ordinal();
-        return getDirectory(SubType.OUTPUT) + config.getDirectory().getOut()[index] + File.separator;
-    }
-
-    public String getLib(LibType type) {
-        return getDirectory(SubType.LIB) + type.getFileName();
+    public static String getPath(Directory.Out out) {
+        return getPath(Directory.Sub.OUTPUT) + out.getName() + File.separator;
     }
 
     public Input getInput() {
