@@ -1,7 +1,0 @@
-{
-  "java": "java",
-  "python": "python",
-  "perl": "perl",
-  "thread": 10,
-  "mapping_quality": 30
-}

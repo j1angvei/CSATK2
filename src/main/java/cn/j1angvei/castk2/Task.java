@@ -3,8 +3,8 @@ package cn.j1angvei.castk2;
 
 import cn.j1angvei.castk2.cmd.InstallCmd;
 import cn.j1angvei.castk2.panther.PantherAnalysis;
-import cn.j1angvei.castk2.run.Analysis;
-import cn.j1angvei.castk2.run.Executor;
+import cn.j1angvei.castk2.cmd.Analysis;
+import cn.j1angvei.castk2.cmd.Executor;
 import cn.j1angvei.castk2.conf.Directory;
 import cn.j1angvei.castk2.conf.Resource;
 import cn.j1angvei.castk2.conf.Software;
