@@ -20,7 +20,6 @@ import java.util.Map;
  * Created by Wayne on 4/21 0021.
  */
 public class Statistics {
-//    private static ConfigInitializer initializer = ConfigInitializer.getInstance();
 
     public static String start(Experiment exp, Type type) {
 
@@ -109,15 +108,11 @@ public class Statistics {
         ALIGNMENT("alignment.stat", "Sampe\tAll reads\tMapped reads\tRmdup reads\tUnique reads"),
         READS_STAT("reads.stat", "reads stat header"),
         PEAK_CALL("peak_calling.stat", "Sample\tPeak type\tAverage Length\tPeak Count"),
-        PEAK_ANNO("peak_annotation.stat", String.format("Sample\t%s\t%s\t%s\t%s\t%s",
-                PeakAnnoColumn.Type.INTERGENIC.getTypeName(),
-                PeakAnnoColumn.Type.EXON.getTypeName(),
-                PeakAnnoColumn.Type.PROMOTER_TSS.getTypeName(),
-                PeakAnnoColumn.Type.TTS.getTypeName(),
-                PeakAnnoColumn.Type.INTRON.getTypeName())),
+        PEAK_ANNO("peak_annotation.stat", PeakAnnoColumn.Type.asHeader()),
         GO_PATHWAY("go_pathway.stat", "go pathway header"),
         MOTIF("motif.stat", "motif header"),
         TSS_PLOT("tss_plot.stat", "tss-plot header");
+
         private String resFileName;
         private String resFileHeader;
 

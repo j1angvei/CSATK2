@@ -69,6 +69,15 @@ public class PeakAnnoColumn implements Column {
         public String getTypeName() {
             return typeName;
         }
+
+        public static String asHeader() {
+            return String.format("Sample\t%s\t%s\t%s\t%s\t%s",
+                    PeakAnnoColumn.Type.INTERGENIC.getTypeName(),
+                    PeakAnnoColumn.Type.EXON.getTypeName(),
+                    PeakAnnoColumn.Type.PROMOTER_TSS.getTypeName(),
+                    PeakAnnoColumn.Type.TTS.getTypeName(),
+                    PeakAnnoColumn.Type.INTRON.getTypeName());
+        }
     }
 
 }
