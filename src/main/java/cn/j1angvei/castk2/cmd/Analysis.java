@@ -1,12 +1,15 @@
 package cn.j1angvei.castk2.cmd;
 
+import cn.j1angvei.castk2.ConfigInitializer;
 import cn.j1angvei.castk2.Constant;
 import cn.j1angvei.castk2.Function;
 import cn.j1angvei.castk2.conf.Experiment;
 import cn.j1angvei.castk2.conf.Genome;
 import cn.j1angvei.castk2.panther.PantherAnalysis;
 import cn.j1angvei.castk2.qc.ParseZip;
-import cn.j1angvei.castk2.ConfigInitializer;
+import cn.j1angvei.castk2.stat.Statistics;
+import cn.j1angvei.castk2.util.FileUtil;
+import cn.j1angvei.castk2.util.StrUtil;
 import cn.j1angvei.castk2.util.SwUtil;
 
 import java.util.ArrayList;
@@ -21,33 +24,46 @@ public class Analysis {
     private static ConfigInitializer CONF = ConfigInitializer.getInstance();
 
     public static void runFunction(Function function) {
-        switch (function) {
-            //genome analysis
-            case GENOME_IDX:
-                traverseGenomes(function);
-                break;
-            //experiment analysis
-            case QC_RAW:
-            case TRIM:
-            case QC_CLEAN:
-            case ALIGNMENT:
-            case CONVERT_SAM:
-            case SORT_BAM:
-            case QC_BAM:
-            case RMDUP_BAM:
-            case UNIQUE_BAM:
-            case PEAK_CALLING:
-            case MOTIF:
-            case PEAK_ANNOTATION:
-            case GENE_LIST:
-            case GO_PATHWAY:
-                traverseExperiment(function);
-                break;
-            //illegal args
-            default:
-                System.err.println("Illegal argument!");
-                break;
+        if (function.equals(Function.GENOME_IDX)) {
+            traverseGenomes(function);
+        } else {
+            if (function.equals(Function.STATISTIC)) {
+                Statistics.initStatisticsFile();
+            }
+            traverseExperiment(function);
         }
+//        switch (function) {
+//            //genome analysis
+//            case GENOME_IDX:
+//
+//                break;
+//            //experiment analysis
+//            case QC_RAW:
+//            case PARSE_RAW:
+//            case TRIM:
+//            case QC_CLEAN:
+//            case PARSE_CLEAN:
+//            case ALIGNMENT:
+//            case CONVERT_SAM:
+//            case SORT_BAM:
+//            case QC_BAM:
+//            case RMDUP_BAM:
+//            case UNIQUE_BAM:
+//            case PEAK_CALLING:
+//            case MOTIF:
+//            case PEAK_ANNOTATION:
+//            case GENE_LIST:
+//            case GO_PATHWAY:
+//            case STATISTIC:
+//                traverseExperiment(function);
+//                break;
+//            case PLOT:
+//                System.out.println("wait for Javascript");
+//                //illegal args
+//            default:
+//                System.err.println("Illegal argument!");
+//                break;
+//        }
     }
 
     private static void traverseExperiment(final Function function) {
@@ -109,14 +125,27 @@ public class Analysis {
         switch (function) {
             case QC_RAW:
                 return SwCmd.qcRawReads(exp);
-            case TRIM:
+            case PARSE_RAW:
                 String rawFastqPfx = exp.getFastq1().substring(0, exp.getFastq1().lastIndexOf('.'));
                 //before trim, parse info from qc zip file to JSON QCInfo Object
                 ParseZip.newInstance().parse(ConfigInitializer.getPath(Out.QC_RAW) + rawFastqPfx + Constant.QC_ZIP_SFX,
-                        ConfigInitializer.getPath(Out.PARSE_ZIP), exp.getCode());
+                        ConfigInitializer.getPath(Out.PARSE_RAW), exp.getCode());
+                return SwCmd.emptyCmd(function);
+            case TRIM:
                 return SwCmd.trimReads(exp);
             case QC_CLEAN:
                 return SwCmd.qcCleanReads(exp);
+            case PARSE_CLEAN:
+                String zipPath = ConfigInitializer.getPath(Out.QC_CLEAN) + exp.getCode();
+                if (StrUtil.isValid(exp.getFastq2())) {
+                    zipPath += "_1" + Constant.QC_ZIP_SFX;
+                } else {
+                    zipPath += Constant.QC_ZIP_SFX;
+                }
+                ParseZip.newInstance().parse(zipPath,
+                        ConfigInitializer.getPath(Out.PARSE_CLEAN),
+                        exp.getCode());
+                return SwCmd.emptyCmd(function);
             case ALIGNMENT:
                 return SwCmd.alignment(exp);
             case CONVERT_SAM:
@@ -138,9 +167,7 @@ public class Analysis {
             case GENE_LIST:
                 String annotatedPeak = ConfigInitializer.getPath(Out.ANNOTATION) + exp.getCode() + Constant.SUFFIX_ANNO_BED;
                 SwUtil.extractGeneList(annotatedPeak, geneList);
-                return new String[]{
-                        "echo\"GENE_LIST are located at: " + annotatedPeak + "\" "
-                };
+                return SwCmd.emptyCmd(function);
             case GO_PATHWAY:
                 final String outGoFile = ConfigInitializer.getPath(Out.GO_PATHWAY) + exp.getCode() + Constant.SUFFIX_GO_PATHWAY;
                 new Thread(new Runnable() {
@@ -150,10 +177,21 @@ public class Analysis {
                         PantherAnalysis.newInstance(exp.getCode(), exp.getGenomeCode(), geneList, outGoFile).analysis();
                     }
                 }).start();
-                return new String[]{
-                        "echo \"GO_PATHWAY results are located at: " + outGoFile + "\"",
-                        "echo \"genome code is: " + exp.getGenomeCode() + "\"",
-                        "echo \"gene list file at: " + geneList + "\""};
+                return SwCmd.emptyCmd(function);
+            case FLAGSTAT:
+                return SwCmd.flagStat(exp);
+            case STATISTIC:
+
+                String outDir = ConfigInitializer.getPath(Out.STATISTICS);
+                for (Statistics.Type type : Statistics.Type.values()) {
+                    String outFilePath = outDir + type.getResFileName();
+                    String content = Statistics.start(exp, type);
+                    FileUtil.appendFile(content, outFilePath);
+                }
+                return SwCmd.emptyCmd(function);
+            case HTML:
+                return SwCmd.emptyCmd(function);
+            case GENOME_IDX:
             default:
                 throw new IllegalArgumentException("Illegal Function args in experiment analysis!");
         }

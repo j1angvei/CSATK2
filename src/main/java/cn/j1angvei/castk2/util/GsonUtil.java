@@ -4,6 +4,11 @@ import cn.j1angvei.castk2.qc.QCInfo;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 
 /**
  * using gson convert object to text, or vice versa
@@ -23,5 +28,15 @@ public class GsonUtil {
 
     public static QCInfo fromJson(String qcContent) {
         return GSON.fromJson(qcContent, QCInfo.class);
+    }
+
+    public static QCInfo fromJsonFilePath(String filePath) {
+        String qcContent = null;
+        try {
+            qcContent = FileUtils.readFileToString(new File(filePath), Charset.defaultCharset());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fromJson(qcContent);
     }
 }

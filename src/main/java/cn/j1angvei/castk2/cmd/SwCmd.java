@@ -1,12 +1,16 @@
 package cn.j1angvei.castk2.cmd;
 
-import cn.j1angvei.castk2.Constant;
 import cn.j1angvei.castk2.ConfigInitializer;
+import cn.j1angvei.castk2.Constant;
+import cn.j1angvei.castk2.Function;
 import cn.j1angvei.castk2.conf.Experiment;
 import cn.j1angvei.castk2.conf.Genome;
-import cn.j1angvei.castk2.qc.QCInfo;
 import cn.j1angvei.castk2.conf.Software;
-import cn.j1angvei.castk2.util.*;
+import cn.j1angvei.castk2.qc.QCInfo;
+import cn.j1angvei.castk2.util.FileUtil;
+import cn.j1angvei.castk2.util.GsonUtil;
+import cn.j1angvei.castk2.util.StrUtil;
+import cn.j1angvei.castk2.util.SwUtil;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -55,7 +59,7 @@ public class SwCmd {
     }
 
     private static QCInfo getQCInfo(Experiment experiment) {
-        File qcFile = new File(ConfigInitializer.getPath(Out.PARSE_ZIP) + experiment.getCode() + Constant.JSON_SFX);
+        File qcFile = new File(ConfigInitializer.getPath(Out.PARSE_RAW) + experiment.getCode() + Constant.JSON_SFX);
         String qcContent = null;
         try {
             qcContent = FileUtils.readFileToString(qcFile, Charset.defaultCharset());
@@ -297,14 +301,23 @@ public class SwCmd {
         String exe = CONF.getSwExecutable(Software.SAMTOOLS);
         //sorted bam file
         String sortedBam = ConfigInitializer.getPath(Out.BAM_SORTED) + experiment.getCode() + Constant.SUFFIX_SORTED_BAM;
-        commands[0] = String.format("%s flagstat %s > %s", exe, sortedBam, sortedBam + Constant.FLAGSTAT_SFX);
+        String sortedStat = ConfigInitializer.getPath(Out.BAM_SORTED) + experiment.getCode() + Constant.FLAGSTAT_SFX;
+        commands[0] = String.format("%s flagstat %s > %s", exe, sortedBam, sortedStat);
         //rmdup bam file
         String rmdupBam = ConfigInitializer.getPath(Out.BAM_RMDUP) + experiment.getCode() + Constant.SUFFIX_RMDUP_BAM;
-        commands[1] = String.format("%s flagstat %s > %s", exe, rmdupBam, rmdupBam + Constant.FLAGSTAT_SFX);
+        String rmdupStat = ConfigInitializer.getPath(Out.BAM_RMDUP) + experiment.getCode() + Constant.FLAGSTAT_SFX;
+        commands[1] = String.format("%s flagstat %s > %s", exe, rmdupBam, rmdupStat);
         //q>30 bam file
-        String q30Bam = ConfigInitializer.getPath(Out.BAM_RMDUP) + experiment.getCode() + Constant.SUFFIX_RMDUP_BAM;
-        commands[1] = String.format("%s flagstat %s > %s", exe, q30Bam, q30Bam + Constant.FLAGSTAT_SFX);
+        String q30Bam = ConfigInitializer.getPath(Out.BAM_UNIQUE) + experiment.getCode() + Constant.SUFFIX_UNIQUE_BAM;
+        String q30Stat = ConfigInitializer.getPath(Out.BAM_UNIQUE) + experiment.getCode() + Constant.FLAGSTAT_SFX;
+        commands[2] = String.format("%s flagstat %s > %s", exe, q30Bam, q30Stat);
         return commands;
+    }
+
+    public static String[] emptyCmd(Function function) {
+        return new String[]{
+                "echo \"No native commands needed in this step:\"" + function.name()
+        };
     }
 
     private static boolean isPairEnd(Experiment experiment) {

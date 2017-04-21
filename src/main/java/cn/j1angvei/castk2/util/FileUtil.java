@@ -1,6 +1,7 @@
 package cn.j1angvei.castk2.util;
 
 import cn.j1angvei.castk2.CSATK;
+import cn.j1angvei.castk2.conf.Directory;
 import cn.j1angvei.castk2.conf.Resource;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -42,6 +43,7 @@ public class FileUtil {
     }
 
     public static void appendFile(String content, String fileName) {
+        content += "\n";
         File file = createFileIfNotExist(fileName);
         try {
             FileUtils.write(file, content, Charset.defaultCharset(), true);
@@ -141,7 +143,7 @@ public class FileUtil {
     }
 
     public static String readFromConfigFolder(Resource type) {
-        return readFile(WORK_DIR + "conf" + File.separator + type.getFileName());
+        return readFile(WORK_DIR + Directory.Sub.CONFIG.getDirName() + File.separator + type.getFileName());
     }
 
     public static String readFromResourceFolder(Resource type) {
@@ -174,6 +176,21 @@ public class FileUtil {
         return count;
     }
 
+    public static long countLines(String filePath) {
+        List<String> lines = readLines(filePath);
+        return lines.size();
+
+    }
+
+    public static List<String> readLines(String filePath) {
+        try {
+            return FileUtils.readLines(new File(filePath), Charset.defaultCharset());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
     public static long getFileSize(String fileName, Unit unit) {
         File file = new File(fileName);
         long lenInBytes = file.length();
@@ -203,7 +220,7 @@ public class FileUtil {
     }
 
     public static String getTimestamp() {
-        return new SimpleDateFormat("yyMMdd_HHmmss").format(new Date());
+        return new SimpleDateFormat("yyyyMMdd-HH:mm:ss").format(new Date());
     }
 
     public enum Unit {

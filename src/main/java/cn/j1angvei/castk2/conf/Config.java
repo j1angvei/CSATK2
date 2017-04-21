@@ -1,7 +1,7 @@
 package cn.j1angvei.castk2.conf;
 
 /**
- * a java bean support with conf.json file
+ * a java bean support with config.json file
  * Created by mjian on 2016/11/29.
  */
 public class Config {

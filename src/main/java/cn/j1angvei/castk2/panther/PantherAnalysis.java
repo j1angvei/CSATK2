@@ -66,7 +66,6 @@ public class PantherAnalysis {
         String modified = "";
         for (String line : originalContent.split("\n")) {
             modified += line.replaceFirst("^", mExpCode + "\t" + goType + "\t");
-            modified += "\n";
         }
         return modified;
     }

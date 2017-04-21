@@ -1,18 +1,11 @@
 package cn.j1angvei.castk2;
 
-import cn.j1angvei.castk2.conf.Software;
-
 /**
  * Entry of the program
  * Created by Wayne on 2016/11/23.
  */
 public class CSATK {
     public static void main(String[] args) {
-        ConfigInitializer initializer = ConfigInitializer.getInstance();
-        for (Software software : Software.values()) {
-            System.out.println(software.getSwName());
-            System.out.printf("archive\t%s\nexecutable\t%s\nfolder\t%s\n", initializer.getSwArchive(software), initializer.getSwExecutable(software), initializer.getSwDestFolder(software));
-        }
         if (args.length == 0) {
             usage();
             return;
@@ -67,22 +60,7 @@ public class CSATK {
                         "\t%s,\tbackup all file of last analysis\n" +
                         "\n" +
                         "Functions:\nCMD:\tjava -jar CSATK.jar -f <function1,function2,...>\n" +
-                        "\t%s,\tgenerate genome index\n" +
-                        "\t%s,\tQC of raw reads\n" +
-                        "\t%s,\ttrim and filter raw reads\n" +
-                        "\t%s,\tQC of clean(filtered) reads\n" +
-                        "\t%s,\talignment of clean reads\n" +
-                        "\t%s,\tconvert sam to bam files\n" +
-                        "\t%s,\tsort bam files\n" +
-                        "\t%s,\tQC of bam files using Qualimap\n" +
-                        "\t%s,\tremove duplicate reads in BAM file\n" +
-                        "\t%s,\tkeep unique mapped reads\n" +
-                        "\t%s,\tpeak calling using MACS2\n" +
-                        "\t%s,\tfind motifs using Homer\n" +
-                        "\t%s,\tpeak annotation using Homer\n" +
-                        "\t%s,\tget gene list  from annotation result\n" +
-                        "\t%s,\tgo & pathway analysis using panther\n" +
-                        "\t%s,\tgenerate analysis summary in HTML format\n" +
+                        Function.getFunctionUsage() +
                         "\n" +
                         "Sole function:\nCMD:\tjava -jar CSATK.jar -s <function keyword> [arg1] [arg2] ...\n" +
                         "\tGO & Pathway analysis:\t%s [species code] [gene list] [output]\n" +
@@ -90,11 +68,6 @@ public class CSATK {
                 ,
                 //task
                 Task.PIPELINE, Task.FUNCTION, Task.SOLELY, Task.INSTALL, Task.RESET, Task.BACKUP,
-                //function
-                Function.GENOME_IDX, Function.QC_RAW, Function.TRIM, Function.QC_CLEAN,
-                Function.ALIGNMENT, Function.CONVERT_SAM, Function.SORT_BAM, Function.QC_BAM, Function.RMDUP_BAM, Function.UNIQUE_BAM,
-                Function.PEAK_CALLING, Function.MOTIF,
-                Function.PEAK_ANNOTATION, Function.GENE_LIST, Function.GO_PATHWAY, Function.SUMMARY,
                 //solely function
                 Function.GO_PATHWAY
         );
