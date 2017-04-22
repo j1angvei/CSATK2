@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 /**
  * Created by mjian on 2016/11/29.
  */
-public class Genome {
+public class Genome implements Comparable<Genome> {
     private int code;
     private String name;
     private String size;
@@ -71,5 +71,10 @@ public class Genome {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
+    }
+
+    @Override
+    public int compareTo(Genome o) {
+        return code - o.getCode();
     }
 }

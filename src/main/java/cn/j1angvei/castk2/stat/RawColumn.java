@@ -45,6 +45,6 @@ public class RawColumn implements Column {
 
     @Override
     public String toString() {
-        return String.format("%s\t%s\t%s\t%s\t%s", expCode, fastq1, fastq2, fileSize, species);
+        return String.format("%s\t%s\t%s\t%s\t%s\n", expCode, fastq1, fastq2, fileSize, species);
     }
 }

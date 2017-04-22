@@ -1,13 +1,15 @@
 package cn.j1angvei.castk2;
 
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 /**
  * Entry of the program
  * Created by Wayne on 2016/11/23.
  */
 public class CSATK {
     public static void main(String[] args) {
-//        new HtmlGenerator("19_statistic"+ File.separator).generate();
         if (args.length == 0) {
             usage();
             return;

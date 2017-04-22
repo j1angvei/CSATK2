@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 /**
  * Created by mjian on 2016/11/29.
  */
-public class Experiment {
+public class Experiment implements Comparable<Experiment> {
     private String code;
     private String fastq1;
     private String fastq2;
@@ -79,5 +79,10 @@ public class Experiment {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
+    }
+
+    @Override
+    public int compareTo(Experiment o) {
+        return code.compareTo(o.getCode());
     }
 }

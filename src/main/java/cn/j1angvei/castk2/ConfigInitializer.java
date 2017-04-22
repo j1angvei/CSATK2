@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 import static cn.j1angvei.castk2.conf.Directory.Sub;
@@ -23,6 +24,8 @@ public class ConfigInitializer {
         try {
             config = gson.fromJson(FileUtil.readFromConfigFolder(Resource.CONFIG), Config.class);
             input = gson.fromJson(FileUtil.readFromConfigFolder(Resource.INPUT), Input.class);
+            Collections.sort(input.getExperiments());
+            Collections.sort(input.getGenomes());
         } catch (JsonSyntaxException e) {
             System.err.println("Error with " + Resource.CONFIG + " or " + Resource.INPUT + ", go check it!");
         }

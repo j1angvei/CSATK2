@@ -51,7 +51,7 @@ public class MotifColumn implements Column {
             builder.append("\t")
                     .append(pngEncode[i]);
         }
-        return builder.toString();
+        return builder.toString()+"\n";
 
     }
 }

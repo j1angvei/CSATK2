@@ -20,7 +20,7 @@ public class GOColumn implements Column {
 
     @Override
     public String toString() {
-        return String.format("%s\t%s\t%s\t%,d\t%s", expCode, type, id, count, percentage);
+        return String.format("%s\t%s\t%s\t%,d\t%s\n", expCode, type, id, count, percentage);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package cn.j1angvei.castk2.html;
 
+import cn.j1angvei.castk2.ConfigInitializer;
+import cn.j1angvei.castk2.conf.Directory;
 import cn.j1angvei.castk2.stat.StatType;
 import cn.j1angvei.castk2.util.FileUtil;
 import org.thymeleaf.TemplateEngine;
@@ -8,9 +10,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 import java.text.DateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Wayne on 4/22 0022.
@@ -34,25 +34,34 @@ public class HtmlGenerator {
         context.setVariable("title", title);
         context.setVariable("date", date);
         fillData(StatType.RAW_DATA, context);
-        for (StatType type : StatType.values()) {
-            fillData(type, context);
-        }
+//        for (StatType type : StatType.values()) {
+//            fillData(type, context);
+//        }
 
         final String html = engine.process("template", context);
-        FileUtil.overwriteFile(html, "test.html");
+        FileUtil.overwriteFile(html, ConfigInitializer.getPath(Directory.Out.HTML) + "csatk_result.html");
 
     }
 
     private void fillData(StatType type, Context context) {
         String[][] dataOriginal = dataMap.get(type);
         String[] header = dataOriginal[0];
-        int row = dataOriginal.length - 1;
+        int row = dataOriginal.length;
         int column = dataOriginal[0].length;
+        System.out.printf("%d\t%d", row, column);
         String[][] dataNoHeader = new String[row - 1][column];
         for (int i = 1; i < row; i++) {
             System.arraycopy(dataOriginal[i], 0, dataNoHeader[i - 1], 0, column);
         }
-        String headerKey = "", dataKey="";
+        Arrays.sort(dataNoHeader, new Comparator<String[]>() {
+            @Override
+            public int compare(String[] o1, String[] o2) {
+                if (o1 == null) return 1;
+                if (o2 == null) return -1;
+                return o1[0].compareTo(o2[0]);
+            }
+        });
+        String headerKey = "", dataKey = "";
         switch (type) {
             case RAW_DATA:
                 headerKey = "raw_header";

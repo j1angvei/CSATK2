@@ -25,7 +25,7 @@ public class QCColumn implements Column {
 
     @Override
     public String toString() {
-        return String.format("%s\t%,d\t%,d\t%,d\t%.2f%%", expCode, readLength, rawReads, filterReads, ratio * 100);
+        return String.format("%s\t%,d\t%,d\t%,d\t%.2f%%\n", expCode, readLength, rawReads, filterReads, ratio * 100);
     }
 
     public String getExpCode() {

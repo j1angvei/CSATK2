@@ -4,9 +4,7 @@ import cn.j1angvei.castk2.stat.StatType;
 import cn.j1angvei.castk2.util.FileUtil;
 import cn.j1angvei.castk2.util.StrUtil;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Wayne on 4/22 0022.

@@ -5,6 +5,7 @@ import cn.j1angvei.castk2.Constant;
 import cn.j1angvei.castk2.Function;
 import cn.j1angvei.castk2.conf.Experiment;
 import cn.j1angvei.castk2.conf.Genome;
+import cn.j1angvei.castk2.html.HtmlGenerator;
 import cn.j1angvei.castk2.panther.PantherAnalysis;
 import cn.j1angvei.castk2.qc.ParseZip;
 import cn.j1angvei.castk2.stat.StatType;
@@ -30,6 +31,9 @@ public class Analysis {
         } else if (function.equals(Function.STATISTIC)) {
             Statistics.initStatisticsFile();
             traverseExperiment(Function.STATISTIC);
+        } else if (function.equals(Function.HTML)) {
+            String statDir = ConfigInitializer.getPath(Out.STATISTICS);
+            new HtmlGenerator(statDir).generate();
         } else {
             traverseExperiment(function);
         }
@@ -156,10 +160,10 @@ public class Analysis {
                     String content = Statistics.start(exp, type);
                     FileUtil.appendFile(content, outFilePath, false);
                 }
-                return SwCmd.emptyCmd(function);
-            case HTML:
+
                 return SwCmd.emptyCmd(function);
             case GENOME_IDX:
+            case HTML:
             default:
                 throw new IllegalArgumentException("Illegal Function args in experiment analysis!");
         }

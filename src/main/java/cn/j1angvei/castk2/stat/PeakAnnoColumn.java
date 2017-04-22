@@ -71,7 +71,7 @@ public class PeakAnnoColumn implements Column {
         }
 
         public static String asHeader() {
-            return String.format("Sample\t%s\t%s\t%s\t%s\t%s",
+            return String.format("Sample\t%s\t%s\t%s\t%s\t%s\n",
                     INTERGENIC.getTypeName(),
                     EXON.getTypeName(),
                     PROMOTER_TSS.getTypeName(),

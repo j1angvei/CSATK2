@@ -127,7 +127,7 @@ public class Statistics {
                 }
                 Collections.sort(pathwayColumns);
                 for (int i = 0; i < 15 && i < pathwayColumns.size(); i++) {
-                    pathwayBuilder.append(pathwayColumns.get(i).toString()).append("\n");
+                    pathwayBuilder.append(pathwayColumns.get(i).toString());
                 }
                 return pathwayBuilder.toString();
             case MOTIF:

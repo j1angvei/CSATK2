@@ -18,7 +18,7 @@ public class PathwayColumn implements Column, Comparable<PathwayColumn> {
 
     @Override
     public String toString() {
-        return String.format("%s\t%s\t%d\t%s", expCode, id, count, percentage);
+        return String.format("%s\t%s\t%d\t%s\n", expCode, id, count, percentage);
     }
 
     @Override
