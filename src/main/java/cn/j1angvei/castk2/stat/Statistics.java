@@ -14,6 +14,8 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -103,6 +105,7 @@ public class Statistics {
                 List<String> pathwayPathLines = FileUtil.readLines(ConfigInitializer.getPath(Directory.Out.GO_PATHWAY) + exp.getCode() + Constant.SFX_GO_PATHWAY);
                 boolean start = false;
                 StringBuilder pathwayBuilder = new StringBuilder();
+                List<PathwayColumn> pathwayColumns = new ArrayList<>();
                 String pathwayDesc;
                 for (String line : pathwayPathLines) {
                     if (StrUtil.isInvalid(line)) {
@@ -119,11 +122,14 @@ public class Statistics {
                         String[] pathwayInfo = line.split("\t");
                         PathwayColumn pathwayColumn = new PathwayColumn(exp.getCode(), pathwayInfo[1],
                                 Integer.parseInt(pathwayInfo[2]), pathwayInfo[3]);
-                        pathwayBuilder.append(pathwayColumn.toString()).append("\n");
+                        pathwayColumns.add(pathwayColumn);
                     }
                 }
+                Collections.sort(pathwayColumns);
+                for (int i = 0; i < 15 && i < pathwayColumns.size(); i++) {
+                    pathwayBuilder.append(pathwayColumns.get(i).toString()).append("\n");
+                }
                 return pathwayBuilder.toString();
-
             case MOTIF:
                 String motifPngPfx = ConfigInitializer.getPath(Directory.Out.MOTIF) + exp.getCode()
                         + File.separator + Constant.FOLDER_KNOWN_MOTIF + File.separator + "known";

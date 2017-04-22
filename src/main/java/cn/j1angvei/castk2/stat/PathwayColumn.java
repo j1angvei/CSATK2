@@ -3,7 +3,7 @@ package cn.j1angvei.castk2.stat;
 /**
  * Created by Wayne on 4/22 0022.
  */
-public class PathwayColumn implements Column {
+public class PathwayColumn implements Column, Comparable<PathwayColumn> {
     private String expCode;
     private String id;
     private int count;
@@ -40,5 +40,14 @@ public class PathwayColumn implements Column {
 
     public String getPercentage() {
         return percentage;
+    }
+
+    @Override
+    public int compareTo(PathwayColumn o) {
+        if (!expCode.equals(o.getExpCode())) {
+            return expCode.compareTo(o.getExpCode());
+        } else {
+            return o.getCount() - count;
+        }
     }
 }
