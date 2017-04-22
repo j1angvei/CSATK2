@@ -30,7 +30,7 @@ public class SwUtil {
                 }
                 int startIndex = column8.indexOf('(') + 1;
                 String geneId = column8.substring(startIndex, endIndex);
-                FileUtil.appendFile(geneId, geneListFile);
+                FileUtil.appendFile(geneId, geneListFile, true);
             }
         }
     }

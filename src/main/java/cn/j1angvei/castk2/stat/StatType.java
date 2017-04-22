@@ -9,8 +9,9 @@ public enum StatType {
     ALIGNMENT("3_alignment.stat", "Sampe\tAll reads\tMapped reads\tRmdup reads\tUnique reads"),
     PEAK_CALL("4_peak_calling.stat", "Sample\tPeak type\tAverage Length\tPeak Count"),
     PEAK_ANNO("5_peak_annotation.stat", PeakAnnoColumn.Type.asHeader()),
-    GO_PATHWAY("6_go_pathway.stat", "Sample\tGO type\tDescription\tCount\tPercent"),
-    MOTIF("7_motif.stat", "Sample\tMotif 1\tMotif 2\tMotif 3\tMotif 4\tMotif 5");
+    GENE_ONTOLOGY("6_go.stat", "Sample\tGO type\tDescription\tCount\tPercent"),
+    PATHWAY("7_pathway.stat", "Sample\tDescription\tCount\tPercent"),
+    MOTIF("8_motif.stat", "Sample\tMotif 1\tMotif 2\tMotif 3\tMotif 4\tMotif 5");
 
     private String resFileName;
     private String resFileHeader;

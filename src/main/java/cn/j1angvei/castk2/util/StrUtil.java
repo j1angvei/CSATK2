@@ -16,8 +16,8 @@ public class StrUtil {
         return !isInvalid(str);
     }
 
-    private static boolean isInvalid(String str) {
-        return str == null || str.isEmpty() || str.toLowerCase().equals("null");
+    public static boolean isInvalid(String str) {
+        return str == null || str.isEmpty() || str.matches("^$") || str.toLowerCase().equals("null");
     }
 
 //    public static Double[] strArrayToDouble(String[] in) {

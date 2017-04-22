@@ -27,44 +27,12 @@ public class Analysis {
     public static void runFunction(Function function) {
         if (function.equals(Function.GENOME_IDX)) {
             traverseGenomes(function);
+        } else if (function.equals(Function.STATISTIC)) {
+            Statistics.initStatisticsFile();
+            traverseExperiment(Function.STATISTIC);
         } else {
-            if (function.equals(Function.STATISTIC)) {
-                Statistics.initStatisticsFile();
-            }
             traverseExperiment(function);
         }
-//        switch (function) {
-//            //genome analysis
-//            case GENOME_IDX:
-//
-//                break;
-//            //experiment analysis
-//            case QC_RAW:
-//            case PARSE_RAW:
-//            case TRIM:
-//            case QC_CLEAN:
-//            case PARSE_CLEAN:
-//            case ALIGNMENT:
-//            case CONVERT_SAM:
-//            case SORT_BAM:
-//            case QC_BAM:
-//            case RMDUP_BAM:
-//            case UNIQUE_BAM:
-//            case PEAK_CALLING:
-//            case MOTIF:
-//            case PEAK_ANNOTATION:
-//            case GENE_LIST:
-//            case GO_PATHWAY:
-//            case STATISTIC:
-//                traverseExperiment(function);
-//                break;
-//            case PLOT:
-//                System.out.println("wait for Javascript");
-//                //illegal args
-//            default:
-//                System.err.println("Illegal argument!");
-//                break;
-//        }
     }
 
     private static void traverseExperiment(final Function function) {
@@ -182,12 +150,11 @@ public class Analysis {
             case FLAGSTAT:
                 return SwCmd.flagStat(exp);
             case STATISTIC:
-
                 String outDir = ConfigInitializer.getPath(Out.STATISTICS);
                 for (StatType type : StatType.values()) {
                     String outFilePath = outDir + type.getResFileName();
                     String content = Statistics.start(exp, type);
-                    FileUtil.appendFile(content, outFilePath);
+                    FileUtil.appendFile(content, outFilePath, false);
                 }
                 return SwCmd.emptyCmd(function);
             case HTML:

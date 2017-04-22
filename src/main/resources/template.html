@@ -2,11 +2,11 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="${title}">CSATK Report</title>
     <style type="text/css">
         @media screen {
             div.summary {
-                width: 18em;
+                width: 14em;
                 position: fixed;
                 top: 3em;
                 margin: 1em 0 0 1em;
@@ -20,7 +20,7 @@
                 width: auto;
                 top: 4.5em;
                 bottom: 2.3em;
-                left: 18em;
+                left: 14em;
                 right: 0;
                 border-left: 1px solid #CCC;
                 padding: 0 0 0 1em;
@@ -213,7 +213,22 @@
 <div class="main">
     <div class="module">
         <h2 id="M0">Raw Data</h2>
-
+        <table>
+            <thead>
+            <tr>
+                <th>Sample</th>
+                <th>Fastq 1</th>
+                <th>Fastq 2</th>
+                <th>File size</th>
+                <th>Species</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="data : ${rawdata}">
+                <td th:each="item : ${data}" th:text="${item}">Cell</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
     <div class="module">
         <h2 id="M1">Quality Control</h2>

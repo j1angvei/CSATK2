@@ -7,6 +7,7 @@ package cn.j1angvei.castk2;
  */
 public class CSATK {
     public static void main(String[] args) {
+//        new HtmlGenerator("19_statistic"+ File.separator).generate();
         if (args.length == 0) {
             usage();
             return;

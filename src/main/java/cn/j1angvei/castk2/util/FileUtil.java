@@ -43,8 +43,10 @@ public class FileUtil {
         }
     }
 
-    public static void appendFile(String content, String fileName) {
-        content += "\n";
+    public static void appendFile(String content, String fileName, boolean appendNewLine) {
+        if (appendNewLine) {
+            content += "\n";
+        }
         File file = createFileIfNotExist(fileName);
         try {
             FileUtils.write(file, content, Charset.defaultCharset(), true);

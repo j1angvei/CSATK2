@@ -30,7 +30,7 @@ public class Statistics {
                 boolean pairEnd = StrUtil.isValid(exp.getFastq2());
                 String fastq2 = pairEnd ? exp.getFastq2() : "--";
                 long size = FileUtil.getFileSize(ConfigInitializer.getPath(Directory.Sub.INPUT) + exp.getFastq1(), FileUtil.Unit.GB);
-                String fileSize = size + FileUtil.Unit.GB.name() + (pairEnd ? "x2" : "");
+                String fileSize = size + FileUtil.Unit.GB.name() + (pairEnd ? " x2" : "");
                 String species = ConfigInitializer.getInstance().getGenome(exp.getGenomeCode()).getName();
                 RawColumn column = new RawColumn(exp.getCode(), fastq1, fastq2, fileSize, species);
                 return column.toString();
@@ -75,24 +75,55 @@ public class Statistics {
                     annoMap.put(annoType, count + 1);
                 }
                 return annoColumn.toString();
-            case GO_PATHWAY:
+            case GENE_ONTOLOGY:
                 List<String> goPathLines = FileUtil.readLines(ConfigInitializer.getPath(Directory.Out.GO_PATHWAY) + exp.getCode() + Constant.SFX_GO_PATHWAY);
-                StringBuilder builder = new StringBuilder();
-                String goType = "";
+                StringBuilder goBuilder = new StringBuilder();
+                String goDescription = null;
                 for (String line : goPathLines) {
-                    if (line.isEmpty()) {
+                    //skip empty line in go_pathway result
+                    if (StrUtil.isInvalid(line)) {
+                        continue;
+                    }
+                    //change the readFront as GoTypeStr is Pathway
+                    if (line.startsWith("#")) {
+                        goDescription = line.substring(1, line.length());
+                        if (goDescription.equals(GoType.PATHWAY.getDescription())) {
+                            break;
+                        }
+                        continue;
+                    }
+
+                    String[] goInfo = line.split("\t");
+                    GOColumn goColumn = new GOColumn(exp.getCode(), goDescription,
+                            goInfo[1], Integer.parseInt(goInfo[2]), goInfo[3]);
+                    goBuilder.append(goColumn.toString()).append("\n");
+                }
+                return goBuilder.toString();
+            case PATHWAY:
+                List<String> pathwayPathLines = FileUtil.readLines(ConfigInitializer.getPath(Directory.Out.GO_PATHWAY) + exp.getCode() + Constant.SFX_GO_PATHWAY);
+                boolean start = false;
+                StringBuilder pathwayBuilder = new StringBuilder();
+                String pathwayDesc;
+                for (String line : pathwayPathLines) {
+                    if (StrUtil.isInvalid(line)) {
                         continue;
                     }
                     if (line.startsWith("#")) {
-                        goType = line.substring(1, line.length());
+                        pathwayDesc = line.substring(1, line.length());
+                        if (pathwayDesc.equals(GoType.PATHWAY.getDescription())) {
+                            start = true;
+                        }
                         continue;
                     }
-                    String[] goInfo = line.split("\t");
-                    GOPathwayColumn goPathwayColumn = new GOPathwayColumn(exp.getCode(),
-                            GoType.fromDescription(goType), goInfo[1], Integer.parseInt(goInfo[2]), goInfo[3]);
-                    builder.append(goPathwayColumn.toString()).append("\n");
+                    if (start) {
+                        String[] pathwayInfo = line.split("\t");
+                        PathwayColumn pathwayColumn = new PathwayColumn(exp.getCode(), pathwayInfo[1],
+                                Integer.parseInt(pathwayInfo[2]), pathwayInfo[3]);
+                        pathwayBuilder.append(pathwayColumn.toString()).append("\n");
+                    }
                 }
-                return builder.toString();
+                return pathwayBuilder.toString();
+
             case MOTIF:
                 String motifPngPfx = ConfigInitializer.getPath(Directory.Out.MOTIF) + exp.getCode()
                         + File.separator + Constant.FOLDER_KNOWN_MOTIF + File.separator + "known";
@@ -108,7 +139,7 @@ public class Statistics {
         for (StatType type : StatType.values()) {
             String filePath = filePrefix + type.getResFileName();
             FileUtil.overwriteFile("", filePrefix + type.getResFileName());
-            FileUtil.appendFile(type.getResFileHeader(), filePath);
+            FileUtil.appendFile(type.getResFileHeader(), filePath, true);
         }
     }
 

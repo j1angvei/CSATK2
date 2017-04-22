@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- * using pantherdb.org to do GO_PATHWAY and KEGG analysis
+ * using pantherdb.org to do GENE_ONTOLOGY and PATHWAY analysis
  * Created by Wayne on 3/7 2017.
  */
 public class PantherAnalysis {
@@ -57,8 +57,8 @@ public class PantherAnalysis {
             if (content == null || content.isEmpty()) {
                 continue;
             }
-            FileUtil.appendFile("#" + goType.getDescription(), mOutFileName);
-            FileUtil.appendFile(content, mOutFileName);
+            FileUtil.appendFile("#" + goType.getDescription(), mOutFileName, true);
+            FileUtil.appendFile(content, mOutFileName, false);
         }
     }
 
