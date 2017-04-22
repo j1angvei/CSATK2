@@ -54,11 +54,12 @@ public class CSATK {
                         "\n" +
                         "Tasks:\nCMD:\tjava -jar CSATK.jar <task>\n" +
                         Task.getTaskUsage() +
+                        "\n" +
                         "Functions:\nCMD:\tjava -jar CSATK.jar -f <function1,function2,...>\n" +
                         Function.getFunctionUsage() +
                         "\n" +
                         "Sole function:\nCMD:\tjava -jar CSATK.jar -s <function keyword> [arg1] [arg2] ...\n" +
-                        "\t1)GO & Pathway analysis:\n\t%s [species code] [gene list] [output]\n"
+                        "\t1) GO & Pathway analysis:\n\t%s [species code] [gene list] [output]\n"
                 ,//solely function
                 Function.GO_PATHWAY
         );

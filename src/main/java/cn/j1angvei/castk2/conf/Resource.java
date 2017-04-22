@@ -8,7 +8,8 @@ public enum Resource {
     INPUT("input.json"),
     ADAPTER("adapters.fa"),
     SPECIES("species.properties"),
-    BROAD_PEAKS("broadPeaks.json");
+    BROAD_PEAKS("broadPeaks.json"),
+    TEMPLATE_HTML("template.html");
 
     String fileName;
 
