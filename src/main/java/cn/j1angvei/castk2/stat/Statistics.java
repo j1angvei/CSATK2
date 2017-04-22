@@ -18,12 +18,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * statistics type
+ * do statistics for all output files
  * Created by Wayne on 4/21 0021.
  */
 public class Statistics {
 
-    public static String start(Experiment exp, Type type) {
+    public static String start(Experiment exp, StatType type) {
         switch (type) {
             case RAW_DATA:
                 String fastq1 = exp.getFastq1();
@@ -61,7 +61,7 @@ public class Statistics {
             case PEAK_ANNO:
                 PeakAnnoColumn annoColumn = new PeakAnnoColumn(exp.getCode());
                 Map<String, Long> annoMap = annoColumn.getMap();
-                String annoFilePath = ConfigInitializer.getPath(Directory.Out.ANNOTATION) + exp.getCode() + Constant.SUFFIX_ANNO_BED;
+                String annoFilePath = ConfigInitializer.getPath(Directory.Out.ANNOTATION) + exp.getCode() + Constant.SFX_ANNO_BED;
                 for (String line : FileUtil.readLines(annoFilePath)) {
                     //skip the first line
                     if (line.contains(Constant.EXE_HOMER_ANNOTATE_PEAK)) continue;
@@ -72,7 +72,7 @@ public class Statistics {
                 }
                 return annoColumn.toString();
             case GO_PATHWAY:
-                List<String> goPathLines = FileUtil.readLines(ConfigInitializer.getPath(Directory.Out.GO_PATHWAY) + exp.getCode() + Constant.SUFFIX_GO_PATHWAY);
+                List<String> goPathLines = FileUtil.readLines(ConfigInitializer.getPath(Directory.Out.GO_PATHWAY) + exp.getCode() + Constant.SFX_GO_PATHWAY);
                 StringBuilder builder = new StringBuilder();
                 String goType = "";
                 for (String line : goPathLines) {
@@ -84,7 +84,8 @@ public class Statistics {
                         continue;
                     }
                     String[] goInfo = line.split("\t");
-                    GOPathwayColumn goPathwayColumn = new GOPathwayColumn(exp.getCode(), GoType.fromDescription(goType), goInfo[1], Integer.parseInt(goInfo[2]), goInfo[3]);
+                    GOPathwayColumn goPathwayColumn = new GOPathwayColumn(exp.getCode(),
+                            GoType.fromDescription(goType), goInfo[1], Integer.parseInt(goInfo[2]), goInfo[3]);
                     builder.append(goPathwayColumn.toString()).append("\n");
                 }
                 return builder.toString();
@@ -100,7 +101,7 @@ public class Statistics {
 
     public static void initStatisticsFile() {
         String filePrefix = ConfigInitializer.getPath(Directory.Out.STATISTICS);
-        for (Type type : Type.values()) {
+        for (StatType type : StatType.values()) {
             String filePath = filePrefix + type.getResFileName();
             FileUtil.overwriteFile("", filePrefix + type.getResFileName());
             FileUtil.appendFile(type.getResFileHeader(), filePath);
@@ -129,31 +130,5 @@ public class Statistics {
         readsCount[1] = Long.parseLong(lines.get(4).replaceAll("\\s.*$", ""));
         return readsCount;
 
-    }
-
-    public enum Type {
-        RAW_DATA("raw_data.stat", "Sample\tFastq 1\t Fastq 2\tFile size"),
-        QUALITY_CONTROL("quality_control.stat", "Sampe Name\tReads length\tTotal reads\tFiltered reads\tRatio"),
-        ALIGNMENT("alignment.stat", "Sampe\tAll reads\tMapped reads\tRmdup reads\tUnique reads"),
-        PEAK_CALL("peak_calling.stat", "Sample\tPeak type\tAverage Length\tPeak Count"),
-        PEAK_ANNO("peak_annotation.stat", PeakAnnoColumn.Type.asHeader()),
-        GO_PATHWAY("go_pathway.stat", "Sample\tGO type\tDescription\tCount\tPercent"),
-        MOTIF("motif.stat", "Sample\tMotif 1\tMotif 2\tMotif 3\tMotif 4\tMotif 5\t...");
-
-        private String resFileName;
-        private String resFileHeader;
-
-        Type(String resFileName, String resFileHeader) {
-            this.resFileName = resFileName;
-            this.resFileHeader = resFileHeader;
-        }
-
-        public String getResFileHeader() {
-            return resFileHeader;
-        }
-
-        public String getResFileName() {
-            return resFileName;
-        }
     }
 }

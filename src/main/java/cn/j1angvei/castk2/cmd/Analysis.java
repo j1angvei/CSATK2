@@ -7,6 +7,7 @@ import cn.j1angvei.castk2.conf.Experiment;
 import cn.j1angvei.castk2.conf.Genome;
 import cn.j1angvei.castk2.panther.PantherAnalysis;
 import cn.j1angvei.castk2.qc.ParseZip;
+import cn.j1angvei.castk2.stat.StatType;
 import cn.j1angvei.castk2.stat.Statistics;
 import cn.j1angvei.castk2.util.FileUtil;
 import cn.j1angvei.castk2.util.StrUtil;
@@ -121,7 +122,7 @@ public class Analysis {
     }
 
     private static String[] getCommands(final Experiment exp, Function function) {
-        final String geneList = ConfigInitializer.getPath(Out.GENE_LIST) + exp.getCode() + Constant.SUFFIX_GENE_LIST;
+        final String geneList = ConfigInitializer.getPath(Out.GENE_LIST) + exp.getCode() + Constant.SFX_GENE_LIST;
         switch (function) {
             case QC_RAW:
                 return SwCmd.qcRawReads(exp);
@@ -165,11 +166,11 @@ public class Analysis {
             case PEAK_ANNOTATION:
                 return SwCmd.annotatePeaks(exp);
             case GENE_LIST:
-                String annotatedPeak = ConfigInitializer.getPath(Out.ANNOTATION) + exp.getCode() + Constant.SUFFIX_ANNO_BED;
+                String annotatedPeak = ConfigInitializer.getPath(Out.ANNOTATION) + exp.getCode() + Constant.SFX_ANNO_BED;
                 SwUtil.extractGeneList(annotatedPeak, geneList);
                 return SwCmd.emptyCmd(function);
             case GO_PATHWAY:
-                final String outGoFile = ConfigInitializer.getPath(Out.GO_PATHWAY) + exp.getCode() + Constant.SUFFIX_GO_PATHWAY;
+                final String outGoFile = ConfigInitializer.getPath(Out.GO_PATHWAY) + exp.getCode() + Constant.SFX_GO_PATHWAY;
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -183,7 +184,7 @@ public class Analysis {
             case STATISTIC:
 
                 String outDir = ConfigInitializer.getPath(Out.STATISTICS);
-                for (Statistics.Type type : Statistics.Type.values()) {
+                for (StatType type : StatType.values()) {
                     String outFilePath = outDir + type.getResFileName();
                     String content = Statistics.start(exp, type);
                     FileUtil.appendFile(content, outFilePath);

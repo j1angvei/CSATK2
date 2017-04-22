@@ -194,21 +194,21 @@ public class SwCmd {
                 CONF.getSwExecutable(Software.SAMTOOLS),
                 THREAD_NUMBER,
                 ConfigInitializer.getPath(Out.ALIGNMENT) + experiment.getCode() + Constant.SAM_SFX,
-                ConfigInitializer.getPath(Out.BAM_CONVERTED) + experiment.getCode() + Constant.SUFFIX_CONVERTED_BAM);
+                ConfigInitializer.getPath(Out.BAM_CONVERTED) + experiment.getCode() + Constant.SFX_CONVERTED_BAM);
         return FileUtil.wrapString(cmd);
     }
 
     public static String[] sortBam(Experiment experiment) {
         String cmd = String.format("%s sort %s --threads %d -o %s",
                 CONF.getSwExecutable(Software.SAMTOOLS),
-                ConfigInitializer.getPath(Out.BAM_CONVERTED) + experiment.getCode() + Constant.SUFFIX_CONVERTED_BAM,
+                ConfigInitializer.getPath(Out.BAM_CONVERTED) + experiment.getCode() + Constant.SFX_CONVERTED_BAM,
                 THREAD_NUMBER,
-                ConfigInitializer.getPath(Out.BAM_SORTED) + experiment.getCode() + Constant.SUFFIX_SORTED_BAM);
+                ConfigInitializer.getPath(Out.BAM_SORTED) + experiment.getCode() + Constant.SFX_SORTED_BAM);
         return FileUtil.wrapString(cmd);
     }
 
     public static String[] qcBam(Experiment experiment) {
-        String sortBamFile = ConfigInitializer.getPath(Out.BAM_SORTED) + experiment.getCode() + Constant.SUFFIX_SORTED_BAM;
+        String sortBamFile = ConfigInitializer.getPath(Out.BAM_SORTED) + experiment.getCode() + Constant.SFX_SORTED_BAM;
         long sortBamSize = FileUtil.getFileSize(sortBamFile, FileUtil.Unit.MB);
         String cmd = String.format("%s bamqc -bam %s -outdir %s --java-mem-size=%dM",
                 CONF.getSwExecutable(Software.QUALIMAP),
@@ -221,8 +221,8 @@ public class SwCmd {
     public static String[] rmdupBam(Experiment experiment) {
         String cmd = String.format("%s rmdup %s %s",
                 CONF.getSwExecutable(Software.SAMTOOLS),
-                ConfigInitializer.getPath(Out.BAM_SORTED) + experiment.getCode() + Constant.SUFFIX_SORTED_BAM,
-                ConfigInitializer.getPath(Out.BAM_RMDUP) + experiment.getCode() + Constant.SUFFIX_RMDUP_BAM
+                ConfigInitializer.getPath(Out.BAM_SORTED) + experiment.getCode() + Constant.SFX_SORTED_BAM,
+                ConfigInitializer.getPath(Out.BAM_RMDUP) + experiment.getCode() + Constant.SFX_RMDUP_BAM
         );
         return FileUtil.wrapString(cmd);
     }
@@ -230,8 +230,8 @@ public class SwCmd {
     public static String[] uniqueBam(Experiment experiment) {
         String cmd = String.format("%s view -b %s -q 30 -o %s",
                 CONF.getSwExecutable(Software.SAMTOOLS),
-                ConfigInitializer.getPath(Out.BAM_RMDUP) + experiment.getCode() + Constant.SUFFIX_RMDUP_BAM,
-                ConfigInitializer.getPath(Out.BAM_UNIQUE) + experiment.getCode() + Constant.SUFFIX_UNIQUE_BAM
+                ConfigInitializer.getPath(Out.BAM_RMDUP) + experiment.getCode() + Constant.SFX_RMDUP_BAM,
+                ConfigInitializer.getPath(Out.BAM_UNIQUE) + experiment.getCode() + Constant.SFX_UNIQUE_BAM
         );
         return FileUtil.wrapString(cmd);
     }
@@ -248,7 +248,7 @@ public class SwCmd {
         //single "macs2 callpeak -t ChIP.bam -c Control.bam -f BAM -g hs -n test -B -q 0.01"
         String callPeakCmd = String.format("%s callpeak -t %s -f BAM -g %s -n %s -B",
                 CONF.getSwExecutable(Software.MACS2),
-                ConfigInitializer.getPath(Out.BAM_UNIQUE) + experiment.getCode() + Constant.SUFFIX_UNIQUE_BAM,
+                ConfigInitializer.getPath(Out.BAM_UNIQUE) + experiment.getCode() + Constant.SFX_UNIQUE_BAM,
                 gSize,
                 ConfigInitializer.getPath(Out.PEAK_CALLING) + experiment.getCode());
         //broad peaks need to set '--broad' parameter
@@ -272,7 +272,7 @@ public class SwCmd {
                 ConfigInitializer.getPath(Sub.GENOME) + genome.getFasta(),
                 annoFormat,
                 ConfigInitializer.getPath(Sub.GENOME) + genome.getAnnotation(),
-                ConfigInitializer.getPath(Out.ANNOTATION) + experiment.getCode() + Constant.SUFFIX_ANNO_BED)
+                ConfigInitializer.getPath(Out.ANNOTATION) + experiment.getCode() + Constant.SFX_ANNO_BED)
         );
         return FileUtil.listToArray(cmd);
     }
@@ -300,15 +300,15 @@ public class SwCmd {
         String[] commands = new String[3];
         String exe = CONF.getSwExecutable(Software.SAMTOOLS);
         //sorted bam file
-        String sortedBam = ConfigInitializer.getPath(Out.BAM_SORTED) + experiment.getCode() + Constant.SUFFIX_SORTED_BAM;
+        String sortedBam = ConfigInitializer.getPath(Out.BAM_SORTED) + experiment.getCode() + Constant.SFX_SORTED_BAM;
         String sortedStat = ConfigInitializer.getPath(Out.BAM_SORTED) + experiment.getCode() + Constant.FLAGSTAT_SFX;
         commands[0] = String.format("%s flagstat %s > %s", exe, sortedBam, sortedStat);
         //rmdup bam file
-        String rmdupBam = ConfigInitializer.getPath(Out.BAM_RMDUP) + experiment.getCode() + Constant.SUFFIX_RMDUP_BAM;
+        String rmdupBam = ConfigInitializer.getPath(Out.BAM_RMDUP) + experiment.getCode() + Constant.SFX_RMDUP_BAM;
         String rmdupStat = ConfigInitializer.getPath(Out.BAM_RMDUP) + experiment.getCode() + Constant.FLAGSTAT_SFX;
         commands[1] = String.format("%s flagstat %s > %s", exe, rmdupBam, rmdupStat);
         //q>30 bam file
-        String q30Bam = ConfigInitializer.getPath(Out.BAM_UNIQUE) + experiment.getCode() + Constant.SUFFIX_UNIQUE_BAM;
+        String q30Bam = ConfigInitializer.getPath(Out.BAM_UNIQUE) + experiment.getCode() + Constant.SFX_UNIQUE_BAM;
         String q30Stat = ConfigInitializer.getPath(Out.BAM_UNIQUE) + experiment.getCode() + Constant.FLAGSTAT_SFX;
         commands[2] = String.format("%s flagstat %s > %s", exe, q30Bam, q30Stat);
         return commands;
