@@ -43,7 +43,7 @@ public class PeakAnnoColumn implements Column {
 
     @Override
     public String toString() {
-        return String.format("%s\t%d\t%d\t%d\t%d\t%d",
+        return String.format("%s\t%,d\t%,d\t%,d\t%,d\t%,d",
                 expCode,
                 map.get(Type.INTERGENIC.getTypeName()),
                 map.get(Type.EXON.getTypeName()),

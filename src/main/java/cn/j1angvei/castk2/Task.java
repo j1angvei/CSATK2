@@ -18,11 +18,11 @@ import static cn.j1angvei.castk2.conf.Directory.Sub;
  */
 public enum Task {
     PIPELINE("-p", "ChIP-Seq analysis pipeline"),
-    FUNCTION("-i", "run function(s) in order"),
-    SOLELY("-r", "run solely function with arguments"),
-    INSTALL("-b", "(re)install all software"),
-    RESET("-f", "reset project to original state"),
-    BACKUP("-s", "backup all file of last analysis");
+    FUNCTION("-f", "run function(s) in order"),
+    SOLELY("-s", "run solely function with arguments"),
+    INSTALL("-i", "(re)install all software"),
+    RESET("-r", "reset project to original state"),
+    BACKUP("-b", "backup all file of last analysis");
     private String keyword;
     private String description;
 

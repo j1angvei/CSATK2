@@ -45,6 +45,6 @@ public class AlignColumn implements Column {
 
     @Override
     public String toString() {
-        return String.format("%s\t%s\t%s\t%s\t%s", expCode, allReads, sortedReads, rmdupReads, uniqueReads);
+        return String.format("%s\t%,d\t%,d\t%,d\t%,d", expCode, allReads, sortedReads, rmdupReads, uniqueReads);
     }
 }

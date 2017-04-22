@@ -22,7 +22,7 @@ public class GOPathwayColumn implements Column {
 
     @Override
     public String toString() {
-        return String.format("%s\t%s\t%s\t%d\t%s", expCode, goType.getDescription(), description, count, percentage);
+        return String.format("%s\t%s\t%s\t%,d\t%s", expCode, goType.getDescription(), description, count, percentage);
     }
 
     @Override

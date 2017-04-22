@@ -36,6 +36,6 @@ public class PeakCallColumn implements Column {
 
     @Override
     public String toString() {
-        return String.format("%s\t%s\t%s\t%s\t", expCode, broadPeak ? "broad" : "narrow", avgLength, peakCount);
+        return String.format("%s\t%s\t%,d\t%,d", expCode, broadPeak ? "broad" : "narrow", avgLength, peakCount);
     }
 }

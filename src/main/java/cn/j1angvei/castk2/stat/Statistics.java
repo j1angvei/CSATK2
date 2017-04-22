@@ -30,7 +30,7 @@ public class Statistics {
                 boolean pairEnd = StrUtil.isValid(exp.getFastq2());
                 String fastq2 = pairEnd ? exp.getFastq2() : "--";
                 long size = FileUtil.getFileSize(ConfigInitializer.getPath(Directory.Sub.INPUT) + exp.getFastq1(), FileUtil.Unit.GB);
-                String fileSize = size + FileUtil.Unit.GB.name() + (pairEnd ? "*2" : "");
+                String fileSize = size + FileUtil.Unit.GB.name() + (pairEnd ? "x2" : "");
                 String species = ConfigInitializer.getInstance().getGenome(exp.getGenomeCode()).getName();
                 RawColumn column = new RawColumn(exp.getCode(), fastq1, fastq2, fileSize, species);
                 return column.toString();
@@ -50,12 +50,16 @@ public class Statistics {
                         (exp.isBroadPeak() ? Constant.SFX_BROAD_PEAKS : Constant.SFX_NARROW_PEAKS);
                 List<String> lines = FileUtil.readLines(peakFilePath);
                 long peakCount = lines.size();
-                long peakLenSum = 0, peakAvgLen;
+                long peakLenSum = 0, peakAvgLen = 0;
                 for (String line : lines) {
                     String[] info = line.split("\t");
                     peakLenSum += Long.parseLong(info[2]) - Long.parseLong(info[1]) + 1;
                 }
-                peakAvgLen = peakLenSum / peakCount;
+                try {
+                    peakAvgLen = peakLenSum / peakCount;
+                } catch (ArithmeticException e) {
+                    System.err.printf("peak file: %s" + peakFilePath);
+                }
                 PeakCallColumn callColumn = new PeakCallColumn(exp.getCode(), exp.isBroadPeak(), peakAvgLen, peakCount);
                 return callColumn.toString();
             case PEAK_ANNO:
