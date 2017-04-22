@@ -1,5 +1,6 @@
 package cn.j1angvei.castk2;
 
+
 /**
  * Entry of the program
  * Created by Wayne on 2016/11/23.
@@ -10,28 +11,28 @@ public class CSATK {
             usage();
             return;
         }
-        String task = args[0];
+        Task task = Task.fromKeyword(args[0]);
         switch (task) {
-            case Task.PIPELINE:
+            case PIPELINE:
                 Task.pipeline();
                 break;
-            case Task.INSTALL:
+            case INSTALL:
                 Task.install();
                 break;
-            case Task.RESET:
+            case RESET:
                 Task.reset();
                 break;
-            case Task.BACKUP:
+            case BACKUP:
                 Task.backup();
                 break;
-            case Task.FUNCTION:
+            case FUNCTION:
                 if (args.length == 2) {
                     Task.function(args[1]);
                 } else {
                     System.err.println("Function keywords are not in function1,function2,function... format!");
                 }
                 break;
-            case Task.SOLELY:
+            case SOLELY:
                 if (args.length > 2) {
                     String functionKeyword = args[1];
                     String[] paramArgs = new String[args.length - 2];
@@ -52,23 +53,14 @@ public class CSATK {
                         "Project: https://github.com/j1angvei/CSATK2\n" +
                         "\n" +
                         "Tasks:\nCMD:\tjava -jar CSATK.jar <task keyword>\n" +
-                        "\t%s,\tChIP-Seq analysis pipeline\n" +
-                        "\t%s,\trun function(s) in order\n" +
-                        "\t%s,\trun solely function with arguments\n" +
-                        "\t%s,\t(re)install all software\n" +
-                        "\t%s,\treset project to original state\n" +
-                        "\t%s,\tbackup all file of last analysis\n" +
-                        "\n" +
+                        Task.getTaskUsage() +
                         "Functions:\nCMD:\tjava -jar CSATK.jar -f <function1,function2,...>\n" +
                         Function.getFunctionUsage() +
                         "\n" +
                         "Sole function:\nCMD:\tjava -jar CSATK.jar -s <function keyword> [arg1] [arg2] ...\n" +
                         "\tGO & Pathway analysis:\t%s [species code] [gene list] [output]\n" +
                         "\n"
-                ,
-                //task
-                Task.PIPELINE, Task.FUNCTION, Task.SOLELY, Task.INSTALL, Task.RESET, Task.BACKUP,
-                //solely function
+                ,//solely function
                 Function.GO_PATHWAY
         );
     }

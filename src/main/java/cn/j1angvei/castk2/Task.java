@@ -1,13 +1,13 @@
 package cn.j1angvei.castk2;
 
 
-import cn.j1angvei.castk2.cmd.InstallCmd;
-import cn.j1angvei.castk2.panther.PantherAnalysis;
 import cn.j1angvei.castk2.cmd.Analysis;
 import cn.j1angvei.castk2.cmd.Executor;
+import cn.j1angvei.castk2.cmd.InstallCmd;
 import cn.j1angvei.castk2.conf.Directory;
 import cn.j1angvei.castk2.conf.Resource;
 import cn.j1angvei.castk2.conf.Software;
+import cn.j1angvei.castk2.panther.PantherAnalysis;
 import cn.j1angvei.castk2.util.FileUtil;
 
 import static cn.j1angvei.castk2.conf.Directory.Sub;
@@ -16,13 +16,51 @@ import static cn.j1angvei.castk2.conf.Directory.Sub;
  * run task list in introduction
  * Created by Wayne on 2016/11/23.
  */
-public class Task {
-    public static final String PIPELINE = "-p";
-    public static final String INSTALL = "-i";
-    public static final String RESET = "-r";
-    public static final String BACKUP = "-b";
-    public static final String FUNCTION = "-f";
-    public static final String SOLELY = "-s";
+public enum Task {
+    PIPELINE("-p", "ChIP-Seq analysis pipeline"),
+    FUNCTION("-i", "run function(s) in order"),
+    SOLELY("-r", "run solely function with arguments"),
+    INSTALL("-b", "(re)install all software"),
+    RESET("-f", "reset project to original state"),
+    BACKUP("-s", "backup all file of last analysis");
+    private String keyword;
+    private String description;
+
+    Task(String keyword, String description) {
+        this.keyword = keyword;
+        this.description = description;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("\t%s,\t%s", this.keyword, this.description);
+    }
+
+    public static Task fromKeyword(String keyword) {
+        for (Task task : Task.values()) {
+            if (task.getKeyword().toLowerCase().equals(keyword)) {
+                return task;
+            }
+        }
+        throw new IllegalArgumentException("keyword " + keyword + " not found in " + Task.class);
+    }
+
+    public static String getTaskUsage() {
+        StringBuilder builder = new StringBuilder();
+        for (Task task : Task.values()) {
+            builder.append(task.toString())
+                    .append("\n");
+        }
+        return builder.toString();
+    }
 
     public static void pipeline() {
         for (Function function : Function.values()) {
