@@ -173,7 +173,7 @@ public class Analysis {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        System.out.println("run go & pathway in background!");
+                        System.out.println(exp.getCode() + " run go & pathway in background!");
                         PantherAnalysis.newInstance(exp.getCode(), exp.getGenomeCode(), geneList, outGoFile).analysis();
                     }
                 }).start();

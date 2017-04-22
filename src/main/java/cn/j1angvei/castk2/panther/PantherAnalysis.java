@@ -57,17 +57,9 @@ public class PantherAnalysis {
             if (content == null || content.isEmpty()) {
                 continue;
             }
-            String modified = addColumn(goType.getDescription(), content);
-            FileUtil.appendFile(modified, mOutFileName);
+            FileUtil.appendFile("#" + goType.getDescription(), mOutFileName);
+            FileUtil.appendFile(content, mOutFileName);
         }
-    }
-
-    private String addColumn(String goType, String originalContent) {
-        String modified = "";
-        for (String line : originalContent.split("\n")) {
-            modified += line.replaceFirst("^", mExpCode + "\t" + goType + "\t");
-        }
-        return modified;
     }
 
     private void initCookies() {

@@ -32,4 +32,9 @@ public class Constant {
      */
     public static final String FLAGSTAT_SFX = ".flagstat";
 
+    /**
+     * specific folder in output or software
+     */
+    public static final String FOLDER_KNOWN_MOTIF = "knownResults";
+
 }

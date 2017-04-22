@@ -3,6 +3,7 @@ package cn.j1angvei.castk2.util;
 import cn.j1angvei.castk2.CSATK;
 import cn.j1angvei.castk2.conf.Directory;
 import cn.j1angvei.castk2.conf.Resource;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -158,7 +159,20 @@ public class FileUtil {
 
     public static void restoreConfig(Resource type) {
         String content = readFromResourceFolder(type);
-        overwriteFile(content, WORK_DIR + "conf" + File.separator + type.getFileName());
+        overwriteFile(content, WORK_DIR + "config" + File.separator + type.getFileName());
+    }
+
+    public static byte[] readToByteArray(String filePath) {
+        try {
+            return FileUtils.readFileToByteArray(new File(filePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new byte[0];
+    }
+
+    public static String encodeToBase64(String filePath) {
+        return Base64.encodeBase64String(readToByteArray(filePath));
     }
 
     public static long countFileContentSize(String fileName) {
