@@ -98,7 +98,7 @@ public class Statistics {
                     String[] goInfo = line.split("\t");
                     GOColumn goColumn = new GOColumn(exp.getCode(), goDescription,
                             goInfo[1], Integer.parseInt(goInfo[2]), goInfo[3]);
-                    goBuilder.append(goColumn.toString()).append("\n");
+                    goBuilder.append(goColumn.toString());
                 }
                 return goBuilder.toString();
             case PATHWAY:

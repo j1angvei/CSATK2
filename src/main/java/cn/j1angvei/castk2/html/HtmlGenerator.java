@@ -33,11 +33,9 @@ public class HtmlGenerator {
         String date = DateFormat.getDateInstance(DateFormat.LONG, Locale.CHINA).format(new Date());
         context.setVariable("title", title);
         context.setVariable("date", date);
-        fillData(StatType.RAW_DATA, context);
-//        for (StatType type : StatType.values()) {
-//            fillData(type, context);
-//        }
-
+        for (StatType type : StatType.values()) {
+            fillData(type, context);
+        }
         final String html = engine.process("template", context);
         FileUtil.overwriteFile(html, ConfigInitializer.getPath(Directory.Out.HTML) + "csatk_result.html");
 
@@ -48,19 +46,23 @@ public class HtmlGenerator {
         String[] header = dataOriginal[0];
         int row = dataOriginal.length;
         int column = dataOriginal[0].length;
-        System.out.printf("%d\t%d", row, column);
         String[][] dataNoHeader = new String[row - 1][column];
         for (int i = 1; i < row; i++) {
             System.arraycopy(dataOriginal[i], 0, dataNoHeader[i - 1], 0, column);
         }
-        Arrays.sort(dataNoHeader, new Comparator<String[]>() {
-            @Override
-            public int compare(String[] o1, String[] o2) {
-                if (o1 == null) return 1;
-                if (o2 == null) return -1;
-                return o1[0].compareTo(o2[0]);
-            }
-        });
+        try {
+            Arrays.sort(dataNoHeader, new Comparator<String[]>() {
+                @Override
+                public int compare(String[] o1, String[] o2) {
+                    if (o1 == null) return 1;
+                    if (o2 == null) return -1;
+                    return o1[0].compareTo(o2[0]);
+                }
+            });
+        } catch (NullPointerException e) {
+            System.out.printf("type\t%s\n", type);
+        }
+
         String headerKey = "", dataKey = "";
         switch (type) {
             case RAW_DATA:

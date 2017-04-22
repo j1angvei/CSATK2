@@ -207,7 +207,7 @@
         <li><a href="#M5">GO Analysis</a></li>
         <li><a href="#M6">Pathway Analysis</a></li>
         <li><a href="#M7">Motif Analysis</a></li>
-        <li><a href="#M8">TSS Plot</a></li>
+        <!--<li><a href="#M8">TSS Plot</a></li>-->
     </ol>
 </div>
 <div class="main">
@@ -216,11 +216,7 @@
         <table>
             <thead>
             <tr>
-                <th>Sample</th>
-                <th>Fastq 1</th>
-                <th>Fastq 2</th>
-                <th>File size</th>
-                <th>Species</th>
+                <th th:each="header : ${raw_header}" th:text="${header}"></th>
             </tr>
             </thead>
             <tbody>
@@ -232,36 +228,130 @@
     </div>
     <div class="module">
         <h2 id="M1">Quality Control</h2>
+        <table>
+            <thead>
+            <tr>
+                <th th:each="header : ${qc_header}" th:text="${header}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="data : ${qc_data}">
+                <td th:each="item : ${data}" th:text="${item}">Cell</td>
+            </tr>
+            </tbody>
+        </table>
         <p><img class="indented" src="" alt="Per base quality graph" width="800" height="600"/></p>
     </div>
     <div class="module">
         <h2 id="M2">Reads Alignment</h2>
+        <table>
+            <thead>
+            <tr>
+                <th th:each="header : ${align_header}" th:text="${header}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="data : ${align_data}">
+                <td th:each="item : ${data}" th:text="${item}">Cell</td>
+            </tr>
+            </tbody>
+        </table>
         <p><img class="indented" src="" alt="Per base quality graph" width="800" height="600"/></p>
     </div>
     <div class="module">
         <h2 id="M3">Peak Calling</h2>
+        <table>
+            <thead>
+            <tr>
+                <th th:each="header : ${call_header}" th:text="${header}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="data : ${call_data}">
+                <td th:each="item : ${data}" th:text="${item}">Cell</td>
+            </tr>
+            </tbody>
+        </table>
         <p><img class="indented" src="" alt="Per Sequence quality graph" width="800" height="600"/></p>
     </div>
     <div class="module">
         <h2 id="M4">Peak Annotation</h2>
+        <table>
+            <thead>
+            <tr>
+                <th th:each="header : ${anno_header}" th:text="${header}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="data : ${anno_data}">
+                <td th:each="item : ${data}" th:text="${item}">Cell</td>
+            </tr>
+            </tbody>
+        </table>
         <p><img class="indented" src="" alt="Per base sequence content" width="800" height="600"/></p>
     </div>
     <div class="module">
         <h2 id="M5">GO Analysis</h2>
+        <table>
+            <thead>
+            <tr>
+                <th th:each="header : ${go_header}" th:text="${header}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="data : ${go_data}">
+                <td th:each="item : ${data}" th:text="${item}">Cell</td>
+            </tr>
+            </tbody>
+        </table>
         <p><img class="indented" src="" alt="Per sequence GC content graph" width="800" height="600"/></p>
     </div>
     <div class="module">
         <h2 id="M6">Pathway Analysis</h2>
+        <table>
+            <thead>
+            <tr>
+                <th th:each="header : ${pathway_header}" th:text="${header}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="data : ${pathway_data}">
+                <td th:each="item : ${data}" th:text="${item}">Cell</td>
+            </tr>
+            </tbody>
+        </table>
         <p><img class="indented" src="" alt="N content graph" width="800" height="600"/></p>
     </div>
     <div class="module">
         <h2 id="M7">Motif Analysis</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Sample</th>
+                <th>Motif 1</th>
+                <th>Motif 2</th>
+                <th>Motif 3</th>
+                <th>Motif 4</th>
+                <th>Motif 5</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="data : ${motif_data}">
+                <td th:text="${data[0]}"></td>
+                <td><img src="#" th:src="'data:image/png;base64,'+${data[1]}"/></td>
+                <td><img src="#" th:src="'data:image/png;base64,'+${data[2]}"/></td>
+                <td><img src="#" th:src="'data:image/png;base64,'+${data[3]}"/></td>
+                <td><img src="#" th:src="'data:image/png;base64,'+${data[4]}"/></td>
+                <td><img src="#" th:src="'data:image/png;base64,'+${data[5]}"/></td>
+            </tr>
+            </tbody>
+        </table>
         <p><img class="indented" src="" alt="Sequence length distribution" width="800" height="600"/></p>
     </div>
-    <div class="module">
-        <h2 id="M8">TSS Plot</h2>
-        <p><img class="indented" src="" alt="Duplication level graph" width="800" height="600"/></p>
-    </div>
+    <!--<div class="module">-->
+    <!--<h2 id="M8">TSS Plot</h2>-->
+    <!--<p><img class="indented" src="" alt="Duplication level graph" width="800" height="600"/></p>-->
+    <!--</div>-->
 </div>
 <div class="footer">Produced by
     <a href="https://github.com/j1angvei/CSATK2">CSATK</a> (version 2.0-170422)

@@ -43,7 +43,7 @@ public class PeakAnnoColumn implements Column {
 
     @Override
     public String toString() {
-        return String.format("%s\t%,d\t%,d\t%,d\t%,d\t%,d",
+        return String.format("%s\t%,d\t%,d\t%,d\t%,d\t%,d\n",
                 expCode,
                 map.get(Type.INTERGENIC.getTypeName()),
                 map.get(Type.EXON.getTypeName()),
@@ -71,7 +71,7 @@ public class PeakAnnoColumn implements Column {
         }
 
         public static String asHeader() {
-            return String.format("Sample\t%s\t%s\t%s\t%s\t%s\n",
+            return String.format("Sample\t%s\t%s\t%s\t%s\t%s",
                     INTERGENIC.getTypeName(),
                     EXON.getTypeName(),
                     PROMOTER_TSS.getTypeName(),
