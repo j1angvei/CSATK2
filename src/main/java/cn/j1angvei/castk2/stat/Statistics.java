@@ -126,13 +126,13 @@ public class Statistics {
                     }
                 }
                 Collections.sort(pathwayColumns);
-                for (int i = 0; i < 15 && i < pathwayColumns.size(); i++) {
+                for (int i = 0; i < 10 && i < pathwayColumns.size(); i++) {
                     pathwayBuilder.append(pathwayColumns.get(i).toString());
                 }
                 return pathwayBuilder.toString();
             case MOTIF:
                 String motifPngPfx = ConfigInitializer.getPath(Directory.Out.MOTIF) + exp.getCode()
-                        + File.separator + Constant.FOLDER_KNOWN_MOTIF + File.separator + "known";
+                        + File.separator + Constant.FOLDER_KNOWN_MOTIF + File.separator + "motif";
                 MotifColumn motifColumn = new MotifColumn(exp.getCode(), motifPngPfx, 5);
                 return motifColumn.toString();
             default:

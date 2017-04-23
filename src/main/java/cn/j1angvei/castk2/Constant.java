@@ -35,6 +35,6 @@ public class Constant {
     /**
      * specific folder in output or software
      */
-    public static final String FOLDER_KNOWN_MOTIF = "knownResults";
+    public static final String FOLDER_KNOWN_MOTIF = "homerResults";
 
 }

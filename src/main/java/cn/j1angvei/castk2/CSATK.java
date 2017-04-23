@@ -1,8 +1,7 @@
 package cn.j1angvei.castk2;
 
 
-import java.util.Arrays;
-import java.util.Comparator;
+import cn.j1angvei.castk2.gui.HomeFrame;
 
 /**
  * Entry of the program
@@ -11,7 +10,8 @@ import java.util.Comparator;
 public class CSATK {
     public static void main(String[] args) {
         if (args.length == 0) {
-            usage();
+            HomeFrame.initiate();
+//            usage();
             return;
         }
         Task task = Task.fromKeyword(args[0]);
@@ -45,6 +45,8 @@ public class CSATK {
                     System.err.println("Lack of solely function arguments, java -jar CSATK.jar -s [function keyword] [arg0] [arg0] ...");
                 }
                 break;
+            case HELP:
+                usage();
             default:
                 throw new IllegalArgumentException("\nTask " + args[0] + " not found!");
         }

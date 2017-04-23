@@ -22,7 +22,8 @@ public enum Task {
     SOLELY("-s", "run solely function with arguments"),
     INSTALL("-i", "(re)install all software"),
     RESET("-r", "reset project to original state"),
-    BACKUP("-b", "backup all file of last analysis");
+    BACKUP("-b", "backup all file of last analysis"),
+    HELP("-h", "print help information and usage");
     private String keyword;
     private String description;
 
