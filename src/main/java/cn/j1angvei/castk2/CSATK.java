@@ -1,7 +1,7 @@
 package cn.j1angvei.castk2;
 
 
-import cn.j1angvei.castk2.gui.HomeFrame;
+import cn.j1angvei.castk2.gui.MainApp;
 
 /**
  * Entry of the program
@@ -10,8 +10,14 @@ import cn.j1angvei.castk2.gui.HomeFrame;
 public class CSATK {
     public static void main(String[] args) {
         if (args.length == 0) {
-            HomeFrame.initiate();
-//            usage();
+//            try {
+//                //open GUI
+////                HomeFrame.initiate();
+//            } catch (HeadlessException e) {
+//                //GUI not supported, print usage
+//                usage();
+//            }
+            MainApp.main(args);
             return;
         }
         Task task = Task.fromKeyword(args[0]);

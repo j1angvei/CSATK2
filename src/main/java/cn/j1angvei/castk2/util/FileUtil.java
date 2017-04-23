@@ -146,8 +146,18 @@ public class FileUtil {
         }
     }
 
-    public static URL readResouce(String resName) {
+    public static URL readResource(String resName) {
         return CSATK.class.getClassLoader().getResource(resName);
+    }
+
+    public static String readResourceAsString(String resName) {
+        try {
+            return IOUtils.toString(readResource(resName), Charset.defaultCharset());
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println(resName + " resource not found");
+            return null;
+        }
     }
 
     public static String readFromConfigFolder(Resource type) {
