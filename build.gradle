@@ -1,5 +1,5 @@
 group 'j1angvei'
-version '170419'
+version '170424'
 
 apply plugin: 'java'
 
@@ -24,5 +24,6 @@ dependencies {
     compile group: 'com.squareup.retrofit2', name: 'converter-scalars', version: '2.2.0'
     compile group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.5.RELEASE'
     compile group: 'org.slf4j', name: 'slf4j-nop', version: '1.6.6'
+    compile group: 'jfree', name: 'jfreechart', version: '1.0.13'
 
 }

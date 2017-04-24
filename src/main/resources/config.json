@@ -3,5 +3,6 @@
   "python": "python",
   "perl": "perl",
   "thread": 10,
-  "mapping_quality": 30
+  "mapping_quality": 30,
+  "call_with_control": false
 }

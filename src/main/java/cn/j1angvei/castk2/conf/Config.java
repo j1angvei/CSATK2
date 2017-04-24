@@ -10,6 +10,7 @@ public class Config {
     private String perl;
     private int thread;
     private int mappingQuality;
+    private boolean callWithControl;
 
     public Config() {
     }
@@ -58,5 +59,9 @@ public class Config {
     public String toString() {
         return "Config{" +
                 '}';
+    }
+
+    public boolean isCallWithControl() {
+        return callWithControl;
     }
 }

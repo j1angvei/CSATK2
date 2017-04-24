@@ -23,9 +23,8 @@ public class Directory {
         GENE_LIST("15_gene_list"),
         GO_PATHWAY("16_go_pathway"),
         MOTIF("17_motif"),
-        FLAGSTAT("18_flagstat"),
-        STATISTICS("19_statistic"),
-        HTML("20_html");
+        STATISTICS("18_statistic"),
+        HTML("19_html");
 
         private String dirName;
 

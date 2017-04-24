@@ -2,6 +2,8 @@ package cn.j1angvei.castk2;
 
 
 import cn.j1angvei.castk2.gui.MainApp;
+import org.apache.commons.lang3.JavaVersion;
+import org.apache.commons.lang3.SystemUtils;
 
 /**
  * Entry of the program
@@ -10,14 +12,11 @@ import cn.j1angvei.castk2.gui.MainApp;
 public class CSATK {
     public static void main(String[] args) {
         if (args.length == 0) {
-//            try {
-//                //open GUI
-////                HomeFrame.initiate();
-//            } catch (HeadlessException e) {
-//                //GUI not supported, print usage
-//                usage();
-//            }
-            MainApp.main(args);
+            if (SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_1_8) && SystemUtils.IS_OS_WINDOWS) {
+                MainApp.main(args);
+            } else {
+                usage();
+            }
             return;
         }
         Task task = Task.fromKeyword(args[0]);
@@ -60,7 +59,7 @@ public class CSATK {
 
     private static void usage() {
         System.out.printf("Program: CSATK(ChIP-Seq Analysis Toolkit)\n" +
-                        "Version: 2.0-170419 by j1angvei\n" +
+                        "Version: 2.0-170424 by j1angvei\n" +
                         "Project: https://github.com/j1angvei/CSATK2\n" +
                         "\n" +
                         "Tasks:\nCMD:\tjava -jar CSATK.jar <task>\n" +

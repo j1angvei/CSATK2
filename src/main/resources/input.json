@@ -15,7 +15,7 @@
       "annotation": "Another species annotation file"
     }
   ],
-  "experiment": [
+  "experiments": [
     {
       "code": "control",
       "fastq1": "C1.fastq",

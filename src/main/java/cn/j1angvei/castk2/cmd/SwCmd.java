@@ -244,13 +244,25 @@ public class SwCmd {
         Genome genome = CONF.getGenome(experiment.getGenomeCode());
         double gSize = Double.parseDouble(genome.getSize());
 
-        //has no control experiment
-        //single "macs2 callpeak -t ChIP.bam -c Control.bam -f BAM -g hs -n test -B -q 0.01"
-        String callPeakCmd = String.format("%s callpeak -t %s -f BAM -g %s -n %s -B",
+        String control_holder = "CONTROL_HOLDER";
+        //example "macs2 callpeak -t ChIP.bam -c Control.bam -f BAM -g hs -n test -B -q 0.01"
+        String callPeakCmd = String.format("%s callpeak -t %s " + control_holder + " -f BAM -g %s -n %s -B",
                 CONF.getSwExecutable(Software.MACS2),
                 ConfigInitializer.getPath(Out.BAM_UNIQUE) + experiment.getCode() + Constant.SFX_UNIQUE_BAM,
                 gSize,
                 ConfigInitializer.getPath(Out.PEAK_CALLING) + experiment.getCode());
+        //set with control
+        String ctrlCode = experiment.getControl();
+        if (CONF.getConfig().isCallWithControl() &&//user set to call peak with control
+                StrUtil.isValid(ctrlCode) &&//this experiment has control
+                !experiment.getCode().equals(ctrlCode)) {//this experiment is not control itself
+            String control = "-c " + ConfigInitializer.getPath(Out.BAM_UNIQUE) +
+                    ctrlCode + Constant.SFX_UNIQUE_BAM;
+            callPeakCmd = callPeakCmd.replace(control_holder, control);
+        } else {
+            callPeakCmd = callPeakCmd.replace(control_holder, "");
+
+        }
         //broad peaks need to set '--broad' parameter
         if (experiment.isBroadPeak()) {
             callPeakCmd += " --broad";

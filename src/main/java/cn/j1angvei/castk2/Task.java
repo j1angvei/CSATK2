@@ -83,7 +83,7 @@ public enum Task {
     public static void reset() {
         System.out.println("Reset CSATK2 to default status...");
         //read conf file from resource to conf dir
-        for (Resource type : Resource.values()) {
+        for (Resource type : new Resource[]{Resource.CONFIG, Resource.INPUT, Resource.ADAPTER}) {
             FileUtil.restoreConfig(type);
             System.out.println("File " + type.getFileName() + " has been reset!");
         }
