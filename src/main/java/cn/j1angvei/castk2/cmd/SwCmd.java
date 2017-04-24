@@ -263,9 +263,12 @@ public class SwCmd {
             callPeakCmd = callPeakCmd.replace(control_holder, "");
 
         }
-        //broad peaks need to set '--broad' parameter
+        //do narrow peaks calling
+        cmd.add(callPeakCmd);
+
+        //do broad peak calling
         if (experiment.isBroadPeak()) {
-            callPeakCmd += " --broad";
+            cmd.add(callPeakCmd + " --broad -q 0.05");
         }
         cmd.add(callPeakCmd);
         return FileUtil.listToArray(cmd);
@@ -323,6 +326,7 @@ public class SwCmd {
         String q30Bam = ConfigInitializer.getPath(Out.BAM_UNIQUE) + experiment.getCode() + Constant.SFX_UNIQUE_BAM;
         String q30Stat = ConfigInitializer.getPath(Out.BAM_UNIQUE) + experiment.getCode() + Constant.FLAGSTAT_SFX;
         commands[2] = String.format("%s flagstat %s > %s", exe, q30Bam, q30Stat);
+
         return commands;
     }
 
