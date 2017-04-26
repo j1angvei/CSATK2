@@ -263,14 +263,15 @@ public class SwCmd {
             callPeakCmd = callPeakCmd.replace(control_holder, "");
 
         }
-        //do narrow peaks calling
-        cmd.add(callPeakCmd);
 
         //do broad peak calling
         if (experiment.isBroadPeak()) {
             cmd.add(callPeakCmd + " --broad -q 0.05");
         }
-        cmd.add(callPeakCmd);
+        //do default peak calling
+        else {
+            cmd.add(callPeakCmd);
+        }
         return FileUtil.listToArray(cmd);
     }
 
