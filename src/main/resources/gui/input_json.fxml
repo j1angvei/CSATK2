@@ -73,6 +73,7 @@
                                                 </GridPane>
                                                 <HBox layoutX="234.0" layoutY="479.0" spacing="5.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
                                                     <children>
+                                          <Button mnemonicParsing="false" onAction="#handleCopyGenome" text="Copy" />
                                                         <Button mnemonicParsing="false" onAction="#handleNewGenome" text="New..." />
                                                         <Button mnemonicParsing="false" onAction="#handleEditGenome" text="Edit..." />
                                                         <Button mnemonicParsing="false" onAction="#handleDeleteGenome" text="Delete" />
@@ -94,7 +95,7 @@
                                     <items>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                             <children>
-                                                <TableView fx:id="expModelTable" prefHeight="531.0" prefWidth="456.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                <TableView fx:id="expModelTable" layoutX="14.0" prefHeight="531.0" prefWidth="456.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-14.0" AnchorPane.topAnchor="0.0">
                                                     <columns>
                                                         <TableColumn fx:id="codeExpCol" prefWidth="75.0" text="Code" />
                                                         <TableColumn fx:id="genomeCodeExpCol" prefWidth="75.0" text="Genome" />
@@ -139,6 +140,7 @@
                                                 </GridPane>
                                                 <HBox spacing="5.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
                                                     <children>
+                                          <Button mnemonicParsing="false" onAction="#handleCopyExperiment" text="Copy" />
                                                         <Button mnemonicParsing="false" onAction="#handleNewExperiment" text="New..." />
                                                         <Button mnemonicParsing="false" onAction="#handleEditExperiment" text="Edit..." />
                                                         <Button mnemonicParsing="false" onAction="#handleDeleteExperiment" text="Delete" />
