@@ -1,5 +1,6 @@
 package cn.j1angvei.castk2.util;
 
+import cn.j1angvei.castk2.conf.Input;
 import cn.j1angvei.castk2.qc.QCInfo;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -16,7 +17,9 @@ import java.nio.charset.Charset;
  */
 public class GsonUtil {
     private static final Gson GSON = new GsonBuilder()
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .setPrettyPrinting()
+            .create();
 
     public static Gson getGson() {
         return GSON;
@@ -38,5 +41,9 @@ public class GsonUtil {
             e.printStackTrace();
         }
         return fromJson(qcContent);
+    }
+
+    public static String toJson(Input input) {
+        return GSON.toJson(input);
     }
 }

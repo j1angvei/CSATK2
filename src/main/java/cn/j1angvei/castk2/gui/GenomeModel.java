@@ -15,6 +15,10 @@ public class GenomeModel {
     private final StringProperty fasta;
     private final StringProperty gtf;
 
+    public GenomeModel() {
+        this(0, null, null, null, null);
+    }
+
     public GenomeModel(int code, String name, String size, String fasta, String gtf) {
         this.code = new SimpleIntegerProperty(code);
         this.name = new SimpleStringProperty(name);
