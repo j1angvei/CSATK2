@@ -244,9 +244,9 @@ public class SwCmd {
         Genome genome = CONF.getGenome(experiment.getGenomeCode());
         double gSize = Double.parseDouble(genome.getSize());
 
-        String control_holder = "CONTROL_HOLDER";
+        String controlHolder = "CONTROL_HOLDER";
         //example "macs2 callpeak -t ChIP.bam -c Control.bam -f BAM -g hs -n test -B -q 0.01"
-        String callPeakCmd = String.format("%s callpeak -t %s " + control_holder + " -f BAM -g %s -n %s -B",
+        String callPeakCmd = String.format("%s callpeak -t %s " + controlHolder + " -f BAM -g %s -n %s -B",
                 CONF.getSwExecutable(Software.MACS2),
                 ConfigInitializer.getPath(Out.BAM_UNIQUE) + experiment.getCode() + Constant.SFX_UNIQUE_BAM,
                 gSize,
@@ -258,9 +258,9 @@ public class SwCmd {
                 !experiment.getCode().equals(ctrlCode)) {//this experiment is not control itself
             String control = "-c " + ConfigInitializer.getPath(Out.BAM_UNIQUE) +
                     ctrlCode + Constant.SFX_UNIQUE_BAM;
-            callPeakCmd = callPeakCmd.replace(control_holder, control);
+            callPeakCmd = callPeakCmd.replace(controlHolder, control);
         } else {
-            callPeakCmd = callPeakCmd.replace(control_holder, "");
+            callPeakCmd = callPeakCmd.replace(controlHolder, "");
 
         }
 

@@ -16,9 +16,13 @@ import java.util.*;
  * Created by Wayne on 4/22 0022.
  */
 public class HtmlGenerator {
-    Map<StatType, String[][]> dataMap;
+    private Map<StatType, String[][]> dataMap;
 
-    public HtmlGenerator(String statDir) {
+    public static HtmlGenerator getInstance(String statDir) {
+        return new HtmlGenerator(statDir);
+    }
+
+    private HtmlGenerator(String statDir) {
         dataMap = DataHolder.getInstance(statDir).getDataMap();
     }
 

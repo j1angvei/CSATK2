@@ -66,7 +66,7 @@ public enum Task {
     public static void pipeline() {
         for (Function function : Function.values()) {
             System.out.println("Start analysis, " + function.name());
-            Analysis.runFunction(function);
+            Analysis.getInstance().runFunction(function);
             System.out.println("Analysis , " + function.name() + " finished!");
         }
     }
@@ -75,23 +75,25 @@ public enum Task {
         for (Software software : Software.values()) {
             String swName = software.getSwName();
             System.out.println("Installing " + swName + " ...");
-            Executor.execute("install_" + software.name(), InstallCmd.install(software));
+            Executor.execute("install_" + software.name().toUpperCase(), InstallCmd.install(software));
             System.out.println("Install " + swName + " finished.");
         }
     }
 
     public static void reset() {
         System.out.println("Reset CSATK2 to default status...");
-        //read conf file from resource to conf dir
-        for (Resource type : new Resource[]{Resource.CONFIG, Resource.INPUT, Resource.ADAPTER}) {
-            FileUtil.restoreConfig(type);
-            System.out.println("File " + type.getFileName() + " has been reset!");
-        }
+        //reset sub directories first
         for (Directory.Sub sub : Directory.Sub.values()) {
             String dir = ConfigInitializer.getPath(sub);
             boolean success = FileUtil.makeDirs(dir);
             System.out.println(success ? "Create directory " + dir + " success!" : "Skip creating " + dir + ", already exists!");
         }
+        //restore configuration file from JAR resources to config sub directory
+        for (Resource type : new Resource[]{Resource.CONFIG, Resource.INPUT, Resource.ADAPTER}) {
+            FileUtil.restoreConfig(type);
+            System.out.println("File " + type.getFileName() + " has been reset!");
+        }
+        //restore all directories under output
         for (Directory.Out out : Directory.Out.values()) {
             String dir = ConfigInitializer.getPath(out);
             boolean success = FileUtil.makeDirs(dir);
@@ -108,9 +110,8 @@ public enum Task {
         backupSubDir(timestamp, Sub.SCRIPT);
         backupSubDir(timestamp, Sub.OUTPUT);
         System.out.println("Backup at: " + ConfigInitializer.getPath(Sub.BACKUP) + timestamp);
-        //reset directories
+        System.out.println("Reset start after backup succeed!");
         reset();
-
     }
 
     private static void backupSubDir(String timestamp, Sub sub) {
@@ -124,7 +125,7 @@ public enum Task {
         for (String keyword : functions) {
             Function function = Function.fromKeyword(keyword);
             System.out.println("Start analysis, " + function.name());
-            Analysis.runFunction(function);
+            Analysis.getInstance().runFunction(function);
             System.out.println("Analysis " + function.name() + " finished!");
         }
     }

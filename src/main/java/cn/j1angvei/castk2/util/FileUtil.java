@@ -251,7 +251,7 @@ public class FileUtil {
     }
 
     public static String getTimestamp() {
-        return new SimpleDateFormat("yyyyMMdd-HH:mm:ss").format(new Date());
+        return new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date());
     }
 
     public enum Unit {

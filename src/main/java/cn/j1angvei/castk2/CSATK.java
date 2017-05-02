@@ -47,11 +47,12 @@ public class CSATK {
                     System.arraycopy(args, 2, paramArgs, 0, paramArgs.length);
                     Task.solely(functionKeyword, paramArgs);
                 } else {
-                    System.err.println("Lack of solely function arguments, java -jar CSATK.jar -s [function keyword] [arg0] [arg0] ...");
+                    System.err.println("Lack of solely function arguments, -s [function keyword] [arg0] [arg0] ...");
                 }
                 break;
             case HELP:
                 usage();
+                break;
             default:
                 throw new IllegalArgumentException("\nTask " + args[0] + " not found!");
         }
@@ -59,7 +60,7 @@ public class CSATK {
 
     private static void usage() {
         System.out.printf("Program: CSATK(ChIP-Seq Analysis Toolkit)\n" +
-                        "Version: 2.0-170424 by j1angvei\n" +
+                        "Version: 2.0-170502 by j1angvei\n" +
                         "Project: https://github.com/j1angvei/CSATK2\n" +
                         "\n" +
                         "Tasks:\nCMD:\tjava -jar CSATK.jar <task>\n" +

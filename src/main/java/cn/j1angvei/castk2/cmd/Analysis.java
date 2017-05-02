@@ -15,7 +15,9 @@ import cn.j1angvei.castk2.util.StrUtil;
 import cn.j1angvei.castk2.util.SwUtil;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.*;
 
 import static cn.j1angvei.castk2.conf.Directory.Out;
 
@@ -23,68 +25,89 @@ import static cn.j1angvei.castk2.conf.Directory.Out;
  * Created by j1angvei on 2016/12/7.
  */
 public class Analysis {
-    private static ConfigInitializer CONF = ConfigInitializer.getInstance();
+    private ConfigInitializer initializer;
 
-    public static void runFunction(Function function) {
+    public static Analysis getInstance() {
+        return new Analysis();
+    }
+
+    private Analysis() {
+        initializer = ConfigInitializer.getInstance();
+    }
+
+    public void runFunction(Function function) {
         if (function.equals(Function.GENOME_IDX)) {
-            traverseGenomes(function);
+            iterateGenomes(function);
         } else if (function.equals(Function.STATISTIC)) {
             Statistics.initStatisticsFile();
-            traverseExperiment(Function.STATISTIC);
+            iterateExperiment(Function.STATISTIC);
         } else if (function.equals(Function.HTML)) {
             String statDir = ConfigInitializer.getPath(Out.STATISTICS);
-            new HtmlGenerator(statDir).generate();
+            HtmlGenerator.getInstance(statDir).generate();
         } else {
-            traverseExperiment(function);
+            iterateExperiment(function);
         }
     }
 
-    private static void traverseExperiment(final Function function) {
-        List<Thread> experimentThreads = new ArrayList<>();
-        for (final Experiment experiment : CONF.getExperiments()) {
-            final String scriptNamePrefix = "Experiment_" + experiment.getCode() + "_" + function.name();
-            Thread t = new Thread(new Runnable() {
+    private void iterateExperiment(final Function function) {
+        List<Callable<String>> expCallable = new ArrayList<>();
+        for (final Experiment experiment : initializer.getExperiments()) {
+            final String description = String.format("Experiment_%s_%s", experiment.getCode(), function.name());
+            expCallable.add(new Callable<String>() {
                 @Override
-                public void run() {
-                    Executor.execute(scriptNamePrefix, getCommands(experiment, function));
+                public String call() throws Exception {
+                    System.out.format("Job %s submitted to work thread\n", description);
+                    Executor.execute(description, getCommands(experiment, function));
+                    return description;
                 }
             });
-            t.setName(scriptNamePrefix);
-            experimentThreads.add(t);
-            t.start();
         }
-        checkStatus(experimentThreads);
+        pendingCallable(expCallable);
     }
 
-    private static void traverseGenomes(final Function function) {
-        List<Thread> genomeThreads = new ArrayList<>();
-        for (final Genome genome : CONF.getGenomes()) {
-            final String scriptNamePrefix = "Genome_" + genome.getCode() + "_" + function.name();
-            Thread t = new Thread(new Runnable() {
+    private void iterateGenomes(final Function function) {
+        List<Callable<String>> genomeCallable = new ArrayList<>();
+        for (final Genome genome : initializer.getGenomes()) {
+            final String description = String.format("Genome_%s_%s", genome.getName(), function.name());
+            genomeCallable.add(new Callable<String>() {
                 @Override
-                public void run() {
-                    Executor.execute(scriptNamePrefix, getCommands(genome, function));
+                public String call() throws Exception {
+                    Executor.execute(description, getCommands(genome, function));
+                    return description;
                 }
             });
-            t.setName(scriptNamePrefix);
-            genomeThreads.add(t);
-            t.start();
         }
-        checkStatus(genomeThreads);
+        pendingCallable(genomeCallable);
     }
 
-    private static void checkStatus(List<Thread> threads) {
-        for (Thread t : threads) {
-            try {
-                t.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+    private void pendingCallable(List<Callable<String>> callable) {
+        List<Future<String>> futures = new ArrayList<>();
+        ExecutorService service = newThreadPoolInstance();
+        for (Callable<String> call : callable) {
+            futures.add(service.submit(call));
+        }
+        try {
+            Iterator<Future<String>> iterator = futures.iterator();
+            while (iterator.hasNext()) {
+                Future<String> future = iterator.next();
+                String description = future.get();
+                iterator.remove();
+                System.out.printf("%s is complete, %d left running\n", description, futures.size());
             }
-            System.out.println("Thread " + t.getName() + " finished!");
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
         }
     }
 
-    private static String[] getCommands(Genome genome, Function function) {
+    private ExecutorService newThreadPoolInstance() {
+        int threadNumber = initializer.getConfig().getExpThread();
+        if (threadNumber == 0) {
+            threadNumber = Runtime.getRuntime().availableProcessors();
+        }
+        return Executors.newFixedThreadPool(threadNumber);
+    }
+
+    private String[] getCommands(Genome genome, Function function) {
         switch (function) {
             case GENOME_IDX:
                 return SwCmd.genomeIndex(genome);
@@ -93,7 +116,7 @@ public class Analysis {
         }
     }
 
-    private static String[] getCommands(final Experiment exp, Function function) {
+    private String[] getCommands(final Experiment exp, Function function) {
         final String geneList = ConfigInitializer.getPath(Out.GENE_LIST) + exp.getCode() + Constant.SFX_GENE_LIST;
         switch (function) {
             case QC_RAW:
@@ -164,6 +187,7 @@ public class Analysis {
                 return SwCmd.emptyCmd(function);
             case GENOME_IDX:
             case HTML:
+                return SwCmd.emptyCmd(function);
             default:
                 throw new IllegalArgumentException("Illegal Function args in experiment analysis!");
         }

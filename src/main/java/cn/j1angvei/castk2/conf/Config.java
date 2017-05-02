@@ -11,6 +11,7 @@ public class Config {
     private int thread;
     private int mappingQuality;
     private boolean callWithControl;
+    private int expThread;
 
     public Config() {
     }
@@ -55,13 +56,19 @@ public class Config {
         this.mappingQuality = mappingQuality;
     }
 
-    @Override
-    public String toString() {
-        return "Config{" +
-                '}';
-    }
-
     public boolean isCallWithControl() {
         return callWithControl;
+    }
+
+    public void setCallWithControl(boolean callWithControl) {
+        this.callWithControl = callWithControl;
+    }
+
+    public int getExpThread() {
+        return expThread;
+    }
+
+    public void setExpThread(int expThread) {
+        this.expThread = expThread;
     }
 }

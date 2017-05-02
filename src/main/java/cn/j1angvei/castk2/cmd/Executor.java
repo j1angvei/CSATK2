@@ -14,10 +14,10 @@ import java.nio.charset.Charset;
  */
 public class Executor {
 
-    public static int execute(String prefixName, String... cmd) {
+    public static int execute(String scriptDescription, String... cmd) {
         String timestamp = FileUtil.getTimestamp();
-        String scriptFile = ConfigInitializer.getPath(Directory.Sub.SCRIPT) + timestamp + "_" + prefixName + ".sh";
-        String logFile = ConfigInitializer.getPath(Directory.Sub.LOG) + timestamp + "_" + prefixName + ".log";
+        String scriptFile = ConfigInitializer.getPath(Directory.Sub.SCRIPT) + timestamp + "_" + scriptDescription + ".sh";
+        String logFile = ConfigInitializer.getPath(Directory.Sub.LOG) + timestamp + "_" + scriptDescription + ".log";
         File script = createScript(scriptFile, cmd);
         int exitValue = 0;
         try {

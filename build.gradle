@@ -1,5 +1,5 @@
 group 'j1angvei'
-version '170424'
+version '170502'
 
 apply plugin: 'java'
 
