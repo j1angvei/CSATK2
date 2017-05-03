@@ -186,7 +186,7 @@ public class ParseZip {
                 }
             }
         } catch (IOException e) {
-            System.err.println("ERROR: QC ZIP File " + zipFilePath + "Not Found!!!");
+            System.err.println("ERROR: QC ZIP File " + zipFilePath + " Not Found!!!");
             e.printStackTrace();
         }
 

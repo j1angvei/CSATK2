@@ -117,13 +117,6 @@ public class SwCmd {
                     CONF.getSwExecutable(Software.FASTQC),
                     ConfigInitializer.getPath(Out.QC_CLEAN),
                     THREAD_NUMBER,
-                    ConfigInitializer.getPath(Out.TRIM) + experiment.getCode()) + StrUtil.getSuffix(experiment.getFastq1())
-            );
-        } else {
-            cmd.add(String.format("%s -o %s -t %d %s",
-                    CONF.getSwExecutable(Software.FASTQC),
-                    ConfigInitializer.getPath(Out.QC_CLEAN),
-                    THREAD_NUMBER,
                     ConfigInitializer.getPath(Out.TRIM) + experiment.getCode()) + "_1" + StrUtil.getSuffix(experiment.getFastq1())
             );
             cmd.add(String.format("%s -o %s -t %d %s",
@@ -132,6 +125,13 @@ public class SwCmd {
                     THREAD_NUMBER,
                     ConfigInitializer.getPath(Out.TRIM) + experiment.getCode() + "_2" + StrUtil.getSuffix(experiment.getFastq2())
             ));
+        } else {
+            cmd.add(String.format("%s -o %s -t %d %s",
+                    CONF.getSwExecutable(Software.FASTQC),
+                    ConfigInitializer.getPath(Out.QC_CLEAN),
+                    THREAD_NUMBER,
+                    ConfigInitializer.getPath(Out.TRIM) + experiment.getCode()) + StrUtil.getSuffix(experiment.getFastq1())
+            );
         }
         return FileUtil.listToArray(cmd);
     }
