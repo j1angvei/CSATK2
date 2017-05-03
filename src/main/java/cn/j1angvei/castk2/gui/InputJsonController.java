@@ -203,9 +203,10 @@ public class InputJsonController {
 
     @FXML
     private void handleCopyGenome() {
-        GenomeModel model = genomeModelTable.getSelectionModel().getSelectedItem();
-        if (model != null) {
-            mainApp.getGenomeModels().add(model);
+        GenomeModel oldModel = genomeModelTable.getSelectionModel().getSelectedItem();
+        if (oldModel != null) {
+            GenomeModel newModel = new GenomeModel(oldModel);
+            mainApp.getGenomeModels().add(newModel);
         } else {
             GuiUtil.createAlert("Error", "No genome is selected", Alert.AlertType.ERROR);
         }
@@ -213,9 +214,10 @@ public class InputJsonController {
 
     @FXML
     private void handleCopyExperiment() {
-        ExperimentModel model = expModelTable.getSelectionModel().getSelectedItem();
-        if (model != null) {
-            mainApp.getExperimentModels().add(model);
+        ExperimentModel oldModel = expModelTable.getSelectionModel().getSelectedItem();
+        if (oldModel != null) {
+            ExperimentModel newModel = new ExperimentModel(oldModel);
+            mainApp.getExperimentModels().add(newModel);
         } else {
 
             GuiUtil.createAlert("Error", "No experiment is selected", Alert.AlertType.ERROR);

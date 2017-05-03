@@ -26,6 +26,7 @@ import static cn.j1angvei.castk2.conf.Directory.Out;
  */
 public class Analysis {
     private ConfigInitializer initializer;
+    private int expThreadNum;
 
     public static Analysis getInstance() {
         return new Analysis();
@@ -33,6 +34,7 @@ public class Analysis {
 
     private Analysis() {
         initializer = ConfigInitializer.getInstance();
+        expThreadNum = initializer.getConfig().getExpThread();
     }
 
     public void runFunction(Function function) {
@@ -56,7 +58,7 @@ public class Analysis {
             expCallable.add(new Callable<String>() {
                 @Override
                 public String call() throws Exception {
-                    System.out.format("Job %s submitted to work thread\n", description);
+                    System.out.format("Job %s submitted\n", description);
                     Executor.execute(description, getCommands(experiment, function));
                     return description;
                 }
@@ -92,9 +94,11 @@ public class Analysis {
                 Future<String> future = iterator.next();
                 String description = future.get();
                 iterator.remove();
-                System.out.printf("%s is complete, %d left running\n", description, futures.size());
+                System.out.printf("Job %s complete, %d %s still running\n", description, futures.size(), futures.size() == 1 ? "job" : "jobs");
             }
         } catch (InterruptedException | ExecutionException e) {
+            Throwable rootException = e.getCause();
+            rootException.printStackTrace();
             e.printStackTrace();
         }
     }

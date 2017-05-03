@@ -5,7 +5,7 @@ package cn.j1angvei.castk2.util;
  */
 public class StrUtil {
     public static String getSuffix(String fullName) {
-        return fullName.substring(fullName.lastIndexOf('.') + 1, fullName.length());
+        return fullName.substring(fullName.lastIndexOf('.'), fullName.length());
     }
 
     public static String getPrefix(String fullName) {

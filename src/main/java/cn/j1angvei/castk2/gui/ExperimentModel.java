@@ -17,6 +17,10 @@ public class ExperimentModel {
         this(null, null, null, null, 0, false);
     }
 
+    public ExperimentModel(ExperimentModel oldModel) {
+        this(oldModel.getCode(), oldModel.getFastq1(), oldModel.getFastq2(), oldModel.getControl(), oldModel.getGenomeCode(), oldModel.isBroadPeak());
+    }
+
     public ExperimentModel(String code, String fastq1, String fastq2, String control, int genomeCode, boolean broadPeak) {
         this.code = new SimpleStringProperty(code);
         this.fastq1 = new SimpleStringProperty(fastq1);

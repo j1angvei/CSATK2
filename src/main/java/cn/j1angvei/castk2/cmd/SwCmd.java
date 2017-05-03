@@ -28,8 +28,8 @@ import static cn.j1angvei.castk2.conf.Directory.Sub;
  */
 public class SwCmd {
     private static final String TRIM_PARAM = "ILLUMINACLIP:%s:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 AVGQUAL:20 MINLEN:%d HEADCROP:%d";
-    private static final int THREAD_NUMBER = 10;
     private static ConfigInitializer CONF = ConfigInitializer.getInstance();
+    private static final int THREAD_NUMBER = CONF.getConfig().getThread();
 
     public static String[] genomeIndex(Genome genome) {
         String cmd = String.format("%s index -p %s %s",
@@ -86,10 +86,10 @@ public class SwCmd {
                     qcInfo.getPhred(),
                     fastq1,
                     fastq2,
-                    outputPrefix + "_1." + StrUtil.getSuffix(experiment.getFastq1()),
-                    outputPrefix + "_1_unpaired." + StrUtil.getSuffix(experiment.getFastq1()),
-                    outputPrefix + "_2." + StrUtil.getSuffix(experiment.getFastq2()),
-                    outputPrefix + "_2_unpaired." + StrUtil.getSuffix(experiment.getFastq2()),
+                    outputPrefix + "_1" + StrUtil.getSuffix(experiment.getFastq1()),
+                    outputPrefix + "_1_unpaired" + StrUtil.getSuffix(experiment.getFastq1()),
+                    outputPrefix + "_2" + StrUtil.getSuffix(experiment.getFastq2()),
+                    outputPrefix + "_2_unpaired" + StrUtil.getSuffix(experiment.getFastq2()),
                     qcInfo.getFaFilePath(),
                     qcInfo.getLength() / 3,
                     qcInfo.getHeadCrop());
@@ -102,7 +102,7 @@ public class SwCmd {
                     THREAD_NUMBER,
                     qcInfo.getPhred(),
                     fastq1,
-                    outputPrefix + "." + StrUtil.getSuffix(experiment.getFastq1()),
+                    outputPrefix + StrUtil.getSuffix(experiment.getFastq1()),
                     qcInfo.getFaFilePath(),
                     qcInfo.getLength() / 3,
                     qcInfo.getHeadCrop());
@@ -112,18 +112,25 @@ public class SwCmd {
 
     public static String[] qcCleanReads(Experiment experiment) {
         List<String> cmd = new ArrayList<>();
-        cmd.add(String.format("%s -o %s -t %d %s",
-                CONF.getSwExecutable(Software.FASTQC),
-                ConfigInitializer.getPath(Out.QC_CLEAN),
-                THREAD_NUMBER,
-                ConfigInitializer.getPath(Out.TRIM) + experiment.getCode()) + "_1." + StrUtil.getSuffix(experiment.getFastq1())
-        );
         if (isPairEnd(experiment)) {
             cmd.add(String.format("%s -o %s -t %d %s",
                     CONF.getSwExecutable(Software.FASTQC),
                     ConfigInitializer.getPath(Out.QC_CLEAN),
                     THREAD_NUMBER,
-                    ConfigInitializer.getPath(Out.TRIM) + experiment.getCode() + "_2." + StrUtil.getSuffix(experiment.getFastq2())
+                    ConfigInitializer.getPath(Out.TRIM) + experiment.getCode()) + StrUtil.getSuffix(experiment.getFastq1())
+            );
+        } else {
+            cmd.add(String.format("%s -o %s -t %d %s",
+                    CONF.getSwExecutable(Software.FASTQC),
+                    ConfigInitializer.getPath(Out.QC_CLEAN),
+                    THREAD_NUMBER,
+                    ConfigInitializer.getPath(Out.TRIM) + experiment.getCode()) + "_1" + StrUtil.getSuffix(experiment.getFastq1())
+            );
+            cmd.add(String.format("%s -o %s -t %d %s",
+                    CONF.getSwExecutable(Software.FASTQC),
+                    ConfigInitializer.getPath(Out.QC_CLEAN),
+                    THREAD_NUMBER,
+                    ConfigInitializer.getPath(Out.TRIM) + experiment.getCode() + "_2" + StrUtil.getSuffix(experiment.getFastq2())
             ));
         }
         return FileUtil.listToArray(cmd);
@@ -142,14 +149,14 @@ public class SwCmd {
         String sai1, sai2 = null;
         if (isPairEnd(experiment)) {
             //pair end data
-            fastq1 = ConfigInitializer.getPath(Out.TRIM) + experiment.getCode() + "_1." + StrUtil.getSuffix(experiment.getFastq1());
-            fastq2 = ConfigInitializer.getPath(Out.TRIM) + experiment.getCode() + "_2." + StrUtil.getSuffix(experiment.getFastq2());
+            fastq1 = ConfigInitializer.getPath(Out.TRIM) + experiment.getCode() + "_1" + StrUtil.getSuffix(experiment.getFastq1());
+            fastq2 = ConfigInitializer.getPath(Out.TRIM) + experiment.getCode() + "_2" + StrUtil.getSuffix(experiment.getFastq2());
             sai1 = ConfigInitializer.getPath(Out.ALIGNMENT) + experiment.getCode() + "_1" + Constant.SAI_SFX;
             sai2 = ConfigInitializer.getPath(Out.ALIGNMENT) + experiment.getCode() + "_2" + Constant.SAI_SFX;
 
         } else {
             //single end data
-            fastq1 = ConfigInitializer.getPath(Out.TRIM) + experiment.getCode() + "." + StrUtil.getSuffix(experiment.getFastq1());
+            fastq1 = ConfigInitializer.getPath(Out.TRIM) + experiment.getCode() + StrUtil.getSuffix(experiment.getFastq1());
             sai1 = ConfigInitializer.getPath(Out.ALIGNMENT) + experiment.getCode() + Constant.SAI_SFX;
         }
         //alignment result SAM file's absolute path
@@ -286,7 +293,7 @@ public class SwCmd {
                 CONF.getSwExecutable(Software.HOMER) + Constant.EXE_HOMER_ANNOTATE_PEAK,
                 ConfigInitializer.getPath(Out.PEAK_CALLING) + experiment.getCode() + sfxPeakFile,
                 ConfigInitializer.getPath(Sub.GENOME) + genome.getFasta(),
-                annoFormat,
+                annoFormat.substring(1, annoFormat.length()),
                 ConfigInitializer.getPath(Sub.GENOME) + genome.getAnnotation(),
                 ConfigInitializer.getPath(Out.ANNOTATION) + experiment.getCode() + Constant.SFX_ANNO_BED)
         );

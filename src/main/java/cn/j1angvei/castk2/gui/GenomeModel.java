@@ -19,6 +19,10 @@ public class GenomeModel {
         this(0, null, null, null, null);
     }
 
+    public GenomeModel(GenomeModel oldModel) {
+        this(oldModel.getCode(), oldModel.getName(), oldModel.getSize(), oldModel.getFasta(), oldModel.getGtf());
+    }
+
     public GenomeModel(int code, String name, String size, String fasta, String gtf) {
         this.code = new SimpleIntegerProperty(code);
         this.name = new SimpleStringProperty(name);
