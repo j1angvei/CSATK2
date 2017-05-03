@@ -18,10 +18,16 @@ In case you have no idea what JSON format is or you just don't want to write the
 Under any environment with X Display support(Like Windows or Ubuntu Desktop) and [JRE](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html),you can start CSATK GUI to help you create input.json.  
 
 Here is a simple illustration of using CSATK GUI to create input.json:
-<img src='./raw/all_genomes_text.png' width=600/>
-<img src='./raw/edit_genome_text.png' width=330/>
-<img src='./raw/all_experiments_text.png' width=600/>
-<img src='./raw/edit_experiment_text.png' width=330/>
-<img src='./raw/generate_success_text.png' width=225/>
+1. Launch CSATK GUI by double clicking CSATK.jar or running `java -jar CSATK.jar` from console(Notice that only X display support devices can open CSATK GUI).  
+2. Add all genome items in the table (you may need to remove the sample genome item).  
+<img src='./raw/all_genomes_text.png'/>
+3. If you have many genome items which is very similar, you can copy it and then edit.  
+<img src='./raw/edit_genome_text.png'/>
+4. Add all experiment items in the table (remember to remove the sample item).  
+<img src='./raw/all_experiments_text.png'/>
+5. Edit the experiment item and check if something is wrong.  
+<img src='./raw/edit_experiment_text.png'/>
+6. Click *Generate* button, a **input.json** will be created under the same location where you put the CSATK.jar.  
+<img src='./raw/generate_success_text.png'/>
 ## About
 ## License
