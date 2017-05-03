@@ -1,5 +1,6 @@
 package cn.j1angvei.castk2.util;
 
+import cn.j1angvei.castk2.conf.BroadPeak;
 import cn.j1angvei.castk2.conf.Input;
 import cn.j1angvei.castk2.qc.QCInfo;
 import com.google.gson.FieldNamingPolicy;
@@ -31,6 +32,10 @@ public class GsonUtil {
 
     public static QCInfo fromJson(String qcContent) {
         return GSON.fromJson(qcContent, QCInfo.class);
+    }
+
+    public static BroadPeak convertBroadPeak(String peakInfo) {
+        return GSON.fromJson(peakInfo, BroadPeak.class);
     }
 
     public static QCInfo fromJsonFilePath(String filePath) {

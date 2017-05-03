@@ -4,11 +4,18 @@ package cn.j1angvei.castk2;
 import cn.j1angvei.castk2.cmd.Analysis;
 import cn.j1angvei.castk2.cmd.Executor;
 import cn.j1angvei.castk2.cmd.InstallCmd;
+import cn.j1angvei.castk2.conf.BroadPeak;
 import cn.j1angvei.castk2.conf.Directory;
 import cn.j1angvei.castk2.conf.Resource;
 import cn.j1angvei.castk2.conf.Software;
 import cn.j1angvei.castk2.panther.PantherAnalysis;
 import cn.j1angvei.castk2.util.FileUtil;
+import cn.j1angvei.castk2.util.GsonUtil;
+
+import java.util.Enumeration;
+import java.util.Map;
+import java.util.Properties;
+import java.util.TreeMap;
 
 import static cn.j1angvei.castk2.conf.Directory.Sub;
 
@@ -17,19 +24,67 @@ import static cn.j1angvei.castk2.conf.Directory.Sub;
  * Created by Wayne on 2016/11/23.
  */
 public enum Task {
+    HELP("-h", "print help information and usage"),
     PIPELINE("-p", "ChIP-Seq analysis pipeline"),
     FUNCTION("-f", "run function(s) in order"),
     SOLELY("-s", "run solely function with arguments"),
     INSTALL("-i", "(re)install all software"),
     RESET("-r", "reset project to original state"),
     BACKUP("-b", "backup all file of last analysis"),
-    HELP("-h", "print help information and usage");
+    PEAK_TYPE("-t", "print broad,narrow,mix peak type information"),
+    SPECIES("-c", "print species code information");
     private String keyword;
     private String description;
 
     Task(String keyword, String description) {
         this.keyword = keyword;
         this.description = description;
+    }
+
+    public static void run(Task task, String[] args) {
+        switch (task) {
+            case PIPELINE:
+                pipeline();
+                break;
+            case INSTALL:
+                install();
+                break;
+            case RESET:
+                reset();
+                break;
+            case BACKUP:
+                backup();
+                break;
+            case HELP:
+                CSATK.usage();
+                break;
+            case SPECIES:
+                System.out.println(getSpeciesInfo());
+                break;
+            case PEAK_TYPE:
+                System.out.println(getPeakTypeInfo());
+                break;
+            case FUNCTION:
+                if (args.length == 2) {
+                    function(args[1]);
+                } else {
+                    System.err.println("Function keywords are not in function1,function2,function... format!");
+                }
+                break;
+            case SOLELY:
+                if (args.length > 2) {
+                    String functionKeyword = args[1];
+                    String[] paramArgs = new String[args.length - 2];
+                    System.arraycopy(args, 2, paramArgs, 0, paramArgs.length);
+                    solely(functionKeyword, paramArgs);
+                } else {
+                    System.err.println("Lack of solely function arguments, -s [function keyword] [arg0] [arg0] ...");
+                }
+                break;
+
+            default:
+                throw new IllegalArgumentException("\nTask " + args[0] + " not found!");
+        }
     }
 
     public String getKeyword() {
@@ -42,7 +97,7 @@ public enum Task {
 
     @Override
     public String toString() {
-        return String.format("\t%s,\t%s", this.keyword, this.description);
+        return String.format("\t%s,\t%s", this.getKeyword(), this.getDescription());
     }
 
     public static Task fromKeyword(String keyword) {
@@ -63,7 +118,36 @@ public enum Task {
         return builder.toString();
     }
 
-    public static void pipeline() {
+    public static String getSpeciesInfo() {
+        Properties properties = FileUtil.readProperties(Resource.SPECIES);
+        Enumeration enuKeys = properties.keys();
+        TreeMap<String, String> speciesMap = new TreeMap<>();
+        while (enuKeys.hasMoreElements()) {
+            //in the properties, key is species code, value is species name
+            String key = (String) enuKeys.nextElement();
+            String value = properties.getProperty(key);
+            //we reverse key and value in the treeMap, so the output can sort by species name
+            speciesMap.put(value, key);
+        }
+        StringBuilder builder = new StringBuilder();
+        builder.append("Species code\tSpecies name\n");
+        for (Map.Entry<String, String> entry : speciesMap.entrySet()) {
+            builder.append(entry.getValue())
+                    .append("\t")
+                    .append(entry.getKey())
+                    .append("\n");
+        }
+        builder.append("ATTENTION: if no need to do GO & Pathway Analysis, any number can be choose as a genome code,as long as it is bigger than 0.\n");
+        return builder.toString();
+    }
+
+    public static String getPeakTypeInfo() {
+        String peakInfo = FileUtil.readResourceAsString(Resource.BROAD_PEAKS.getFileName());
+        BroadPeak broadPeak = GsonUtil.convertBroadPeak(peakInfo);
+        return broadPeak.toString();
+    }
+
+    private static void pipeline() {
         for (Function function : Function.values()) {
             System.out.println("Start analysis, " + function.name());
             Analysis.getInstance().runFunction(function);
@@ -71,7 +155,7 @@ public enum Task {
         }
     }
 
-    public static void install() {
+    private static void install() {
         for (Software software : Software.values()) {
             String swName = software.getSwName();
             System.out.println("Installing " + swName + " ...");
@@ -80,7 +164,7 @@ public enum Task {
         }
     }
 
-    public static void reset() {
+    private static void reset() {
         System.out.println("Reset CSATK2 to default status...");
         //reset sub directories first
         for (Directory.Sub sub : Directory.Sub.values()) {
@@ -102,7 +186,7 @@ public enum Task {
         System.out.println("Reset finished!");
     }
 
-    public static void backup() {
+    private static void backup() {
         String timestamp = FileUtil.getTimestamp();
         //backup files and dirs
         backupSubDir(timestamp, Sub.CONFIG);
@@ -111,6 +195,7 @@ public enum Task {
         backupSubDir(timestamp, Sub.OUTPUT);
         System.out.println("Backup at: " + ConfigInitializer.getPath(Sub.BACKUP) + timestamp);
         System.out.println("Reset start after backup succeed!");
+        //after backup complete, do reset
         reset();
     }
 
@@ -120,7 +205,7 @@ public enum Task {
         FileUtil.move(ConfigInitializer.getPath(sub), destPath);
     }
 
-    public static void function(String keywords) {
+    private static void function(String keywords) {
         String[] functions = keywords.split(",");
         for (String keyword : functions) {
             Function function = Function.fromKeyword(keyword);
@@ -130,7 +215,7 @@ public enum Task {
         }
     }
 
-    public static void solely(String functionKeyword, String[] paramArgs) {
+    private static void solely(String functionKeyword, String[] paramArgs) {
         Function function = Function.fromKeyword(functionKeyword);
         switch (function) {
             case GO_PATHWAY:

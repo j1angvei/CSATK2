@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * Created by mjian on 2016/11/29.
@@ -172,6 +173,17 @@ public class FileUtil {
             e.printStackTrace();
         }
         return content;
+    }
+
+    public static Properties readProperties(Resource resource) {
+        Properties properties = new Properties();
+        URL url = readResource(resource.getFileName());
+        try {
+            properties.load(url.openStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return properties;
     }
 
     public static void restoreConfig(Resource type) {
