@@ -67,7 +67,7 @@ If you are familiar with [JSON](https://en.wikipedia.org/wiki/JSON) format, you 
 
 In case you have no idea what JSON format is or you just don't want to write the boilerplate, CSATK can help you create the input.json file, just double click the JAR file or run `java -jar CSATK.jar`.    
 
-Under any environment with X Display support(Like Windows or Ubuntu Desktop) and [JRE 7](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html),you can start CSATK GUI to help you create input.json.  
+Under any environment with X Display support(such as Windows, MACS or Ubuntu Desktop) and at least [JRE 8] is installed (http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)(JDK 8 is the same since JDK contains JRE), you can start CSATK GUI to help you create input.json.  
 
 Here is a simple illustration of using CSATK GUI to create input.json:
 1. Launch CSATK GUI by double clicking CSATK.jar or running `java -jar CSATK.jar` from console(Notice that only X display support devices can open CSATK GUI).  

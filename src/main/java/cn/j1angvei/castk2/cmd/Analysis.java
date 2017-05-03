@@ -6,12 +6,14 @@ import cn.j1angvei.castk2.Function;
 import cn.j1angvei.castk2.conf.Directory;
 import cn.j1angvei.castk2.conf.Experiment;
 import cn.j1angvei.castk2.conf.Genome;
+import cn.j1angvei.castk2.conf.Resource;
 import cn.j1angvei.castk2.html.HtmlGenerator;
 import cn.j1angvei.castk2.panther.PantherAnalysis;
 import cn.j1angvei.castk2.qc.ParseZip;
 import cn.j1angvei.castk2.stat.StatType;
 import cn.j1angvei.castk2.stat.Statistics;
 import cn.j1angvei.castk2.util.FileUtil;
+import cn.j1angvei.castk2.util.GsonUtil;
 import cn.j1angvei.castk2.util.StrUtil;
 import cn.j1angvei.castk2.util.SwUtil;
 
@@ -43,6 +45,9 @@ public class Analysis {
             case GENOME_IDX:
             case GENOME_SIZE:
                 iterateGenomes(function);
+                //after update genome, write them back to input.json
+                String inputJson = GsonUtil.toJson(initializer.getInput());
+                FileUtil.overwriteFile(inputJson, ConfigInitializer.getPath(Directory.Sub.CONFIG) + Resource.INPUT.getFileName());
                 break;
             case HTML:
                 String statDir = ConfigInitializer.getPath(Out.STATISTICS);
@@ -124,12 +129,15 @@ public class Analysis {
                         System.out.printf("Job %s complete!\n", description);
                     }
                 }
-                if (futures.size() == 0) {
+                int size = futures.size();
+                if (size == 0) {
                     System.out.println("All jobs complete!");
                     service.shutdownNow();
                     break;
+                } else {
+                    System.out.printf("%d job%s still in progress...\n", size, size < 2 ? " is" : "s are");
+                    TimeUnit.SECONDS.sleep(5);
                 }
-                TimeUnit.SECONDS.sleep(60);
             }
 
         } catch (InterruptedException | ExecutionException e) {
