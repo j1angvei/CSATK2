@@ -334,8 +334,41 @@ public class SwCmd {
         String q30Bam = ConfigInitializer.getPath(Out.BAM_UNIQUE) + experiment.getCode() + Constant.SFX_UNIQUE_BAM;
         String q30Stat = ConfigInitializer.getPath(Out.BAM_UNIQUE) + experiment.getCode() + Constant.FLAGSTAT_SFX;
         commands[2] = String.format("%s flagstat %s > %s", exe, q30Bam, q30Stat);
-
         return commands;
+    }
+
+    public static String[] faidx(Genome genome) {
+        String exeSamtools = CONF.getSwExecutable(Software.SAMTOOLS);
+        String fasta = ConfigInitializer.getPath(Sub.GENOME) + genome.getFasta();
+        List<String> cmd = new ArrayList<>();
+        //samtool faidx command: samtools faidx <file.fa|file.fa.gz> [<reg> [...]]
+        cmd.add(String.format("%s faidx %s", exeSamtools, fasta));
+        //retrieve first 2 columns to assemble genome sizes
+        //cut usage: cut -f 1,2 in.file > out.file
+        cmd.add(String.format("cut -f 1,2 %s > %s", fasta + Constant.SFX_GENOME_FAIDX, fasta + Constant.SFX_GENOME_SIZES));
+        return FileUtil.listToArray(cmd);
+    }
+
+    public static String[] bigwig(Experiment experiment) {
+        List<String> commands = new ArrayList<>();
+        String code = experiment.getCode();
+        String bedGraph = ConfigInitializer.getPath(Out.PEAK_CALLING) + code + Constant.SFX_BEDGRAPH;
+        String bigWig = ConfigInitializer.getPath(Out.BIGWIG) + code + Constant.SFX_BIG_WIG;
+        String wig = ConfigInitializer.getPath(Out.BIGWIG) + code + Constant.SFX_WIG;
+
+        String chromeSize = ConfigInitializer.getPath(Sub.GENOME) +
+                CONF.getGenome(experiment.getGenomeCode()).getFasta() + Constant.SFX_GENOME_SIZES;
+        //sort bedGraph in place
+        String exeBedSort = CONF.getSwExecutable(Software.UCSC) + Constant.EXE_UCSC_BED_SORT;
+        String exeBedGraphToBigWig = CONF.getSwExecutable(Software.UCSC) + Constant.EXE_UCSC_BEDGRAPH_2_BIGWIG;
+        String exeBigWigToWig = CONF.getSwExecutable(Software.UCSC) + Constant.EXE_UCSC_BIGWIG_2_WIG;
+        //bed sort usage: bedSort in.bed out.bed (in.bed and out.bed may be the same.)
+        commands.add(String.format("%s %s %s", exeBedSort, bedGraph, bedGraph));
+        //bedGraphToBigWig usage:  bedGraphToBigWig in.bedGraph chrom.sizes out.bw
+        commands.add(String.format("%s %s %s %s", exeBedGraphToBigWig, bedGraph, chromeSize, bigWig));
+        //bigWigToWig usage: bigWigToWig in.bigWig out.wig
+        commands.add(String.format("%s %s %s", exeBigWigToWig, bigWig, wig));
+        return FileUtil.listToArray(commands);
     }
 
     public static String[] emptyCmd(Function function) {

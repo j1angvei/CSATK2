@@ -4,6 +4,9 @@ package cn.j1angvei.castk2;
  * Created by Wayne on 2/28 0028.
  */
 public class Constant {
+    /**
+     * all suffix for intermediate result file
+     */
     public static final String SFX_NARROW_PEAKS = "_peaks.narrowPeak";
     public static final String SFX_BROAD_PEAKS = "_peaks.broadPeak";
     public static final String SFX_ANNO_BED = "_annotation.bed";
@@ -13,8 +16,29 @@ public class Constant {
     public static final String SFX_UNIQUE_BAM = ".unique.bam";
     public static final String SFX_GENE_LIST = "_geneList.txt";
     public static final String SFX_GO_PATHWAY = "_go_pathway.txt";
+    public static final String SFX_BEDGRAPH = "_treat_pileup.bdg";
+    /**
+     * real executable in homer
+     */
     public static final String EXE_HOMER_ANNOTATE_PEAK = "annotatePeaks.pl";
     public static final String EXE_HOMER_FIND_MOTIF = "findMotifsGenome.pl";
+
+    /**
+     * genome relevant suffix
+     */
+    public static final String SFX_GENOME_FAIDX = ".fai";
+    public static final String SFX_GENOME_SIZES = ".sizes";
+    /**
+     * real executable distributed by UCSC
+     */
+    public static final String EXE_UCSC_BED_SORT = "bedSort";
+    public static final String EXE_UCSC_BEDGRAPH_2_BIGWIG = "bedGraphToBigWig";
+    public static final String EXE_UCSC_BIGWIG_2_WIG = "bigWigToWig";
+    /**
+     * bigWig file relevant suffix
+     */
+    public static final String SFX_BIG_WIG = ".bw";
+    public static final String SFX_WIG = ".wig";
     /**
      * FastQC generate zip report file name is, FastQ file name + "_fastqc.zip";
      */

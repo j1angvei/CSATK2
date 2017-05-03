@@ -4,6 +4,6 @@
   "perl": "perl",
   "thread": 10,
   "mapping_quality": 30,
-  "call_with_control": false,
+  "call_with_control": true,
   "exp_thread": 5
 }

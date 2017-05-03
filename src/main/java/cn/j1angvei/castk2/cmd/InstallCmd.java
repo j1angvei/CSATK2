@@ -1,8 +1,8 @@
 package cn.j1angvei.castk2.cmd;
 
+import cn.j1angvei.castk2.ConfigInitializer;
 import cn.j1angvei.castk2.conf.Directory;
 import cn.j1angvei.castk2.conf.Software;
-import cn.j1angvei.castk2.ConfigInitializer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +53,7 @@ public class InstallCmd {
             case TRIMMOMATIC:
             case QUALIMAP:
             case WEBLOGO:
+            case UCSC:
                 cmd.add(OsCmd.unpack(archive, swSubDir));
                 break;
             default:

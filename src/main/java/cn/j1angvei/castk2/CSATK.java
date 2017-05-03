@@ -23,7 +23,6 @@ public class CSATK {
         String[] param = new String[args.length - 1];
         System.arraycopy(args, 1, param, 0, param.length);
         Task.run(task, param);
-
     }
 
     public static void usage() {

@@ -3,6 +3,7 @@ package cn.j1angvei.castk2.cmd;
 import cn.j1angvei.castk2.ConfigInitializer;
 import cn.j1angvei.castk2.Constant;
 import cn.j1angvei.castk2.Function;
+import cn.j1angvei.castk2.conf.Directory;
 import cn.j1angvei.castk2.conf.Experiment;
 import cn.j1angvei.castk2.conf.Genome;
 import cn.j1angvei.castk2.html.HtmlGenerator;
@@ -38,16 +39,19 @@ public class Analysis {
     }
 
     public void runFunction(Function function) {
-        if (function.equals(Function.GENOME_IDX)) {
-            iterateGenomes(function);
-        } else if (function.equals(Function.STATISTIC)) {
-            Statistics.initStatisticsFile();
-            iterateExperiment(Function.STATISTIC);
-        } else if (function.equals(Function.HTML)) {
-            String statDir = ConfigInitializer.getPath(Out.STATISTICS);
-            HtmlGenerator.getInstance(statDir).generate();
-        } else {
-            iterateExperiment(function);
+        switch (function) {
+            case GENOME_IDX:
+            case GENOME_SIZE:
+                iterateGenomes(function);
+                break;
+            case HTML:
+                String statDir = ConfigInitializer.getPath(Out.STATISTICS);
+                HtmlGenerator.getInstance(statDir).generate();
+                break;
+            case STATISTIC:
+                Statistics.initStatisticsFile();
+            default:
+                iterateExperiment(function);
         }
     }
 
@@ -59,7 +63,7 @@ public class Analysis {
                 @Override
                 public String call() throws Exception {
                     System.out.format("Job %s submitted\n", description);
-                    Executor.execute(description, getCommands(experiment, function));
+                    ShellExecutor.execute(description, getCommands(experiment, function));
                     return description;
                 }
             });
@@ -74,12 +78,32 @@ public class Analysis {
             genomeCallable.add(new Callable<String>() {
                 @Override
                 public String call() throws Exception {
-                    Executor.execute(description, getCommands(genome, function));
+                    ShellExecutor.execute(description, getCommands(genome, function));
+                    //if running calculating genome size, use new value and replace it
+                    if (function.equals(Function.GENOME_SIZE)) {
+                        updateGenomeSize(genome);
+                    }
                     return description;
                 }
             });
         }
         pendingCallable(genomeCallable);
+    }
+
+    private void updateGenomeSize(Genome genome) {
+        long calculatedSize = SwUtil.calculateGenomeSize(
+                ConfigInitializer.getPath(Directory.Sub.GENOME)
+                        + genome.getFasta() + Constant.SFX_GENOME_SIZES);
+        long originalSize;
+        try {
+            originalSize = Long.parseLong(genome.getSize());
+        } catch (NumberFormatException e) {
+            originalSize = calculatedSize;
+        }
+        if (originalSize == 0) {
+            originalSize = calculatedSize;
+        }
+        genome.setSize(String.valueOf(originalSize));
     }
 
     private void pendingCallable(List<Callable<String>> callable) {
@@ -89,32 +113,43 @@ public class Analysis {
             futures.add(service.submit(call));
         }
         try {
-            Iterator<Future<String>> iterator = futures.iterator();
-            while (iterator.hasNext()) {
-                Future<String> future = iterator.next();
-                String description = future.get();
-                iterator.remove();
-                System.out.printf("Job %s complete, %d %s still running\n", description, futures.size(), futures.size() == 1 ? "job" : "jobs");
+            //iterate all callable until they all finished and removed from list
+            while (!futures.isEmpty()) {
+                //iterate future, remove the finished one
+                for (Iterator<Future<String>> iterator = futures.iterator(); iterator.hasNext(); ) {
+                    Future<String> future = iterator.next();
+                    if (future.isDone()) {
+                        iterator.remove();
+                        String description = future.get();
+                        System.out.printf("Job %s complete!\n", description);
+                    }
+                }
+                if (futures.size() == 0) {
+                    System.out.println("All jobs complete!");
+                    service.shutdownNow();
+                    break;
+                }
+                TimeUnit.SECONDS.sleep(60);
             }
+
         } catch (InterruptedException | ExecutionException e) {
-            Throwable rootException = e.getCause();
-            rootException.printStackTrace();
             e.printStackTrace();
         }
     }
 
     private ExecutorService newThreadPoolInstance() {
-        int threadNumber = initializer.getConfig().getExpThread();
-        if (threadNumber == 0) {
-            threadNumber = Runtime.getRuntime().availableProcessors();
+        if (expThreadNum == 0) {
+            expThreadNum = Runtime.getRuntime().availableProcessors();
         }
-        return Executors.newFixedThreadPool(threadNumber);
+        return Executors.newFixedThreadPool(expThreadNum);
     }
 
     private String[] getCommands(Genome genome, Function function) {
         switch (function) {
             case GENOME_IDX:
                 return SwCmd.genomeIndex(genome);
+            case GENOME_SIZE:
+                return SwCmd.faidx(genome);
             default:
                 throw new IllegalArgumentException("Illegal Function args in genome analysis!");
         }
@@ -187,11 +222,11 @@ public class Analysis {
                     String content = Statistics.start(exp, type);
                     FileUtil.appendFile(content, outFilePath, false);
                 }
-
                 return SwCmd.emptyCmd(function);
-            case GENOME_IDX:
             case HTML:
                 return SwCmd.emptyCmd(function);
+            case BIGWIG:
+                return SwCmd.bigwig(exp);
             default:
                 throw new IllegalArgumentException("Illegal Function args in experiment analysis!");
         }

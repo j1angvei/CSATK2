@@ -19,12 +19,13 @@ public class Directory {
         BAM_RMDUP("11_bam_rmdup"),
         BAM_UNIQUE("12_bam_unique"),
         PEAK_CALLING("13_peak_calling"),
-        ANNOTATION("14_peak_anno"),
-        GENE_LIST("15_gene_list"),
-        GO_PATHWAY("16_go_pathway"),
-        MOTIF("17_motif"),
-        STATISTICS("18_statistic"),
-        HTML("19_html");
+        BIGWIG("14_bigwig"),
+        ANNOTATION("15_peak_anno"),
+        GENE_LIST("16_gene_list"),
+        GO_PATHWAY("17_go_pathway"),
+        MOTIF("18_motif"),
+        STATISTICS("19_statistic"),
+        HTML("20_html");
 
         private String dirName;
 

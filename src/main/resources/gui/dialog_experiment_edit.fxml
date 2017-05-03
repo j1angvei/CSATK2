@@ -32,11 +32,11 @@
             <Label text="Control experiment code" GridPane.rowIndex="3" />
             <Label text="Genome code" GridPane.rowIndex="4" />
             <Label text="Broad peak" GridPane.rowIndex="5" />
-            <TextField fx:id="codeField" GridPane.columnIndex="1" />
-            <TextField fx:id="fastq1Field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="fastq2Field" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="controlField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField fx:id="genomeCodeField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="codeField" promptText="any text, easy for you to identify" GridPane.columnIndex="1" />
+            <TextField fx:id="fastq1Field" promptText="raw data file name,  can be FASTQ or FQ format" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="fastq2Field" promptText="put 'null' if is single end, else put second raw data file name" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="controlField" promptText="put its control experiment code here, or 'null' for no control" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="genomeCodeField" promptText="put this experiment's reference genome code here" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <CheckBox fx:id="broadPeakBox" mnemonicParsing="false" text="Is broad peak" GridPane.columnIndex="1" GridPane.rowIndex="5" />
          </children>
       </GridPane>

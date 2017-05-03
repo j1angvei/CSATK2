@@ -66,4 +66,14 @@ public class SwUtil {
         }
     }
 
+    public static long calculateGenomeSize(String faiPath) {
+        List<String> lines = FileUtil.readLines(faiPath);
+        long size = 0;
+        for (String line : lines) {
+            String[] info = line.split("\t");
+            size += Long.parseLong(info[1]);
+        }
+        return size;
+    }
+
 }

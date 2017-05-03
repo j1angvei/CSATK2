@@ -10,7 +10,7 @@ public enum Software {
     /**
      * as software swName,
      * archive compressed archive file swName,
-     * software archive destination folder after uncompress,
+     * software archive destination folder after uncompress, aka software's subDir
      * software executable
      */
     FASTQC(
@@ -52,7 +52,12 @@ public enum Software {
             "weblogo",
             "weblogo.2.8.2.tar.gz",
             "weblogo",
-            "seqlogo");
+            "seqlogo"),
+    UCSC("ucsc",
+            "ucsc-1.0.tar.gz",
+            "ucsc-1.0",
+            ""
+    );
 
     private String swName;
     private String archive;

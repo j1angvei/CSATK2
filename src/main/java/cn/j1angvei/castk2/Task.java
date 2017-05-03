@@ -2,7 +2,7 @@ package cn.j1angvei.castk2;
 
 
 import cn.j1angvei.castk2.cmd.Analysis;
-import cn.j1angvei.castk2.cmd.Executor;
+import cn.j1angvei.castk2.cmd.ShellExecutor;
 import cn.j1angvei.castk2.cmd.InstallCmd;
 import cn.j1angvei.castk2.conf.BroadPeak;
 import cn.j1angvei.castk2.conf.Directory;
@@ -65,20 +65,20 @@ public enum Task {
                 System.out.println(getPeakTypeInfo());
                 break;
             case FUNCTION:
-                if (args.length == 2) {
-                    function(args[1]);
+                if (args.length == 1) {
+                    function(args[0]);
                 } else {
-                    System.err.println("Function keywords are not in function1,function2,function... format!");
+                    System.err.println("Function keywords are not in <function1,function2,function...> format!");
                 }
                 break;
             case SOLELY:
-                if (args.length > 2) {
+                if (args.length > 1) {
                     String functionKeyword = args[1];
-                    String[] paramArgs = new String[args.length - 2];
-                    System.arraycopy(args, 2, paramArgs, 0, paramArgs.length);
+                    String[] paramArgs = new String[args.length - 1];
+                    System.arraycopy(args, 1, paramArgs, 0, paramArgs.length);
                     solely(functionKeyword, paramArgs);
                 } else {
-                    System.err.println("Lack of solely function arguments, -s [function keyword] [arg0] [arg0] ...");
+                    System.err.println("Lack of solely function arguments, -s <function keyword> [arg0] [arg0] ...");
                 }
                 break;
 
@@ -148,18 +148,20 @@ public enum Task {
     }
 
     private static void pipeline() {
-        for (Function function : Function.values()) {
-            System.out.println("Start analysis, " + function.name());
-            Analysis.getInstance().runFunction(function);
-            System.out.println("Analysis , " + function.name() + " finished!");
-        }
+        function(Function.assemblePipelineKeywords());
+//        for (Function function : Function.values()) {
+//            function(function.getKeyword());
+//            System.out.println("Start analysis, " + function.name() + " ...");
+//            Analysis.getInstance().runFunction(function);
+//            System.out.println("Analysis , " + function.name() + " finished!");
+//        }
     }
 
     private static void install() {
         for (Software software : Software.values()) {
             String swName = software.getSwName();
             System.out.println("Installing " + swName + " ...");
-            Executor.execute("install_" + software.name().toUpperCase(), InstallCmd.install(software));
+            ShellExecutor.execute("install_" + software.name().toUpperCase(), InstallCmd.install(software));
             System.out.println("Install " + swName + " finished.");
         }
     }
@@ -209,7 +211,7 @@ public enum Task {
         String[] functions = keywords.split(",");
         for (String keyword : functions) {
             Function function = Function.fromKeyword(keyword);
-            System.out.println("Start analysis, " + function.name());
+            System.out.println("Start analysis, " + function.name() + " ...");
             Analysis.getInstance().runFunction(function);
             System.out.println("Analysis " + function.name() + " finished!");
         }

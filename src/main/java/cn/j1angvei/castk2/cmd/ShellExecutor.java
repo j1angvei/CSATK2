@@ -12,7 +12,7 @@ import java.nio.charset.Charset;
 /**
  * Created by j1angvei on 2016/11/30.
  */
-public class Executor {
+public class ShellExecutor {
 
     public static int execute(String scriptDescription, String... cmd) {
         String timestamp = FileUtil.getTimestamp();
