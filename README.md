@@ -79,7 +79,7 @@ Here is a simple illustration of using CSATK GUI to create input.json:
 <img src='./raw/all_experiments_text.png'/>  
 5. Edit the experiment item and check if something is wrong.  
 <img src='./raw/edit_experiment_text.png'/>  
-6. Click *Generate* button, a **input.json** will be created under the same location where you put the CSATK.jar.  
+6. Click _Generate_ button, a **input.json** will be created under the same location where you put the CSATK.jar.  
 <img src='./raw/generate_success_text.png'/>  
 
 ## About
