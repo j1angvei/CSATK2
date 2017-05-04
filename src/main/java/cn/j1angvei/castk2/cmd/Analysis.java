@@ -16,8 +16,6 @@ import cn.j1angvei.castk2.util.FileUtil;
 import cn.j1angvei.castk2.util.GsonUtil;
 import cn.j1angvei.castk2.util.StrUtil;
 import cn.j1angvei.castk2.util.SwUtil;
-import org.apache.commons.io.FileUtils;
-import sun.misc.IOUtils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -50,7 +48,7 @@ public class Analysis {
                 iterateGenomes(function);
                 break;
 
-            //function should run in native shell command
+            //function should start in native shell command
             case QC_RAW:
             case TRIM:
             case QC_CLEAN:
@@ -68,7 +66,7 @@ public class Analysis {
                 iterateExperiment(function, true);
                 break;
 
-            //function should run in pure Java, implemented in CSATK
+            //function should start in pure Java, implemented in CSATK
             case STATISTIC:
                 //before start statistics, create all stat files first
                 Statistics.initStatisticsFile();
@@ -79,7 +77,7 @@ public class Analysis {
                 iterateExperiment(function, false);
                 break;
 
-            //function should run only once, without iterate genome or experiment
+            //function should start only once, without iterate genome or experiment
             case HTML:
                 String statDir = ConfigInitializer.getPath(Out.STATISTICS);
                 HtmlGenerator.getInstance(statDir).generate();
@@ -99,7 +97,7 @@ public class Analysis {
                 @Override
                 public String call() throws Exception {
                     System.out.format("Job %s submitted\n", jodTitle);
-                    //shell job should run using ShellExecutor
+                    //shell job should start using ShellExecutor
                     if (isShellJob) {
                         String[] commands = SwCmd.getExperimentCommands(function, experiment);
                         ShellExecutor.execute(jodTitle, commands);
@@ -150,7 +148,7 @@ public class Analysis {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        System.out.println(experiment.getCode() + " run go & pathway in background!");
+                        System.out.println(experiment.getCode() + " start go & pathway in background!");
                         PantherAnalysis.newInstance(experiment.getCode(), experiment.getGenomeCode(), geneList, outGoFile).analysis();
                     }
                 }).start();
@@ -319,8 +317,8 @@ public class Analysis {
 //                final String outGoFile = ConfigInitializer.getPath(Out.GO_PATHWAY) + exp.getCode() + Constant.SFX_GO_PATHWAY;
 //                new Thread(new Runnable() {
 //                    @Override
-//                    public void run() {
-//                        System.out.println(exp.getCode() + " run go & pathway in background!");
+//                    public void start() {
+//                        System.out.println(exp.getCode() + " start go & pathway in background!");
 //                        PantherAnalysis.newInstance(exp.getCode(), exp.getGenomeCode(), geneList, outGoFile).analysis();
 //                    }
 //                }).start();

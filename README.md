@@ -55,12 +55,30 @@ CSATK has following advantages:
 
 ## Tutorial
 ### How to download and use CSATK
-1. Download CSATK compressed file, [CSATK2-170503 release page](https://github.com/j1angvei/CSATK2/releases/tag/v2.0.170503);
+1. Download CSATK compressed file, [CSATK2 release page](https://github.com/j1angvei/CSATK2/releases);
 2. Unzip the .tgz file, run `java -jar CSATK.jar -r` to restore CSATK structure;
 3. Run `java -jar CSATK.jar -i` to install all relevant software(FastQC, BWA, SAMTools, etc.);
 4. Place your raw data under **input** folder, genome reference file and annotation under **genome** folder;
 5. Create your **input.json** file and put it under **config** folder (there is a template of input.json under the same folder);
 6. Start the ChIP-Seq pipeline by running `java -jar CSATK.jar -p`.
+
+#### Tips:   
+When execute CSATK2.jar with `java -jar CSATK2.jar`, but a error message showed up like <strong>Error occurred during initialization of VM</strong>, this is because JVM can not get enough RAM.
+  
+To resolve this error, add `-Xmx256M` to execute the Jar file,for example `java -Xmx256M CSATK2.jar`. Beware this will limit CSATK to use only 256M RAM doing analysis. You can increase to 1024 or higher.As explained [here](http://docs.oracle.com/javase/7/docs/technotes/tools/solaris/java.html):  
+
+    -Xmxn
+    Specifies the maximum size, in bytes, of the memory allocation pool. This value must a multiple of 1024 greater than 2 MB. Append the letter k or K to indicate kilobytes, or m or M to indicate megabytes. The default value is chosen at runtime based on system configuration.
+    
+    For server deployments, -Xms and -Xmx are often set to the same value.
+    
+    Examples:
+    
+    -Xmx83886080
+    -Xmx81920k
+    -Xmx80m 
+
+ 
 ### How to create your own **input.json** file
 
 If you are familiar with [JSON](https://en.wikipedia.org/wiki/JSON) format, you can create it very easily using VIM (Linux) or Notepad (Windows). And all you need to is modify the input.json template in **config** folder.    

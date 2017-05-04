@@ -41,7 +41,7 @@ public class PantherAnalysis {
 
     public static PantherAnalysis newInstance(String expCode, int genomeCode, String geneList, String outFileName) {
         if (expCode == null) {
-            System.out.println("WARNING: run go analysis from solely function");
+            System.out.println("WARNING: start go analysis from solely function");
             expCode = "solely";
         }
         return new PantherAnalysis(expCode, genomeCode, geneList, outFileName);
