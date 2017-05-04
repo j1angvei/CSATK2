@@ -2,6 +2,7 @@ package cn.j1angvei.castk2;
 
 
 import cn.j1angvei.castk2.gui.MainApp;
+import cn.j1angvei.castk2.panther.PantherAnalysis;
 import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.SystemUtils;
 
@@ -39,7 +40,7 @@ public class CSATK {
                         "Sole function:\nCMD:\tjava -jar CSATK.jar -s <function keyword> [arg1] [arg2] ...\n" +
                         "\t1) GO & Pathway analysis:\n\t%s [species code] [gene list] [output]\n"
                 ,//solely function
-                Function.GO_PATHWAY
+                Function.GO_PATHWAY.getKeyword()
         );
     }
 }

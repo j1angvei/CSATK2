@@ -82,6 +82,9 @@ Here is a simple illustration of using CSATK GUI to create input.json:
 6. Click _Generate_ button, a **input.json** will be created under the same location where you put the CSATK.jar.  
 <img src='./raw/generate_success_text.png'/>  
 
-## About
+## Tips
+1. If you met problem like <strong>Error occurred during initialization of VM</strong>, you can solve this by adding parameter`-Xmx256M`, for example `java -Xmx256M -jar CSATK.jar`.  
+
+2. Since GO & Pathway needs network connection, you better check the computed nodes are available connecting to network.
 
 ## License

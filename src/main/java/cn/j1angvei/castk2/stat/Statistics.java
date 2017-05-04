@@ -72,7 +72,8 @@ public class Statistics {
                     //skip the first line
                     if (line.contains(Constant.EXE_HOMER_ANNOTATE_PEAK)) continue;
                     String[] info = line.split("\t");
-                    String annoType = info[7].replaceAll("[(\\s].*$", "");
+                    String annoType = info[7].replaceAll("[ (\t].+$", "");
+                    if (annoType.equals("NA")) continue;
                     long count = annoMap.get(annoType);
                     annoMap.put(annoType, count + 1);
                 }
@@ -148,7 +149,6 @@ public class Statistics {
             FileUtil.appendFile(type.getResFileHeader(), filePath, true);
         }
     }
-
 
     private static long[] readFlagstatCount(Directory.Out out, String expCode) {
         if (!out.equals(Directory.Out.BAM_SORTED) && !out.equals(Directory.Out.BAM_RMDUP) && !out.equals(Directory.Out.BAM_UNIQUE)) {

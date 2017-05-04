@@ -31,6 +31,54 @@ public class SwCmd {
     private static ConfigInitializer CONF = ConfigInitializer.getInstance();
     private static final int THREAD_NUMBER = CONF.getConfig().getThread();
 
+    public static String[] getExperimentCommands(Function function, Experiment exp) {
+        switch (function) {
+            case QC_RAW:
+                return SwCmd.qcRawReads(exp);
+            case TRIM:
+                return SwCmd.trimReads(exp);
+            case QC_CLEAN:
+                return SwCmd.qcCleanReads(exp);
+            case ALIGNMENT:
+                return SwCmd.alignment(exp);
+            case CONVERT_SAM:
+                return SwCmd.convertSamToBam(exp);
+            case SORT_BAM:
+                return SwCmd.sortBam(exp);
+            case RMDUP_BAM:
+                return SwCmd.rmdupBam(exp);
+            case UNIQUE_BAM:
+                return SwCmd.uniqueBam(exp);
+            case QC_BAM:
+                return SwCmd.qcBam(exp);
+            case PEAK_CALLING:
+                return SwCmd.callPeaks(exp);
+            case MOTIF:
+                return SwCmd.findMotifs(exp);
+            case PEAK_ANNOTATION:
+                return SwCmd.annotatePeaks(exp);
+            case FLAGSTAT:
+                return SwCmd.flagStat(exp);
+            case BIGWIG:
+                return SwCmd.bigwig(exp);
+            default:
+                System.err.println("Wrong function  keyword in experiment analysis, return empty command");
+                return SwCmd.emptyCmd(function);
+        }
+    }
+
+    public static String[] getGenomeCommands(Function function, Genome genome) {
+        switch (function) {
+            case GENOME_IDX:
+                return SwCmd.genomeIndex(genome);
+            case GENOME_SIZE:
+                return SwCmd.faidx(genome);
+            default:
+                System.err.println("Wrong function  keyword in genome analysis, return empty command");
+                return SwCmd.emptyCmd(function);
+        }
+    }
+
     public static String[] genomeIndex(Genome genome) {
         String cmd = String.format("%s index -p %s %s",
                 CONF.getSwExecutable(Software.BWA),
