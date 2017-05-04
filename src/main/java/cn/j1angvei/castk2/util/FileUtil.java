@@ -3,13 +3,11 @@ package cn.j1angvei.castk2.util;
 import cn.j1angvei.castk2.CSATK;
 import cn.j1angvei.castk2.conf.Directory;
 import cn.j1angvei.castk2.conf.Resource;
-import cn.j1angvei.castk2.panther.PantherApi;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
-import java.net.InetAddress;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
@@ -95,6 +93,25 @@ public class FileUtil {
             }
         }
         return file;
+    }
+
+    public static PrintStream[] redirectSystemStdErrOut(String logFileName) {
+        PrintStream[] originalStream = {System.out, System.err};
+        try {
+            PrintStream logStream = new PrintStream(new FileOutputStream(logFileName));
+            System.setOut(logStream);
+            System.setErr(logStream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+        return originalStream;
+    }
+
+    public static void restoreSystemStdErrOut(PrintStream[] originalStream) {
+        System.setOut(originalStream[0]);
+        System.setErr(originalStream[1]);
     }
 
     public static void move(String srcPath, String destPath) {
@@ -240,17 +257,30 @@ public class FileUtil {
         File file = new File(fileName);
         long lenInBytes = file.length();
         switch (unit) {
-            case BYTES:
-                return lenInBytes;
-            case KB:
-                return lenInBytes / 1024;
-            case MB:
-                return lenInBytes / 1024 / 1024;
             case GB:
-                return lenInBytes / 1024 / 1024 / 1024;
+                lenInBytes /= 1024;
+            case MB:
+                lenInBytes /= 1024;
+            case KB:
+                lenInBytes /= 1024;
             default:
-                return 0;
+                return lenInBytes;
         }
+    }
+
+    public static long getAvailableMemory(Unit unit) {
+        long freeMemory = Runtime.getRuntime().maxMemory();
+        switch (unit) {
+            case GB:
+                freeMemory /= 1024;
+            case MB:
+                freeMemory /= 1024;
+            case KB:
+                freeMemory /= 1024;
+            default:
+                break;
+        }
+        return freeMemory;
     }
 
     public static String[] listToArray(List<String> input) {

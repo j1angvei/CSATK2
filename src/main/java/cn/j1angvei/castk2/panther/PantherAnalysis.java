@@ -47,6 +47,19 @@ public class PantherAnalysis {
         return new PantherAnalysis(expCode, genomeCode, geneList, outFileName);
     }
 
+    public static boolean isPantherAvailable() {
+        try {
+            URL url = new URL(PantherApi.URL_BASE);
+            Request request = new Request.Builder().url(url).build();
+            okhttp3.Response response = new OkHttpClient().newCall(request).execute();
+            int code = response.code();
+            return code == 200;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public void analysis() {
         //check if there is network connection
         if (!isPantherAvailable()) {
@@ -146,19 +159,6 @@ public class PantherAnalysis {
                     .append("&");
         }
         return referer.substring(0, referer.length() - 1);
-    }
-
-    public static boolean isPantherAvailable() {
-        try {
-            URL url = new URL(PantherApi.URL_BASE);
-            Request request = new Request.Builder().url(url).build();
-            okhttp3.Response response = new OkHttpClient().newCall(request).execute();
-            int code = response.code();
-            return code == 200;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     private void printStatus(String job, int code) {

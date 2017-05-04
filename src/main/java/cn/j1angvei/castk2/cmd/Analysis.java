@@ -31,13 +31,13 @@ public class Analysis {
     private ConfigInitializer initializer;
     private int expThreadNum;
 
-    public static Analysis getInstance() {
-        return new Analysis();
-    }
-
     private Analysis() {
         initializer = ConfigInitializer.getInstance();
         expThreadNum = initializer.getConfig().getExpThread();
+    }
+
+    public static Analysis getInstance() {
+        return new Analysis();
     }
 
     public void runFunction(Function function) {
@@ -115,6 +115,7 @@ public class Analysis {
     }
 
     private void runBuiltInFunction(Function function, final Experiment experiment) {
+
         final String geneList = ConfigInitializer.getPath(Out.GENE_LIST) + experiment.getCode() + Constant.SFX_GENE_LIST;
         //using pure CSATK built-in Java function in CSATK depending on the Function
         switch (function) {
@@ -172,17 +173,17 @@ public class Analysis {
     private void iterateGenomes(final Function function) {
         List<Callable<String>> genomeCalls = new ArrayList<>();
         for (final Genome genome : initializer.getGenomes()) {
-            final String description = String.format("Genome_%s_%s", genome.getName(), function.name());
+            final String jobTitle = String.format("Genome_%s_%s", genome.getName(), function.name());
             Callable<String> callable = new Callable<String>() {
                 @Override
                 public String call() throws Exception {
                     String[] commands = SwCmd.getGenomeCommands(function, genome);
-                    ShellExecutor.execute(description, commands);
+                    ShellExecutor.execute(jobTitle, commands);
                     //if running calculating genome size, use new value and replace it
                     if (function == Function.GENOME_SIZE) {
                         updateGenomeSize(genome);
                     }
-                    return description;
+                    return jobTitle;
                 }
             };
             genomeCalls.add(callable);

@@ -34,71 +34,71 @@ public class ExperimentModel {
         return code.get();
     }
 
-    public StringProperty codeProperty() {
-        return code;
-    }
-
     public void setCode(String code) {
         this.code.set(code);
+    }
+
+    public StringProperty codeProperty() {
+        return code;
     }
 
     public String getFastq1() {
         return fastq1.get();
     }
 
-    public StringProperty fastq1Property() {
-        return fastq1;
-    }
-
     public void setFastq1(String fastq1) {
         this.fastq1.set(fastq1);
+    }
+
+    public StringProperty fastq1Property() {
+        return fastq1;
     }
 
     public String getFastq2() {
         return fastq2.get();
     }
 
-    public StringProperty fastq2Property() {
-        return fastq2;
-    }
-
     public void setFastq2(String fastq2) {
         this.fastq2.set(fastq2);
+    }
+
+    public StringProperty fastq2Property() {
+        return fastq2;
     }
 
     public String getControl() {
         return control.get();
     }
 
-    public StringProperty controlProperty() {
-        return control;
-    }
-
     public void setControl(String control) {
         this.control.set(control);
+    }
+
+    public StringProperty controlProperty() {
+        return control;
     }
 
     public int getGenomeCode() {
         return genomeCode.get();
     }
 
-    public IntegerProperty genomeCodeProperty() {
-        return genomeCode;
-    }
-
     public void setGenomeCode(int genomeCode) {
         this.genomeCode.set(genomeCode);
+    }
+
+    public IntegerProperty genomeCodeProperty() {
+        return genomeCode;
     }
 
     public boolean isBroadPeak() {
         return broadPeak.get();
     }
 
-    public BooleanProperty broadPeakProperty() {
-        return broadPeak;
-    }
-
     public void setBroadPeak(boolean broadPeak) {
         this.broadPeak.set(broadPeak);
+    }
+
+    public BooleanProperty broadPeakProperty() {
+        return broadPeak;
     }
 }

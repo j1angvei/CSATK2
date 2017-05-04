@@ -17,14 +17,6 @@ public class Genome implements Comparable<Genome> {
     public Genome() {
     }
 
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getSize() {
         return size;
     }
@@ -33,29 +25,36 @@ public class Genome implements Comparable<Genome> {
         this.size = size;
     }
 
-    public void setFasta(String fasta) {
-        this.fasta = fasta;
-    }
-
-    public void setAnnotation(String annotation) {
-        this.annotation = annotation;
-    }
-
     public int getCode() {
         return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getFasta() {
         return fasta;
     }
 
+    public void setFasta(String fasta) {
+        this.fasta = fasta;
+    }
+
     public String getAnnotation() {
         return annotation;
+    }
+
+    public void setAnnotation(String annotation) {
+        this.annotation = annotation;
     }
 
     @Override

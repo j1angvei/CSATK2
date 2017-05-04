@@ -39,6 +39,14 @@ public class ConfigInitializer {
         return INSTANCE;
     }
 
+    public static String getPath(Sub sub) {
+        return FileUtil.getWorkDir() + sub.getDirName() + File.separator;
+    }
+
+    public static String getPath(Directory.Out out) {
+        return getPath(Directory.Sub.OUTPUT) + out.getDirName() + File.separator;
+    }
+
     public Config getConfig() {
         return config;
     }
@@ -65,14 +73,6 @@ public class ConfigInitializer {
 
     public String getSwExecutable(Software sw) {
         return getSwDestFolder(sw) + sw.getExecutable();
-    }
-
-    public static String getPath(Sub sub) {
-        return FileUtil.getWorkDir() + sub.getDirName() + File.separator;
-    }
-
-    public static String getPath(Directory.Out out) {
-        return getPath(Directory.Sub.OUTPUT) + out.getDirName() + File.separator;
     }
 
     public Input getInput() {

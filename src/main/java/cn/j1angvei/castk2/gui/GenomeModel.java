@@ -35,12 +35,20 @@ public class GenomeModel {
         return code.get();
     }
 
+    public void setCode(int code) {
+        this.code.set(code);
+    }
+
     public IntegerProperty codeProperty() {
         return code;
     }
 
     public String getName() {
         return name.get();
+    }
+
+    public void setName(String name) {
+        this.name.set(name);
     }
 
     public StringProperty nameProperty() {
@@ -51,12 +59,20 @@ public class GenomeModel {
         return size.get();
     }
 
+    public void setSize(String size) {
+        this.size.set(size);
+    }
+
     public StringProperty sizeProperty() {
         return size;
     }
 
     public String getFasta() {
         return fasta.get();
+    }
+
+    public void setFasta(String fasta) {
+        this.fasta.set(fasta);
     }
 
     public StringProperty fastaProperty() {
@@ -67,27 +83,11 @@ public class GenomeModel {
         return gtf.get();
     }
 
-    public StringProperty gtfProperty() {
-        return gtf;
-    }
-
-    public void setCode(int code) {
-        this.code.set(code);
-    }
-
-    public void setName(String name) {
-        this.name.set(name);
-    }
-
-    public void setSize(String size) {
-        this.size.set(size);
-    }
-
-    public void setFasta(String fasta) {
-        this.fasta.set(fasta);
-    }
-
     public void setGtf(String gtf) {
         this.gtf.set(gtf);
+    }
+
+    public StringProperty gtfProperty() {
+        return gtf;
     }
 }

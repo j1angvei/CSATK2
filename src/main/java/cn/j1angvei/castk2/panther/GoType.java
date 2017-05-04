@@ -19,14 +19,6 @@ public enum GoType {
         this.description = description;
     }
 
-    public int getType() {
-        return type;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
     public static GoType fromDescription(String description) {
         for (GoType type : GoType.values()) {
             if (type.getDescription().equals(description)) {
@@ -34,5 +26,13 @@ public enum GoType {
             }
         }
         throw new IllegalArgumentException("Wrong GoType description " + description);
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

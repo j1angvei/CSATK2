@@ -18,7 +18,7 @@ public class MotifColumn implements Column {
         this.number = number;
         pngEncode = new String[number];
         for (int i = 1; i <= number; i++) {
-            pngEncode[i-1] = FileUtil.encodeToBase64(filePrefix + i + SUFFIX);
+            pngEncode[i - 1] = FileUtil.encodeToBase64(filePrefix + i + SUFFIX);
         }
 
     }
@@ -51,7 +51,7 @@ public class MotifColumn implements Column {
             builder.append("\t")
                     .append(pngEncode[i]);
         }
-        return builder.toString()+"\n";
+        return builder.toString() + "\n";
 
     }
 }

@@ -66,10 +66,6 @@ public class PeakAnnoColumn implements Column {
             this.typeName = typeName;
         }
 
-        public String getTypeName() {
-            return typeName;
-        }
-
         public static String asHeader() {
             return String.format("Sample\t%s\t%s\t%s\t%s\t%s",
                     INTERGENIC.getTypeName(),
@@ -77,6 +73,10 @@ public class PeakAnnoColumn implements Column {
                     PROMOTER_TSS.getTypeName(),
                     TTS.getTypeName(),
                     INTRON.getTypeName());
+        }
+
+        public String getTypeName() {
+            return typeName;
         }
     }
 

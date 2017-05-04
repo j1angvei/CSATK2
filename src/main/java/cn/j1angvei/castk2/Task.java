@@ -23,19 +23,6 @@ public enum Task {
         this.description = description;
     }
 
-    public String getKeyword() {
-        return keyword;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("\t%s,\t%s", this.getKeyword(), this.getDescription());
-    }
-
     public static Task fromKeyword(String keyword) {
         for (Task task : Task.values()) {
             if (task.getKeyword().toLowerCase().equals(keyword)) {
@@ -52,6 +39,19 @@ public enum Task {
                     .append("\n");
         }
         return builder.toString();
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("\t%s,\t%s", this.getKeyword(), this.getDescription());
     }
 
 }

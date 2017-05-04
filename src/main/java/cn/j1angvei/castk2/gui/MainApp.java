@@ -28,6 +28,10 @@ public class MainApp extends Application {
         experimentModels.add(new ExperimentModel("sample exp code", "fastq 1", "fastq 2", "control exp code", 18, false));
     }
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
@@ -125,7 +129,6 @@ public class MainApp extends Application {
         }
     }
 
-
     public Stage getPrimaryStage() {
         return primaryStage;
     }
@@ -136,9 +139,5 @@ public class MainApp extends Application {
 
     public ObservableList<ExperimentModel> getExperimentModels() {
         return experimentModels;
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

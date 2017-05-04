@@ -18,12 +18,12 @@ import java.util.*;
 public class HtmlGenerator {
     private Map<StatType, String[][]> dataMap;
 
-    public static HtmlGenerator getInstance(String statDir) {
-        return new HtmlGenerator(statDir);
-    }
-
     private HtmlGenerator(String statDir) {
         dataMap = DataHolder.getInstance(statDir).getDataMap();
+    }
+
+    public static HtmlGenerator getInstance(String statDir) {
+        return new HtmlGenerator(statDir);
     }
 
     public void generate() {

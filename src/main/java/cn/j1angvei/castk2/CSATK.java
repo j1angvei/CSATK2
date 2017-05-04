@@ -15,6 +15,7 @@ import cn.j1angvei.castk2.util.GsonUtil;
 import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.SystemUtils;
 
+import java.awt.*;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.Properties;
@@ -25,12 +26,21 @@ import java.util.TreeMap;
  * Created by Wayne on 2016/11/23.
  */
 public class CSATK {
+    //CSATK GUI using JavaFX, which required jdk 1.8 and upper.
+    static {
+        if (!SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_1_8)) {
+            //if jdk is under 1.8, set headless mode to be true, hence GUI will be disabled
+            System.setProperty("java.awt.headless", "true");
+        }
+    }
+
     public static void main(String[] args) {
+        //open GUI or usage
         if (args.length == 0) {
-            if (SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_1_8) && SystemUtils.IS_OS_WINDOWS) {
-                MainApp.main(args);
-            } else {
+            if (GraphicsEnvironment.isHeadless()) {
                 usage();
+            } else {
+                MainApp.main(args);
             }
             return;
         }
@@ -111,8 +121,9 @@ public class CSATK {
         for (Software software : Software.values()) {
             String swName = software.getSwName();
             System.out.println("Installing " + swName + " ...");
-            ShellExecutor.execute("install_" + software.name().toUpperCase(), InstallCmd.install(software));
-            System.out.println("Install " + swName + " finished.");
+            String jobTile = "install_" + software.name().toUpperCase();
+            ShellExecutor.execute(jobTile, InstallCmd.install(software));
+            System.out.println("Install " + swName + " finished!");
         }
     }
 

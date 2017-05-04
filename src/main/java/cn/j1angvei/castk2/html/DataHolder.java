@@ -4,7 +4,9 @@ import cn.j1angvei.castk2.stat.StatType;
 import cn.j1angvei.castk2.util.FileUtil;
 import cn.j1angvei.castk2.util.StrUtil;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Wayne on 4/22 0022.
@@ -14,13 +16,13 @@ public class DataHolder {
     private String statDir;
     private Map<StatType, String[][]> dataMap;
 
-    public static synchronized DataHolder getInstance(String dir) {
-        return new DataHolder(dir);
-    }
-
     private DataHolder(String dir) {
         statDir = dir;
         readData();
+    }
+
+    public static synchronized DataHolder getInstance(String dir) {
+        return new DataHolder(dir);
     }
 
     private void readData() {

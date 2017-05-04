@@ -44,19 +44,6 @@ public enum Function {
         throw new IllegalArgumentException("Function using keyword " + keyword + " not found");
     }
 
-    public String getKeyword() {
-        return keyword;
-    }
-
-    public String getHint() {
-        return hint;
-    }
-
-    @Override
-    public String toString() {
-        return "\t" + this.keyword + ",\t" + this.hint;
-    }
-
     public static String getFunctionUsage() {
         StringBuilder sb = new StringBuilder();
         for (Function function : Function.values()) {
@@ -74,5 +61,18 @@ public enum Function {
         }
         String keywords = builder.toString();
         return keywords.substring(0, keywords.length() - 1);
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public String getHint() {
+        return hint;
+    }
+
+    @Override
+    public String toString() {
+        return "\t" + this.keyword + ",\t" + this.hint;
     }
 }

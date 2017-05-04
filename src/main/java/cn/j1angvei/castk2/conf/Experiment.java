@@ -22,44 +22,44 @@ public class Experiment implements Comparable<Experiment> {
         return code;
     }
 
-    public String getFastq1() {
-        return fastq1;
-    }
-
-    public String getFastq2() {
-        return fastq2;
-    }
-
-    public String getControl() {
-        return control;
-    }
-
-    public int getGenomeCode() {
-        return genomeCode;
-    }
-
-    public boolean isBroadPeak() {
-        return broadPeak;
-    }
-
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getFastq1() {
+        return fastq1;
     }
 
     public void setFastq1(String fastq1) {
         this.fastq1 = fastq1;
     }
 
+    public String getFastq2() {
+        return fastq2;
+    }
+
     public void setFastq2(String fastq2) {
         this.fastq2 = fastq2;
+    }
+
+    public String getControl() {
+        return control;
     }
 
     public void setControl(String control) {
         this.control = control;
     }
 
+    public int getGenomeCode() {
+        return genomeCode;
+    }
+
     public void setGenomeCode(int genomeCode) {
         this.genomeCode = genomeCode;
+    }
+
+    public boolean isBroadPeak() {
+        return broadPeak;
     }
 
     public void setBroadPeak(boolean broadPeak) {

@@ -1,7 +1,7 @@
 package cn.j1angvei.castk2.cmd;
 
-import cn.j1angvei.castk2.conf.Directory;
 import cn.j1angvei.castk2.ConfigInitializer;
+import cn.j1angvei.castk2.conf.Directory;
 import cn.j1angvei.castk2.util.FileUtil;
 import org.apache.commons.io.IOUtils;
 
@@ -14,10 +14,10 @@ import java.nio.charset.Charset;
  */
 public class ShellExecutor {
 
-    public static int execute(String scriptDescription, String... cmd) {
+    public static int execute(String jobTitle, String... cmd) {
         String timestamp = FileUtil.getTimestamp();
-        String scriptFile = ConfigInitializer.getPath(Directory.Sub.SCRIPT) + timestamp + "_" + scriptDescription + ".sh";
-        String logFile = ConfigInitializer.getPath(Directory.Sub.LOG) + timestamp + "_" + scriptDescription + ".log";
+        String scriptFile = ConfigInitializer.getPath(Directory.Sub.SCRIPT) + timestamp + "_" + jobTitle + ".sh";
+        String logFile = ConfigInitializer.getPath(Directory.Sub.LOG) + timestamp + "_" + jobTitle + ".log";
         File script = createScript(scriptFile, cmd);
         int exitValue = 0;
         try {

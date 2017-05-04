@@ -24,12 +24,12 @@ public class Input {
         return genomes;
     }
 
-    public List<Experiment> getExperiments() {
-        return experiments;
-    }
-
     public void setGenomes(List<Genome> genomes) {
         this.genomes = genomes;
+    }
+
+    public List<Experiment> getExperiments() {
+        return experiments;
     }
 
     public void setExperiments(List<Experiment> experiments) {

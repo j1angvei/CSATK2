@@ -14,14 +14,14 @@ import java.util.List;
 public class InputConvector {
     private static InputConvector INSTANCE;
 
+    private InputConvector() {
+    }
+
     public static InputConvector getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new InputConvector();
         }
         return INSTANCE;
-    }
-
-    private InputConvector() {
     }
 
     public Input convert(List<GenomeModel> genomeModels, List<ExperimentModel> experimentModels) {
@@ -60,10 +60,10 @@ public class InputConvector {
         } else {
             experiment.setFastq2(model.getFastq2());
         }
-        if (StrUtil.isInvalid(model.getControl())){
+        if (StrUtil.isInvalid(model.getControl())) {
             experiment.setControl("");
-        }else {
-        experiment.setControl(model.getControl());
+        } else {
+            experiment.setControl(model.getControl());
         }
         experiment.setBroadPeak(model.isBroadPeak());
         return experiment;
