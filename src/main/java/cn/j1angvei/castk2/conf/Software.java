@@ -17,46 +17,60 @@ public enum Software {
             "fastqc",
             "FastQC_v0.11.5.zip",
             "FastQC",
-            "fastqc"),
+            "fastqc"
+    ),
     TRIMMOMATIC(
             "trimmomatic",
             "Trimmomatic-0.36.zip",
             "Trimmomatic-0.36",
-            "trimmomatic-0.36.jar"),
+            "trimmomatic-0.36.jar"
+    ),
     BWA(
             "bwa",
             "bwa-0.7.13.tar.bz2",
             "bwa-0.7.13",
-            "bwa"),
+            "bwa"
+    ),
     SAMTOOLS(
             "samtools",
             "samtools-1.3.1.tar.bz2",
             "samtools-1.3.1",
-            "samtools"),
+            "samtools"
+    ),
     HOMER(
             "homer",
             "homer.v4.8.3.zip",
             "homer.v4.8.3",
-            "bin" + File.separator),
+            "bin" + File.separator
+    ),
     QUALIMAP(
             "qualimap",
             "qualimap_v2.2.zip",
             "qualimap_v2.2",
-            "qualimap"),
+            "qualimap"
+    ),
     MACS2(
             "macs2",
             "MACS2-2.1.1.20160309.tar.gz",
             "MACS2-2.1.1.20160309",
-            "bin" + File.separator + "macs2"),
+            "bin" + File.separator + "macs2"
+    ),
     WEBLOGO(
             "weblogo",
             "weblogo.2.8.2.tar.gz",
             "weblogo",
-            "seqlogo"),
+            "seqlogo"
+    ),
     UCSC("ucsc",
             "ucsc-1.0.tar.gz",
             "ucsc-1.0",
             ""
+    ),
+    DEEPTOOLS(
+            "deeptools",
+            "deepTools-2.5.0.1.tar.gz",
+            "deepTools-2.5.0.1",
+            "bin" + File.separator
     );
 
     private String swName;

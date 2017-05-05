@@ -32,6 +32,7 @@ public class InstallCmd {
                 cmd.add(OsCmd.makeInstall(swFolder));
                 break;
             case MACS2:
+            case DEEPTOOLS:
                 cmd.add(OsCmd.unpack(archive, swSubDir));
                 cmd.add(OsCmd.changeDir(swFolder));
                 String install = String.format("%s setup.py install --prefix %s",

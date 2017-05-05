@@ -61,6 +61,8 @@ public class SwCmd {
                 return SwCmd.flagStat(exp);
             case BIGWIG:
                 return SwCmd.bigwig(exp);
+            case DEEPTOOLS:
+                return SwCmd.deeptools(exp);
             default:
                 System.err.println("Wrong function  keyword in experiment analysis, return empty command");
                 return SwCmd.emptyCmd(function);
@@ -73,6 +75,8 @@ public class SwCmd {
                 return SwCmd.genomeIndex(genome);
             case GENOME_SIZE:
                 return SwCmd.faidx(genome);
+            case GENOME_TSS:
+                return SwCmd.parseAnnotation(genome);
             default:
                 System.err.println("Wrong function  keyword in genome analysis, return empty command");
                 return SwCmd.emptyCmd(function);
@@ -121,12 +125,14 @@ public class SwCmd {
         //before trim reads, get phred, minLen and fa file from qc results in zip file
         String cmd;
         String fastq1 = ConfigInitializer.getPath(Sub.INPUT) + experiment.getFastq1();
+        String fastq1Suffix = StrUtil.getSuffixWithDot(experiment.getFastq1());
         String outputPrefix = ConfigInitializer.getPath(Out.TRIM) + experiment.getCode();
 
         QCInfo qcInfo = getQCInfo(experiment);
         if (isPairEnd(experiment)) {
             //pair end
             String fastq2 = ConfigInitializer.getPath(Sub.INPUT) + experiment.getFastq2();
+            String fastq2Suffix = StrUtil.getSuffixWithDot(experiment.getFastq2());
             cmd = String.format("%s -Xmx256m -jar %s PE -threads %d %s %s %s %s %s %s %s " + TRIM_PARAM,
                     CONF.getJava(),
                     CONF.getSwExecutable(Software.TRIMMOMATIC),
@@ -134,10 +140,10 @@ public class SwCmd {
                     qcInfo.getPhred(),
                     fastq1,
                     fastq2,
-                    outputPrefix + "_1" + StrUtil.getSuffix(experiment.getFastq1()),
-                    outputPrefix + "_1_unpaired" + StrUtil.getSuffix(experiment.getFastq1()),
-                    outputPrefix + "_2" + StrUtil.getSuffix(experiment.getFastq2()),
-                    outputPrefix + "_2_unpaired" + StrUtil.getSuffix(experiment.getFastq2()),
+                    outputPrefix + "_1" + fastq1Suffix,
+                    outputPrefix + "_1_unpaired" + fastq1Suffix,
+                    outputPrefix + "_2" + fastq2Suffix,
+                    outputPrefix + "_2_unpaired" + fastq2Suffix,
                     qcInfo.getFaFilePath(),
                     qcInfo.getLength() / 3,
                     qcInfo.getHeadCrop());
@@ -150,7 +156,7 @@ public class SwCmd {
                     THREAD_NUMBER,
                     qcInfo.getPhred(),
                     fastq1,
-                    outputPrefix + StrUtil.getSuffix(experiment.getFastq1()),
+                    outputPrefix + fastq1Suffix,
                     qcInfo.getFaFilePath(),
                     qcInfo.getLength() / 3,
                     qcInfo.getHeadCrop());
@@ -160,25 +166,27 @@ public class SwCmd {
 
     public static String[] qcCleanReads(Experiment experiment) {
         List<String> cmd = new ArrayList<>();
+        String fastq1Suffix = StrUtil.getSuffixWithDot(experiment.getFastq1());
         if (isPairEnd(experiment)) {
+            String fastq2Suffix = StrUtil.getSuffixWithDot(experiment.getFastq2());
             cmd.add(String.format("%s -o %s -t %d %s",
                     CONF.getSwExecutable(Software.FASTQC),
                     ConfigInitializer.getPath(Out.QC_CLEAN),
                     THREAD_NUMBER,
-                    ConfigInitializer.getPath(Out.TRIM) + experiment.getCode()) + "_1" + StrUtil.getSuffix(experiment.getFastq1())
+                    ConfigInitializer.getPath(Out.TRIM) + experiment.getCode()) + "_1" + fastq1Suffix
             );
             cmd.add(String.format("%s -o %s -t %d %s",
                     CONF.getSwExecutable(Software.FASTQC),
                     ConfigInitializer.getPath(Out.QC_CLEAN),
                     THREAD_NUMBER,
-                    ConfigInitializer.getPath(Out.TRIM) + experiment.getCode() + "_2" + StrUtil.getSuffix(experiment.getFastq2())
+                    ConfigInitializer.getPath(Out.TRIM) + experiment.getCode() + "_2" + fastq2Suffix
             ));
         } else {
             cmd.add(String.format("%s -o %s -t %d %s",
                     CONF.getSwExecutable(Software.FASTQC),
                     ConfigInitializer.getPath(Out.QC_CLEAN),
                     THREAD_NUMBER,
-                    ConfigInitializer.getPath(Out.TRIM) + experiment.getCode()) + StrUtil.getSuffix(experiment.getFastq1())
+                    ConfigInitializer.getPath(Out.TRIM) + experiment.getCode()) + fastq1Suffix
             );
         }
         return FileUtil.listToArray(cmd);
@@ -197,14 +205,14 @@ public class SwCmd {
         String sai1, sai2 = null;
         if (isPairEnd(experiment)) {
             //pair end data
-            fastq1 = ConfigInitializer.getPath(Out.TRIM) + experiment.getCode() + "_1" + StrUtil.getSuffix(experiment.getFastq1());
-            fastq2 = ConfigInitializer.getPath(Out.TRIM) + experiment.getCode() + "_2" + StrUtil.getSuffix(experiment.getFastq2());
+            fastq1 = ConfigInitializer.getPath(Out.TRIM) + experiment.getCode() + "_1" + StrUtil.getSuffixWithDot(experiment.getFastq1());
+            fastq2 = ConfigInitializer.getPath(Out.TRIM) + experiment.getCode() + "_2" + StrUtil.getSuffixWithDot(experiment.getFastq2());
             sai1 = ConfigInitializer.getPath(Out.ALIGNMENT) + experiment.getCode() + "_1" + Constant.SAI_SFX;
             sai2 = ConfigInitializer.getPath(Out.ALIGNMENT) + experiment.getCode() + "_2" + Constant.SAI_SFX;
 
         } else {
             //single end data
-            fastq1 = ConfigInitializer.getPath(Out.TRIM) + experiment.getCode() + StrUtil.getSuffix(experiment.getFastq1());
+            fastq1 = ConfigInitializer.getPath(Out.TRIM) + experiment.getCode() + StrUtil.getSuffixWithDot(experiment.getFastq1());
             sai1 = ConfigInitializer.getPath(Out.ALIGNMENT) + experiment.getCode() + Constant.SAI_SFX;
         }
         //alignment result SAM file's absolute path
@@ -334,14 +342,14 @@ public class SwCmd {
         String sfxPeakFile = experiment.isBroadPeak() ? Constant.SFX_BROAD_PEAKS : Constant.SFX_NARROW_PEAKS;
         Genome genome = CONF.getGenome(experiment.getGenomeCode());
         String annoFileName = genome.getAnnotation();
-        String annoFormat = StrUtil.getSuffix(annoFileName);
+        String annoFormat = StrUtil.getSuffixWithoutDot(annoFileName);
         List<String> cmd = new ArrayList<>();
         cmd.add(OsCmd.addPath(SwUtil.getPath(Software.HOMER)));
         cmd.add(String.format("%s %s %s -%s %s > %s",
                 CONF.getSwExecutable(Software.HOMER) + Constant.EXE_HOMER_ANNOTATE_PEAK,
                 ConfigInitializer.getPath(Out.PEAK_CALLING) + experiment.getCode() + sfxPeakFile,
                 ConfigInitializer.getPath(Sub.GENOME) + genome.getFasta(),
-                annoFormat.substring(1, annoFormat.length()),
+                annoFormat,
                 ConfigInitializer.getPath(Sub.GENOME) + genome.getAnnotation(),
                 ConfigInitializer.getPath(Out.ANNOTATION) + experiment.getCode() + Constant.SFX_ANNO_BED)
         );
@@ -401,8 +409,8 @@ public class SwCmd {
         List<String> commands = new ArrayList<>();
         String code = experiment.getCode();
         String bedGraph = ConfigInitializer.getPath(Out.PEAK_CALLING) + code + Constant.SFX_BEDGRAPH;
-        String bigWig = ConfigInitializer.getPath(Out.BIGWIG) + code + Constant.SFX_BIG_WIG;
-        String wig = ConfigInitializer.getPath(Out.BIGWIG) + code + Constant.SFX_WIG;
+        String bigWig = ConfigInitializer.getPath(Out.BIGWIG) + code + Constant.SFX_UCSC_BIG_WIG;
+        String wig = ConfigInitializer.getPath(Out.BIGWIG) + code + Constant.SFX_UCSC_WIG;
 
         String chromeSize = ConfigInitializer.getPath(Sub.GENOME) +
                 CONF.getGenome(experiment.getGenomeCode()).getFasta() + Constant.SFX_GENOME_SIZES;
@@ -419,6 +427,81 @@ public class SwCmd {
         return FileUtil.listToArray(commands);
     }
 
+    public static String[] deeptools(Experiment experiment) {
+        boolean hasControl = StrUtil.isValid(experiment.getControl());
+        List<String> commands = new ArrayList<>();
+        String exePrefix = CONF.getSwExecutable(Software.DEEPTOOLS);
+        String outPrefix = ConfigInitializer.getPath(Out.DEEPTOOLS) + experiment.getCode();
+        //convert bam to bigwig using bamCompare and bamCoverage
+        String exeBamCoverage = exePrefix + Constant.EXE_DT_BAMCOVERAGE;
+        String exeBamCompare = exePrefix + Constant.EXE_DT_BAMCOMPARE;
+        String treatBam = ConfigInitializer.getPath(Out.BAM_SORTED) + experiment.getCode() + Constant.SFX_SORTED_BAM;
+        String outBw = outPrefix + Constant.SFX_DT_BIG_WIG;
+
+        if (hasControl) {
+            //has control experiment
+            String controlBam = ConfigInitializer.getPath(Out.BAM_SORTED) + experiment.getControl() + Constant.SFX_SORTED_BAM;
+            //bamCompare usage:bamCompare -b1 treatment.bam -b2 control.bam -o log2ratio.bw
+            commands.add(String.format("%s -b1 %s -b2 %s -o %s -of bigwig", exeBamCompare, treatBam, controlBam, outBw));
+        } else {
+            //no control experiment
+            //bamCoverage usage: bamCoverage -b reads.bam -o coverage.bw
+            commands.add(String.format("%s -b %s -o %s -of bigwig", exeBamCoverage, treatBam, outBw));
+        }
+
+        //compute matrix, scale-regions or reference-point mode, we choose first one
+        //usage:  computeMatrix scale-regions -S <bigwig file> -R <bed file> -b 1000
+        String exeComputeMatrix = exePrefix + Constant.EXE_DT_COMPUTEMATRIX;
+
+        //using bigwig generated by deeptools
+        String inTss = ConfigInitializer.getPath(Sub.GENOME) + CONF.getGenome(experiment.getGenomeCode()).getAnnotation() + Constant.SFX_GENOME_TSS;
+        String outTssMatrix = outPrefix + Constant.SFX_DT_TSS_MATRIX;
+
+        commands.add(String.format("%s scale-regions -S %s -R %s -b 3000 -a 3000 -m 4000 -out %s",
+                exeComputeMatrix, outBw, inTss, outTssMatrix));
+
+        //plot heatmap
+        String exePlotHeatmap = exePrefix + Constant.EXE_DT_PLOTHEATMAP;
+        String outPngHeatmap = outPrefix + Constant.PNG_DT_HEATMAP;
+        commands.add(String.format("%s -m %s -out %s --samplesLabel %s",
+                exePlotHeatmap, outTssMatrix, outPngHeatmap, experiment.getCode()
+        ));
+        //plot profile usage: plotProfile -m matrix -out outfile
+        String exePlotProfile = exePrefix + Constant.EXE_DT_PLOTPROFILE;
+        String outPngProfile = outPrefix + Constant.PNG_DT_PROFILE;
+        commands.add(String.format("%s -m %s -out %s --samplesLabel %s",
+                exePlotProfile, outTssMatrix, outPngProfile, experiment.getCode()
+        ));
+
+        return FileUtil.listToArray(commands);
+    }
+
+    public static String[] parseAnnotation(Genome genome) {
+        List<String> commands = new ArrayList<>();
+        //add path
+        commands.add(OsCmd.addPath(SwUtil.getPath(Software.HOMER)));
+
+        String exeParseGtf = CONF.getSwExecutable(Software.HOMER) + Constant.EXE_HOMER_PARSE_GTF;
+        String annoFile = ConfigInitializer.getPath(Sub.GENOME) + genome.getAnnotation();
+        String annoFormat = StrUtil.getSuffixWithoutDot(genome.getAnnotation()).toLowerCase();
+        String outTss = annoFile + Constant.SFX_GENOME_TSS;
+
+        //usage: parseGTF.pl <GTF format file> <mode> [options]; mode : tss, tts
+
+        // options -gff -gff3, which is determined by annotation format
+        String homerOption = "";
+        if (annoFormat.equals("gff")) {
+            homerOption = "-gff";
+        } else if (annoFormat.equals("gff3")) {
+            homerOption = "-gff3";
+        }
+        //mode: tss, tts, ann , etc. we only need tss
+        String homerMode = "tss";
+        commands.add(String.format("%s %s %s %s | awk '{OFS=\"\t\"} {print $2,$3,$4,$6,$1,$5}' > %s",
+                exeParseGtf, annoFile, homerMode, homerOption, outTss));
+        return FileUtil.listToArray(commands);
+    }
+
     public static String[] emptyCmd(Function function) {
         return new String[]{
                 "echo \"No native commands needed in this step:\"" + function.name()
@@ -428,4 +511,6 @@ public class SwCmd {
     private static boolean isPairEnd(Experiment experiment) {
         return StrUtil.isValid(experiment.getFastq2());
     }
+
+
 }

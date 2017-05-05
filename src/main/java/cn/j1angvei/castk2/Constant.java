@@ -22,12 +22,34 @@ public class Constant {
      */
     public static final String EXE_HOMER_ANNOTATE_PEAK = "annotatePeaks.pl";
     public static final String EXE_HOMER_FIND_MOTIF = "findMotifsGenome.pl";
+    public static final String EXE_HOMER_PARSE_GTF = "parseGTF.pl";
+    /**
+     * real executable in deeptools
+     */
+    //convert bam file to bigwig
+    public static final String EXE_DT_BAMCOMPARE = "bamCompare";
+    public static final String EXE_DT_BAMCOVERAGE = "bamCoverage";
+
+    //calculate matrix, which will be used fro plotHeatmap and plotProfile
+    public static final String EXE_DT_COMPUTEMATRIX = "computeMatrix";
+
+    public static final String EXE_DT_PLOTFINGERPRINT = "plotFingerprint";
+    public static final String EXE_DT_PLOTHEATMAP = "plotHeatmap";
+    public static final String EXE_DT_PLOTPROFILE = "plotProfile";
+
+    public static final String SFX_DT_BIG_WIG = ".deeptools.bw";
+    public static final String SFX_DT_TSS_MATRIX = ".tss.matrix";
+
+    //png suffix
+    public static final String PNG_DT_PROFILE = ".profile.png";
+    public static final String PNG_DT_HEATMAP = ".heatmap.png";
 
     /**
      * genome relevant suffix
      */
     public static final String SFX_GENOME_FAIDX = ".fai";
     public static final String SFX_GENOME_SIZES = ".sizes";
+    public static final String SFX_GENOME_TSS = ".tss.bed";
     /**
      * real executable distributed by UCSC
      */
@@ -37,8 +59,8 @@ public class Constant {
     /**
      * bigWig file relevant suffix
      */
-    public static final String SFX_BIG_WIG = ".bw";
-    public static final String SFX_WIG = ".wig";
+    public static final String SFX_UCSC_BIG_WIG = ".ucsc.bw";
+    public static final String SFX_UCSC_WIG = ".wig";
     /**
      * FastQC generate zip report file name is, FastQ file name + "_fastqc.zip";
      */

@@ -25,7 +25,8 @@ public class Directory {
         GO_PATHWAY("17_go_pathway"),
         MOTIF("18_motif"),
         STATISTICS("19_statistic"),
-        HTML("20_html");
+        HTML("20_html"),
+        DEEPTOOLS("21.deeptools");
 
         private String dirName;
 

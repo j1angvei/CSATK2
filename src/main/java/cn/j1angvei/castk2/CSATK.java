@@ -16,10 +16,7 @@ import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.SystemUtils;
 
 import java.awt.*;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.Properties;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Entry of the program
@@ -56,7 +53,7 @@ public class CSATK {
                 pipeline();
                 break;
             case INSTALL:
-                install();
+                install(param);
                 break;
             case RESET:
                 reset();
@@ -97,7 +94,7 @@ public class CSATK {
 
     private static void usage() {
         System.out.printf("Program: CSATK(ChIP-Seq Analysis Toolkit)\n" +
-                        "Version: 2.0-170503 by j1angvei\n" +
+                        "Version: 2.0-170504 by j1angvei\n" +
                         "Project: https://github.com/j1angvei/CSATK2\n" +
                         "\n" +
                         "Tasks:\nCMD:\tjava -jar CSATK.jar <task>\n" +
@@ -117,14 +114,27 @@ public class CSATK {
         function(Function.assemblePipelineKeywords());
     }
 
-    private static void install() {
-        for (Software software : Software.values()) {
-            String swName = software.getSwName();
-            System.out.println("Installing " + swName + " ...");
-            String jobTile = "install_" + software.name().toUpperCase();
-            ShellExecutor.execute(jobTile, InstallCmd.install(software));
-            System.out.println("Install " + swName + " finished!");
+    private static void install(String[] param) {
+        if (param.length == 0) {
+            System.out.println("No software specified, install them all");
+            for (Software software : Software.values()) {
+                install(software);
+            }
+        } else {
+            System.out.println("Install software as following :" + Arrays.toString(param));
+            for (String sw : param) {
+                Software software = Software.valueOf(sw.toUpperCase());
+                install(software);
+            }
         }
+    }
+
+    private static void install(Software software) {
+        String swName = software.getSwName();
+        System.out.println("Installing " + swName + " ...");
+        String jobTile = "install_" + software.name().toUpperCase();
+        ShellExecutor.execute(jobTile, InstallCmd.install(software));
+        System.out.println("Install " + swName + " finished!");
     }
 
     private static void reset() {

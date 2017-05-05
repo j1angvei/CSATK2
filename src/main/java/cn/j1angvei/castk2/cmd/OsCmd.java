@@ -42,7 +42,8 @@ public class OsCmd {
     }
 
     public static String addPythonPath(String swFolder) {
-        return String.format("export PYTHONPATH=%slib" + File.separator + "python%s" + File.separator + "site-packages" + File.separator + ":$PYTHONPATH", swFolder, SwUtil.getPythonVersion());
+        return String.format("export PYTHONPATH=%slib" + File.separator + "python%s" + File.separator +
+                "site-packages" + File.separator + ":$PYTHONPATH", swFolder, SwUtil.getPythonVersion());
     }
 
     public static String addPath(String path) {

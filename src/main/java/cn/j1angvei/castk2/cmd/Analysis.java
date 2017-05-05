@@ -45,6 +45,7 @@ public class Analysis {
             //function should iterate genomes
             case GENOME_IDX:
             case GENOME_SIZE:
+            case GENOME_TSS:
                 iterateGenomes(function);
                 break;
 
@@ -63,6 +64,7 @@ public class Analysis {
             case PEAK_ANNOTATION:
             case FLAGSTAT:
             case BIGWIG:
+            case DEEPTOOLS:
                 iterateExperiment(function, true);
                 break;
 
@@ -177,6 +179,7 @@ public class Analysis {
             Callable<String> callable = new Callable<String>() {
                 @Override
                 public String call() throws Exception {
+                    System.out.format("Job %s submitted\n", jobTitle);
                     String[] commands = SwCmd.getGenomeCommands(function, genome);
                     ShellExecutor.execute(jobTitle, commands);
                     //if running calculating genome size, use new value and replace it
