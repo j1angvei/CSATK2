@@ -26,24 +26,34 @@ public class Constant {
     /**
      * real executable in deeptools
      */
+    //calculate chip quality
+    public static final String EXE_DT_PLOT_FINGERPRINT = "plotFingerprint";
+
     //convert bam file to bigwig
     public static final String EXE_DT_BAMCOMPARE = "bamCompare";
     public static final String EXE_DT_BAMCOVERAGE = "bamCoverage";
-
     //calculate matrix, which will be used fro plotHeatmap and plotProfile
     public static final String EXE_DT_COMPUTEMATRIX = "computeMatrix";
 
-    public static final String EXE_DT_PLOTFINGERPRINT = "plotFingerprint";
+    //plot tss heatmap and profile
     public static final String EXE_DT_PLOTHEATMAP = "plotHeatmap";
     public static final String EXE_DT_PLOTPROFILE = "plotProfile";
 
+    //correlation
+    public static final String EXE_DT_MULTI_BIGWIG_SUMMARY = "multiBigwigSummary";
+    public static final String EXE_DT_PLOT_CORRELATION = "plotCorrelation";
+    /**
+     * deeptools intermediate files suffix
+     */
     public static final String SFX_DT_BIG_WIG = ".deeptools.bw";
     public static final String SFX_DT_TSS_MATRIX = ".tss.matrix";
+    public static final String SFX_DT_NPZ = "dt.multibigwigsummary.npz";
+    public static final String SFX_DT_CORRELATION = "dt.correlation.png";
 
     //png suffix
     public static final String PNG_DT_PROFILE = ".profile.png";
     public static final String PNG_DT_HEATMAP = ".heatmap.png";
-
+    public static final String PNG_DT_FINGER_PRINT = "dt.fingerprint.png";
     /**
      * genome relevant suffix
      */

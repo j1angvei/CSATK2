@@ -20,7 +20,7 @@ import java.util.Properties;
  * Created by mjian on 2016/11/29.
  */
 public class FileUtil {
-    private static String WORK_DIR = System.getProperty("user.dir") + File.separator;
+    public static String WORK_DIR = System.getProperty("user.dir") + File.separator;
 
     public static String getWorkDir() {
         return WORK_DIR;

@@ -62,11 +62,23 @@ public class SwCmd {
             case BIGWIG:
                 return SwCmd.bigwig(exp);
             case DEEPTOOLS:
-                return SwCmd.deeptools(exp);
+                return SwCmd.tssProfile(exp);
             default:
                 System.err.println("Wrong function  keyword in experiment analysis, return empty command");
                 return SwCmd.emptyCmd(function);
         }
+    }
+
+    public static String[] getProjectCommands(Function function) {
+        switch (function) {
+            case CORRELATION:
+                return correlation();
+            case CHIP_QUALITY:
+                return chipQuality();
+            default:
+                return new String[0];
+        }
+
     }
 
     public static String[] getGenomeCommands(Function function, Genome genome) {
@@ -76,7 +88,7 @@ public class SwCmd {
             case GENOME_SIZE:
                 return SwCmd.faidx(genome);
             case GENOME_TSS:
-                return SwCmd.parseAnnotation(genome);
+                return SwCmd.parseTSS(genome);
             default:
                 System.err.println("Wrong function  keyword in genome analysis, return empty command");
                 return SwCmd.emptyCmd(function);
@@ -432,9 +444,14 @@ public class SwCmd {
         return FileUtil.listToArray(commands);
     }
 
-    public static String[] deeptools(Experiment experiment) {
-        boolean hasControl = StrUtil.isValid(experiment.getControl());
+    private static boolean hasControl(Experiment experiment) {
+        return StrUtil.isValid(experiment.getControl());
+    }
+
+    public static String[] tssProfile(Experiment experiment) {
+        boolean hasControl = hasControl(experiment);
         List<String> commands = new ArrayList<>();
+        commands.add(OsCmd.addPythonPath(CONF.getSwDestFolder(Software.DEEPTOOLS)));
         String exePrefix = CONF.getSwExecutable(Software.DEEPTOOLS);
         String outPrefix = ConfigInitializer.getPath(Out.DEEPTOOLS) + experiment.getCode();
         //convert bam to bigwig using bamCompare and bamCoverage
@@ -465,18 +482,17 @@ public class SwCmd {
         commands.add(String.format("%s scale-regions -S %s -R %s -b 3000 -a 3000 -m 4000 -out %s",
                 exeComputeMatrix, outBw, inTss, outTssMatrix));
 
-        //plot heatmap
-        String exePlotHeatmap = exePrefix + Constant.EXE_DT_PLOTHEATMAP;
-        String outPngHeatmap = outPrefix + Constant.PNG_DT_HEATMAP;
-        commands.add(String.format("%s -m %s -out %s --samplesLabel %s",
-                exePlotHeatmap, outTssMatrix, outPngHeatmap, experiment.getCode()
-        ));
         //plot profile usage: plotProfile -m matrix -out outfile
         String exePlotProfile = exePrefix + Constant.EXE_DT_PLOTPROFILE;
         String outPngProfile = outPrefix + Constant.PNG_DT_PROFILE;
         commands.add(String.format("%s -m %s -out %s --samplesLabel %s",
-                exePlotProfile, outTssMatrix, outPngProfile, experiment.getCode()
-        ));
+                exePlotProfile, outTssMatrix, outPngProfile, experiment.getCode()));
+
+//        //plot heatmap
+//        String exePlotHeatmap = exePrefix + Constant.EXE_DT_PLOTHEATMAP;
+//        String outPngHeatmap = outPrefix + Constant.PNG_DT_HEATMAP;
+//        commands.add(String.format("%s -m %s -out %s ",
+//                exePlotHeatmap, outTssMatrix, outPngHeatmap));
 
         return FileUtil.listToArray(commands);
     }
@@ -485,16 +501,57 @@ public class SwCmd {
         return null;
     }
 
-    public static String[] fingerprint() {
+    public static String[] computeMatrix(Experiment experiment) {
         return null;
+    }
+
+    /**
+     * using deeptools's plotFingerprint commands
+     *
+     * @return plotFingerprint command
+     */
+    public static String[] chipQuality() {
+        List<String> commands = new ArrayList<>();
+        commands.add(OsCmd.addPythonPath(CONF.getSwDestFolder(Software.DEEPTOOLS)));
+        String exePrefix = CONF.getSwExecutable(Software.DEEPTOOLS);
+        String dirPrefix = ConfigInitializer.getPath(Out.DEEPTOOLS);
+
+        String sortedBamStar = ConfigInitializer.getPath(Out.BAM_SORTED) + "*";
+        String exeFingerprint = exePrefix + Constant.EXE_DT_PLOT_FINGERPRINT;
+        String outPng = dirPrefix + Constant.PNG_DT_FINGER_PRINT;
+        String title = "\"Fingerprints of all experiments\"";
+        commands.add(String.format("%s -b %s -T %s -plot %s",
+                exeFingerprint, sortedBamStar, title, outPng));
+
+        return FileUtil.listToArray(commands);
     }
 
     public static String[] correlation() {
-        //bigwig first
-        return null;
+        List<String> commands = new ArrayList<>();
+        commands.add(OsCmd.addPythonPath(CONF.getSwDestFolder(Software.DEEPTOOLS)));
+        //multi bigwig summary
+        String exePrefix = CONF.getSwExecutable(Software.DEEPTOOLS);
+        String dirPrefix = ConfigInitializer.getPath(Out.DEEPTOOLS);
+
+        String exeMultiBigwigSummary = exePrefix + Constant.EXE_DT_MULTI_BIGWIG_SUMMARY;
+        StringBuilder bigwigList = new StringBuilder();
+        for (Experiment experiment : CONF.getExperiments()) {
+            bigwigList.append(dirPrefix).append(experiment.getCode()).append(Constant.SFX_DT_BIG_WIG).append(" ");
+        }
+        String outNpz = dirPrefix + Constant.SFX_DT_NPZ;
+        commands.add(String.format("%s -b %s -out %s",
+                exeMultiBigwigSummary, bigwigList.toString(), outNpz));
+
+        //correlation
+        String exeCorrelation = exePrefix + Constant.EXE_DT_PLOT_CORRELATION;
+        String outCorrelation = dirPrefix + Constant.SFX_DT_CORRELATION;
+        String plotTitle = " \"Spearman Correlation of Read Counts\"";
+        commands.add(String.format("%s bins -in %s -c spearman --skipZeros  --plotTitle %s, -p heatmap --colorMap RdYlBu -o %s",
+                exeCorrelation, outNpz, plotTitle, outCorrelation));
+        return FileUtil.listToArray(commands);
     }
 
-    public static String[] parseAnnotation(Genome genome) {
+    public static String[] parseTSS(Genome genome) {
         List<String> commands = new ArrayList<>();
         //add path
         commands.add(OsCmd.addPath(SwUtil.getPath(Software.HOMER)));

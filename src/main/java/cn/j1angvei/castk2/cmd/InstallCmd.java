@@ -3,6 +3,7 @@ package cn.j1angvei.castk2.cmd;
 import cn.j1angvei.castk2.ConfigInitializer;
 import cn.j1angvei.castk2.conf.Directory;
 import cn.j1angvei.castk2.conf.Software;
+import cn.j1angvei.castk2.util.FileUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +32,10 @@ public class InstallCmd {
                 cmd.add(OsCmd.changeDir(swFolder));
                 cmd.add(OsCmd.makeInstall(swFolder));
                 break;
-            case MACS2:
             case DEEPTOOLS:
+                cmd.add("export BLAS=" + FileUtil.WORK_DIR + "lib/libblas.so");
+                cmd.add("export LAPACK=" + FileUtil.WORK_DIR + "lib/liblapack.so");
+            case MACS2:
                 cmd.add(OsCmd.unpack(archive, swSubDir));
                 cmd.add(OsCmd.changeDir(swFolder));
                 String install = String.format("%s setup.py install --prefix %s",

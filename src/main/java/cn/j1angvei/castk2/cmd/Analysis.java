@@ -80,6 +80,10 @@ public class Analysis {
                 break;
 
             //function should start only once, without iterate genome or experiment
+            case CORRELATION:
+            case CHIP_QUALITY:
+                runShellFunction(function);
+                break;
             case HTML:
                 String statDir = ConfigInitializer.getPath(Out.STATISTICS);
                 HtmlGenerator.getInstance(statDir).generate();
@@ -88,6 +92,22 @@ public class Analysis {
                 System.err.println("Illegal function keyword " + function.getKeyword());
                 break;
         }
+    }
+
+    private void runShellFunction(final Function function) {
+        final List<Callable<String>> expCalls = new ArrayList<>();
+        final String jobTitle = String.format("Project_%s", function.name());
+        Callable<String> callable = new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                System.out.format("Job %s submitted...\n", jobTitle);
+                ShellExecutor.execute(jobTitle, SwCmd.getProjectCommands(function));
+                return jobTitle;
+            }
+        };
+
+        expCalls.add(callable);
+        pendingCallable(expCalls);
     }
 
     private void iterateExperiment(final Function function, final boolean isShellJob) {
