@@ -17,9 +17,13 @@ import java.util.*;
  */
 public class HtmlGenerator {
     private Map<StatType, String[][]> dataMap;
+    private String statDir;
+    private DataPlot dataPlot;
 
     private HtmlGenerator(String statDir) {
+        this.statDir = statDir;
         dataMap = DataHolder.getInstance(statDir).getDataMap();
+        dataPlot = new DataPlot(statDir);
     }
 
     public static HtmlGenerator getInstance(String statDir) {
@@ -76,27 +80,37 @@ public class HtmlGenerator {
             case QUALITY_CONTROL:
                 headerKey = "qc_header";
                 dataKey = "qc_data";
+                String qcPngBase64 = dataPlot.qcBarChart(dataNoHeader);
+                context.setVariable("qc_chart", qcPngBase64);
                 break;
             case ALIGNMENT:
                 headerKey = "align_header";
                 dataKey = "align_data";
+                String alignBase64 = dataPlot.alignmentBarChart(dataNoHeader);
+                context.setVariable("alignment_chart", alignBase64);
                 break;
             case PEAK_CALL:
                 headerKey = "call_header";
                 dataKey = "call_data";
+                String[] peakCallBase64 = dataPlot.peakCallingBarChart(dataNoHeader);
+                context.setVariable("peak_call_chart", peakCallBase64);
                 break;
             case PEAK_ANNO:
                 headerKey = "anno_header";
                 dataKey = "anno_data";
+                String[] peakAnnoBase64 = dataPlot.annotationPieChart(header, dataNoHeader);
+                context.setVariable("peak_anno_pie", peakAnnoBase64);
                 break;
             case GENE_ONTOLOGY:
                 headerKey = "go_header";
                 dataKey = "go_data";
+                String[] goBase64 = dataPlot.goBarChart(dataNoHeader);
+                context.setVariable("go_bar_chart", goBase64);
                 break;
-            case PATHWAY:
-                headerKey = "pathway_header";
-                dataKey = "pathway_data";
-                break;
+//            case PATHWAY:
+//                headerKey = "pathway_header";
+//                dataKey = "pathway_data";
+//                break;
             case MOTIF:
                 headerKey = "motif_header";
                 dataKey = "motif_data";

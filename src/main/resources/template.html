@@ -10,6 +10,7 @@
                 position: fixed;
                 top: 3em;
                 margin: 1em 0 0 1em;
+                background-color: #EDE4D8;
             }
 
             div.main {
@@ -29,7 +30,7 @@
             }
 
             div.header {
-                background-color: #EEE;
+                background-color: rgba(135, 57, 34, 1.0);
                 border: 0;
                 margin: 0;
                 padding: 0.5em;
@@ -73,14 +74,14 @@
             }
 
             div.header {
-                background-color: #FFF;
+                background-color: rgba(135, 57, 34, 1.0);
             }
         }
 
         body {
             font-family: sans-serif;
             color: #000;
-            background-color: #FFF;
+            background-color: #EDE4D8;
             border: 0;
             margin: 0;
             padding: 0;
@@ -97,12 +98,14 @@
 
         #header_title {
             display: inline-block;
+            color: rgba(212, 195, 172, 0.5);
             float: left;
             clear: left;
         }
 
         #header_filename {
             display: inline-block;
+            color: rgba(212, 195, 172, 0.5);
             float: right;
             clear: right;
             font-size: 50%;
@@ -130,6 +133,7 @@
         }
 
         div.module {
+            text-align: center;
             padding-bottom: 1.5em;
             padding-top: 1.5em;
         }
@@ -155,13 +159,14 @@
         h2 {
             color: #800000;
             padding-bottom: 0;
-            margin-bottom: 0;
+            margin-bottom: 1em;
             clear: left;
         }
 
         table {
-            margin-left: 3em;
+            /*margin-left: 3em;*/
             text-align: center;
+            margin: auto;
         }
 
         th {
@@ -200,12 +205,15 @@
     <h2>Content</h2>
     <ol type="1">
         <li><a href="#raw_data">Raw Data</a></li>
+        <li><a href="#chip_quality">ChIP Quality</a></li>
         <li><a href="#quality_control">Quality Control</a></li>
         <li><a href="#reads_alignment">Reads Alignment</a></li>
+        <li><a href="#correlation_analysis">Correlation</a></li>
+        <li><a href="#tss_plot">TSS Plot</a></li>
         <li><a href="#peak_calling">Peak Calling</a></li>
         <li><a href="#peak_annotation">Peak Annotation</a></li>
         <li><a href="#go_analysis">GO Analysis</a></li>
-        <li><a href="#pathway_analysis">Pathway Analysis</a></li>
+        <!--<li><a href="#pathway_analysis">Pathway Analysis</a></li>-->
         <li><a href="#motif_analysis">Motif Analysis</a></li>
         <!--<li><a href="#M8">TSS Plot</a></li>-->
     </ol>
@@ -226,6 +234,14 @@
             </tbody>
         </table>
     </div>
+
+    <div class="module">
+        <h2 id="chip_quality">ChIP Quality</h2>
+        <p>Still under construction...</p>
+        <!--<p><img  src="" alt="Per base quality graph" width="800" height="600"/></p>-->
+
+    </div>
+
     <div class="module">
         <h2 id="quality_control">Quality Control</h2>
         <table>
@@ -240,7 +256,8 @@
             </tr>
             </tbody>
         </table>
-        <!--<p><img class="indented" src="" alt="Per base quality graph" width="800" height="600"/></p>-->
+        <p><img class="indented" src="#" th:src="'data:image/png;base64,'+${qc_chart}"/></p>
+        <!--<p><img  src="" alt="Per base quality graph" width="800" height="600"/></p>-->
     </div>
     <div class="module">
         <h2 id="reads_alignment">Reads Alignment</h2>
@@ -256,7 +273,22 @@
             </tr>
             </tbody>
         </table>
+        <p><img class="indented" src="#" th:src="'data:image/png;base64,'+${alignment_chart}"/></p>
         <!--<p><img class="indented" src="" alt="Per base quality graph" width="800" height="600"/></p>-->
+    </div>
+
+    <div class="module">
+        <h2 id="correlation_analysis">Correlation Analysis</h2>
+        <p>Still under construction...</p>
+        <!--<p><img  src="" alt="Per base quality graph" width="800" height="600"/></p>-->
+
+    </div>
+
+    <div class="module">
+        <h2 id="tss_plot">TSS Plot</h2>
+        <p>Still under construction...</p>
+        <!--<p><img  src="" alt="Per base quality graph" width="800" height="600"/></p>-->
+
     </div>
     <div class="module">
         <h2 id="peak_calling">Peak Calling</h2>
@@ -272,6 +304,8 @@
             </tr>
             </tbody>
         </table>
+        <p><img class="indented" src="#" th:src="'data:image/png;base64,'+${peak_call_chart[0]}"/></p>
+        <p><img class="indented" src="#" th:src="'data:image/png;base64,'+${peak_call_chart[1]}"/></p>
         <!--<p><img class="indented" src="" alt="Per Sequence quality graph" width="800" height="600"/></p>-->
     </div>
     <div class="module">
@@ -288,6 +322,9 @@
             </tr>
             </tbody>
         </table>
+        <p th:each="data : ${peak_anno_pie}">
+            <img class="indented" src="#" th:src="'data:image/png;base64,'+${data}"/>
+        </p>
         <!--<p><img class="indented" src="" alt="Per base sequence content" width="800" height="600"/></p>-->
     </div>
     <div class="module">
@@ -304,24 +341,27 @@
             </tr>
             </tbody>
         </table>
+        <p th:each="data : ${go_bar_chart}">
+            <img class="indented" src="#" th:src="'data:image/png;base64,'+${data}"/>
+        </p>
         <!--<p><img class="indented" src="" alt="Per sequence GC content graph" width="800" height="600"/></p>-->
     </div>
-    <div class="module">
-        <h2 id="pathway_analysis">Pathway Analysis</h2>
-        <table>
-            <thead>
-            <tr>
-                <th th:each="header : ${pathway_header}" th:text="${header}"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="data : ${pathway_data}">
-                <td th:each="item : ${data}" th:text="${item}">Cell</td>
-            </tr>
-            </tbody>
-        </table>
-        <!--<p><img class="indented" src="" alt="N content graph" width="800" height="600"/></p>-->
-    </div>
+    <!--<div class="module">-->
+        <!--<h2 id="pathway_analysis">Pathway Analysis</h2>-->
+        <!--<table>-->
+            <!--<thead>-->
+            <!--<tr>-->
+                <!--<th th:each="header : ${pathway_header}" th:text="${header}"></th>-->
+            <!--</tr>-->
+            <!--</thead>-->
+            <!--<tbody>-->
+            <!--<tr th:each="data : ${pathway_data}">-->
+                <!--<td th:each="item : ${data}" th:text="${item}">Cell</td>-->
+            <!--</tr>-->
+            <!--</tbody>-->
+        <!--</table>-->
+        <!--&lt;!&ndash;<p><img class="indented" src="" alt="N content graph" width="800" height="600"/></p>&ndash;&gt;-->
+    <!--</div>-->
     <div class="module">
         <h2 id="motif_analysis">Motif Analysis</h2>
         <table>
@@ -349,7 +389,7 @@
     <!--</div>-->
 </div>
 <div class="footer">Produced by
-    <a href="https://github.com/j1angvei/CSATK2">CSATK</a> (version 2.0-170422)
+    <a href="https://github.com/j1angvei/CSATK2" target="_blank">CSATK</a> (version 2.0-170422)
 </div>
 </body>
 </html>

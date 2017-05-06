@@ -8,6 +8,8 @@
         <option value="$PROJECT_DIR$/gradle" />
         <option value="$PROJECT_DIR$/.gradle" />
         <option value="$PROJECT_DIR$/.idea" />
+        <option value="$PROJECT_DIR$/config" />
+        <option value="$PROJECT_DIR$/output" />
       </list>
     </option>
   </component>
