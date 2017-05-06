@@ -1,5 +1,5 @@
 group 'j1angvei'
-version '170505'
+version getDate()
 
 apply plugin: 'java'
 
@@ -9,6 +9,13 @@ targetCompatibility = 1.7
 repositories {
     mavenCentral()
 }
+
+static def getDate() {
+    def date = new Date()
+    def formattedDate = date.format("yyMMdd")
+    return formattedDate
+}
+
 jar {
     manifest { attributes 'Main-Class': 'cn.j1angvei.castk2.CSATK' }
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }

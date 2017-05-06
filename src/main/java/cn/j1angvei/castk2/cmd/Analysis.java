@@ -98,7 +98,7 @@ public class Analysis {
             final Callable<String> callable = new Callable<String>() {
                 @Override
                 public String call() throws Exception {
-                    System.out.format("Job %s submitted\n", jodTitle);
+                    System.out.format("Job %s submitted...\n", jodTitle);
                     //shell job should start using ShellExecutor
                     if (isShellJob) {
                         String[] commands = SwCmd.getExperimentCommands(function, experiment);
@@ -179,7 +179,7 @@ public class Analysis {
             Callable<String> callable = new Callable<String>() {
                 @Override
                 public String call() throws Exception {
-                    System.out.format("Job %s submitted\n", jobTitle);
+                    System.out.format("Job %s submitted...\n", jobTitle);
                     String[] commands = SwCmd.getGenomeCommands(function, genome);
                     ShellExecutor.execute(jobTitle, commands);
                     //if running calculating genome size, use new value and replace it
@@ -328,7 +328,7 @@ public class Analysis {
 //                }).start();
 //                return SwCmd.emptyCmd(function);
 //            case FLAGSTAT:
-//                return SwCmd.flagStat(exp);
+//                return SwCmd.bamIndexStat(exp);
 //            case STATISTIC:
 //                String outDir = ConfigInitializer.getPath(Out.STATISTICS);
 //                for (StatType type : StatType.values()) {

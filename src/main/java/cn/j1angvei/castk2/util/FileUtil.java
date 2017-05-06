@@ -298,6 +298,10 @@ public class FileUtil {
         return new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date());
     }
 
+    public static String getShortDate() {
+        return new SimpleDateFormat("yyMMdd").format(new Date());
+    }
+
     public enum Unit {
         BYTES, KB, MB, GB
     }

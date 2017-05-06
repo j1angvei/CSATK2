@@ -94,7 +94,7 @@ public class CSATK {
 
     private static void usage() {
         System.out.printf("Program: CSATK(ChIP-Seq Analysis Toolkit)\n" +
-                        "Version: 2.0-170504 by j1angvei\n" +
+                        "Version: 2.0-%s by j1angvei\n" +
                         "Project: https://github.com/j1angvei/CSATK2\n" +
                         "\n" +
                         "Tasks:\nCMD:\tjava -jar CSATK.jar <task>\n" +
@@ -105,6 +105,7 @@ public class CSATK {
                         "\n" +
                         "Standalone function:\nCMD:\tjava -jar CSATK.jar -s <function keyword> [arg1] [arg2] ...\n" +
                         "\t1) GO & Pathway analysis:\n\t%s, [species code] [gene list] [output]\n"
+                , FileUtil.getShortDate()
                 ,//solely function
                 Function.GO_PATHWAY.getKeyword()
         );
