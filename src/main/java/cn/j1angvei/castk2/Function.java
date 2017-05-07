@@ -64,6 +64,7 @@ public enum Function {
                     .append(",");
         }
         String keywords = builder.toString();
+        System.out.println("pipeline " + keywords);
         return keywords.substring(0, keywords.length() - 1);
     }
 

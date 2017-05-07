@@ -452,7 +452,7 @@ public class SwCmd {
         boolean hasControl = hasControl(experiment);
         List<String> commands = new ArrayList<>();
         commands.add(OsCmd.addPythonPath(CONF.getSwDestFolder(Software.DEEPTOOLS)));
-        String exePrefix = CONF.getSwExecutable(Software.DEEPTOOLS);
+        String exePrefix =getTmpDeeptools();
         String outPrefix = ConfigInitializer.getPath(Out.DEEPTOOLS) + experiment.getCode();
         //convert bam to bigwig using bamCompare and bamCoverage
         String exeBamCoverage = exePrefix + Constant.EXE_DT_BAMCOVERAGE;
@@ -513,10 +513,10 @@ public class SwCmd {
     public static String[] chipQuality() {
         List<String> commands = new ArrayList<>();
         commands.add(OsCmd.addPythonPath(CONF.getSwDestFolder(Software.DEEPTOOLS)));
-        String exePrefix = CONF.getSwExecutable(Software.DEEPTOOLS);
+        String exePrefix = getTmpDeeptools();
         String dirPrefix = ConfigInitializer.getPath(Out.DEEPTOOLS);
 
-        String sortedBamStar = ConfigInitializer.getPath(Out.BAM_SORTED) + "*";
+        String sortedBamStar = ConfigInitializer.getPath(Out.BAM_SORTED) + "*" + Constant.SFX_SORTED_BAM;
         String exeFingerprint = exePrefix + Constant.EXE_DT_PLOT_FINGERPRINT;
         String outPng = dirPrefix + Constant.PNG_DT_FINGER_PRINT;
         String title = "\"Fingerprints of all experiments\"";
@@ -526,11 +526,16 @@ public class SwCmd {
         return FileUtil.listToArray(commands);
     }
 
+    private static String getTmpDeeptools() {
+        return "";
+    }
+
     public static String[] correlation() {
         List<String> commands = new ArrayList<>();
         commands.add(OsCmd.addPythonPath(CONF.getSwDestFolder(Software.DEEPTOOLS)));
         //multi bigwig summary
-        String exePrefix = CONF.getSwExecutable(Software.DEEPTOOLS);
+//        String exePrefix = CONF.getSwExecutable(Software.DEEPTOOLS);
+        String exePrefix = getTmpDeeptools();
         String dirPrefix = ConfigInitializer.getPath(Out.DEEPTOOLS);
 
         String exeMultiBigwigSummary = exePrefix + Constant.EXE_DT_MULTI_BIGWIG_SUMMARY;

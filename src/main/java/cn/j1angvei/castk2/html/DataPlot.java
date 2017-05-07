@@ -164,7 +164,7 @@ public class DataPlot {
             PiePlot plot = (PiePlot) chart.getPlot();
             plot.setLabelGenerator(new StandardPieSectionLabelGenerator("{0}={2}\n{1}"));
             File file = new File(statDir + "peak_anno_pie_chart_" + code + ".png");
-            int width = 640, height = 480;
+            int width = 480, height = 360;
             try {
                 ChartUtilities.saveChartAsPNG(file, chart, width, height);
             } catch (IOException e) {
@@ -236,10 +236,6 @@ public class DataPlot {
         return base64;
     }
 
-    public String[] pathwayBarChart(String[][] table) {
-        return null;
-    }
-
     private int[] getWidthAndHeight(int category) {
         int width = 80 * category;
         int height = 60 * category;
@@ -247,6 +243,6 @@ public class DataPlot {
     }
 
     private void setBackground(JFreeChart chart) {
-        chart.getPlot().setBackgroundPaint(new Color(238, 238, 238));
+//        chart.getPlot().setBackgroundPaint(new Color(238, 238, 238));
     }
 }
