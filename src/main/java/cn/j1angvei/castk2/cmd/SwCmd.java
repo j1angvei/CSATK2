@@ -397,14 +397,16 @@ public class SwCmd {
         //build bam index
         commands.add(String.format("%s index -b %s", exeSamtools, sortedBam));
         commands.add(String.format("%s flagstat %s > %s", exeSamtools, sortedBam, sortedStat));
+
         //rmdup bam file
         String rmdupBamPrefix = ConfigInitializer.getPath(Out.BAM_RMDUP) + experiment.getCode();
         String rmdupBam = rmdupBamPrefix + Constant.SFX_RMDUP_BAM;
         String rmdupStat = rmdupBamPrefix + Constant.FLAGSTAT_SFX;
         commands.add(String.format("%s index -b %s", exeSamtools, rmdupBam));
         commands.add(String.format("%s flagstat %s > %s", exeSamtools, rmdupBam, rmdupStat));
+
         //q>30 bam file
-        String uniqueBamPrefix = ConfigInitializer.getPath(Out.BAM_RMDUP) + experiment.getCode();
+        String uniqueBamPrefix = ConfigInitializer.getPath(Out.BAM_UNIQUE) + experiment.getCode();
         String uniqueBam = uniqueBamPrefix + Constant.SFX_UNIQUE_BAM;
         String uniqueStat = uniqueBamPrefix + Constant.FLAGSTAT_SFX;
         commands.add(String.format("%s index -b %s", exeSamtools, uniqueBam));
