@@ -387,24 +387,26 @@ public class SwCmd {
     }
 
     public static String[] bamIndexStat(Experiment experiment) {
-        String bamPrefix = ConfigInitializer.getPath(Out.BAM_SORTED) + experiment.getCode();
         //for sorted bam, rmdup bam, q>30 bam
         List<String> commands = new ArrayList<>();
         String exeSamtools = CONF.getSwExecutable(Software.SAMTOOLS);
         //sorted bam file
-        String sortedBam = bamPrefix + Constant.SFX_SORTED_BAM;
-        String sortedStat = bamPrefix + Constant.FLAGSTAT_SFX;
+        String sortBamPrefix = ConfigInitializer.getPath(Out.BAM_SORTED) + experiment.getCode();
+        String sortedBam = sortBamPrefix + Constant.SFX_SORTED_BAM;
+        String sortedStat = sortBamPrefix + Constant.FLAGSTAT_SFX;
         //build bam index
         commands.add(String.format("%s index -b %s", exeSamtools, sortedBam));
         commands.add(String.format("%s flagstat %s > %s", exeSamtools, sortedBam, sortedStat));
         //rmdup bam file
-        String rmdupBam = bamPrefix + Constant.SFX_RMDUP_BAM;
-        String rmdupStat = bamPrefix + Constant.FLAGSTAT_SFX;
+        String rmdupBamPrefix = ConfigInitializer.getPath(Out.BAM_RMDUP) + experiment.getCode();
+        String rmdupBam = rmdupBamPrefix + Constant.SFX_RMDUP_BAM;
+        String rmdupStat = rmdupBamPrefix + Constant.FLAGSTAT_SFX;
         commands.add(String.format("%s index -b %s", exeSamtools, rmdupBam));
         commands.add(String.format("%s flagstat %s > %s", exeSamtools, rmdupBam, rmdupStat));
         //q>30 bam file
-        String uniqueBam = bamPrefix + Constant.SFX_UNIQUE_BAM;
-        String uniqueStat = bamPrefix + Constant.FLAGSTAT_SFX;
+        String uniqueBamPrefix = ConfigInitializer.getPath(Out.BAM_RMDUP) + experiment.getCode();
+        String uniqueBam = uniqueBamPrefix + Constant.SFX_UNIQUE_BAM;
+        String uniqueStat = uniqueBamPrefix + Constant.FLAGSTAT_SFX;
         commands.add(String.format("%s index -b %s", exeSamtools, uniqueBam));
         commands.add(String.format("%s flagstat %s > %s", exeSamtools, uniqueBam, uniqueStat));
         return FileUtil.listToArray(commands);
@@ -451,8 +453,8 @@ public class SwCmd {
     public static String[] tssProfile(Experiment experiment) {
         boolean hasControl = hasControl(experiment);
         List<String> commands = new ArrayList<>();
-        commands.add(OsCmd.addPythonPath(CONF.getSwDestFolder(Software.DEEPTOOLS)));
-        String exePrefix =getTmpDeeptools();
+//        commands.add(OsCmd.addPythonPath(CONF.getSwDestFolder(Software.DEEPTOOLS)));
+        String exePrefix = getTmpDeeptools();
         String outPrefix = ConfigInitializer.getPath(Out.DEEPTOOLS) + experiment.getCode();
         //convert bam to bigwig using bamCompare and bamCoverage
         String exeBamCoverage = exePrefix + Constant.EXE_DT_BAMCOVERAGE;
@@ -512,7 +514,7 @@ public class SwCmd {
      */
     public static String[] chipQuality() {
         List<String> commands = new ArrayList<>();
-        commands.add(OsCmd.addPythonPath(CONF.getSwDestFolder(Software.DEEPTOOLS)));
+//        commands.add(OsCmd.addPythonPath(CONF.getSwDestFolder(Software.DEEPTOOLS)));
         String exePrefix = getTmpDeeptools();
         String dirPrefix = ConfigInitializer.getPath(Out.DEEPTOOLS);
 
@@ -532,7 +534,7 @@ public class SwCmd {
 
     public static String[] correlation() {
         List<String> commands = new ArrayList<>();
-        commands.add(OsCmd.addPythonPath(CONF.getSwDestFolder(Software.DEEPTOOLS)));
+//        commands.add(OsCmd.addPythonPath(CONF.getSwDestFolder(Software.DEEPTOOLS)));
         //multi bigwig summary
 //        String exePrefix = CONF.getSwExecutable(Software.DEEPTOOLS);
         String exePrefix = getTmpDeeptools();
