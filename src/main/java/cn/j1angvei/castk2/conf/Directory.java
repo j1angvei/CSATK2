@@ -26,7 +26,11 @@ public class Directory {
         MOTIF("18_motif"),
         STATISTICS("19_statistic"),
         HTML("20_html"),
-        DEEPTOOLS("21.deeptools");
+        CHIP_QUALITY("21_chip_quality"),
+        TSS_PROFILE("22_tss_profile"),
+        CORRELATION("23_correlation"),
+        BIGWIG_DT("24_bigwig_dt"),
+        DEEPTOOLS("21_deeptools");
 
         private String dirName;
 

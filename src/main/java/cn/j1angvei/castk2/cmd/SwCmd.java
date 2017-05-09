@@ -61,8 +61,10 @@ public class SwCmd {
                 return SwCmd.bamIndexStat(exp);
             case BIGWIG:
                 return SwCmd.bigwig(exp);
-            case DEEPTOOLS:
+            case PROFILE:
                 return SwCmd.tssProfile(exp);
+            case BW_DT:
+                return SwCmd.bigwigDt(exp);
             default:
                 System.err.println("Wrong function  keyword in experiment analysis, return empty command");
                 return SwCmd.emptyCmd(function);
@@ -448,16 +450,13 @@ public class SwCmd {
         return FileUtil.listToArray(commands);
     }
 
-    private static boolean hasControl(Experiment experiment) {
-        return StrUtil.isValid(experiment.getControl());
-    }
-
-    public static String[] tssProfile(Experiment experiment) {
+    public static String[] bigwigDt(Experiment experiment) {
         boolean hasControl = hasControl(experiment);
         List<String> commands = new ArrayList<>();
 //        commands.add(OsCmd.addPythonPath(CONF.getSwDestFolder(Software.DEEPTOOLS)));
         String exePrefix = getTmpDeeptools();
-        String outPrefix = ConfigInitializer.getPath(Out.DEEPTOOLS) + experiment.getCode();
+        String outPrefix = ConfigInitializer.getPath(Out.BIGWIG_DT) + experiment.getCode();
+
         //convert bam to bigwig using bamCompare and bamCoverage
         String exeBamCoverage = exePrefix + Constant.EXE_DT_BAMCOVERAGE;
         String exeBamCompare = exePrefix + Constant.EXE_DT_BAMCOMPARE;
@@ -474,6 +473,19 @@ public class SwCmd {
             //bamCoverage usage: bamCoverage -b reads.bam -o coverage.bw
             commands.add(String.format("%s -b %s -o %s -of bigwig", exeBamCoverage, treatBam, outBw));
         }
+        return FileUtil.listToArray(commands);
+    }
+
+    private static boolean hasControl(Experiment experiment) {
+        return StrUtil.isValid(experiment.getControl());
+    }
+
+    public static String[] tssProfile(Experiment experiment) {
+        List<String> commands = new ArrayList<>();
+//        commands.add(OsCmd.addPythonPath(CONF.getSwDestFolder(Software.DEEPTOOLS)));
+        String exePrefix = getTmpDeeptools();
+        String outPrefix = ConfigInitializer.getPath(Out.TSS_PROFILE) + experiment.getCode();
+        String outBw = outPrefix + Constant.SFX_DT_BIG_WIG;
 
         //compute matrix, scale-regions or reference-point mode, we choose first one
         //usage:  computeMatrix scale-regions -S <bigwig file> -R <bed file> -b 1000
@@ -483,7 +495,7 @@ public class SwCmd {
         String inTss = ConfigInitializer.getPath(Sub.GENOME) + CONF.getGenome(experiment.getGenomeCode()).getAnnotation() + Constant.SFX_GENOME_TSS;
         String outTssMatrix = outPrefix + Constant.SFX_DT_TSS_MATRIX;
 
-        commands.add(String.format("%s scale-regions -S %s -R %s -b 3000 -a 3000 -m 4000 -out %s",
+        commands.add(String.format("%s scale-regions -S %s -R %s -b 1000 -a 1000 -out %s",
                 exeComputeMatrix, outBw, inTss, outTssMatrix));
 
         //plot profile usage: plotProfile -m matrix -out outfile
@@ -492,18 +504,15 @@ public class SwCmd {
         commands.add(String.format("%s -m %s -out %s --samplesLabel %s",
                 exePlotProfile, outTssMatrix, outPngProfile, experiment.getCode()));
 
-//        //plot heatmap
-//        String exePlotHeatmap = exePrefix + Constant.EXE_DT_PLOTHEATMAP;
-//        String outPngHeatmap = outPrefix + Constant.PNG_DT_HEATMAP;
-//        commands.add(String.format("%s -m %s -out %s ",
-//                exePlotHeatmap, outTssMatrix, outPngHeatmap));
+        //plot heatmap
+        String exePlotHeatmap = exePrefix + Constant.EXE_DT_PLOTHEATMAP;
+        String outPngHeatmap = outPrefix + Constant.PNG_DT_HEATMAP;
+        commands.add(String.format("%s -m %s -out %s ",
+                exePlotHeatmap, outTssMatrix, outPngHeatmap));
 
         return FileUtil.listToArray(commands);
     }
 
-    public static String[] bigwigDt(Experiment experiment) {
-        return null;
-    }
 
     public static String[] computeMatrix(Experiment experiment) {
         return null;
@@ -518,14 +527,22 @@ public class SwCmd {
         List<String> commands = new ArrayList<>();
 //        commands.add(OsCmd.addPythonPath(CONF.getSwDestFolder(Software.DEEPTOOLS)));
         String exePrefix = getTmpDeeptools();
-        String dirPrefix = ConfigInitializer.getPath(Out.DEEPTOOLS);
+        String inPrefix = ConfigInitializer.getPath(Out.BAM_SORTED);
+        String outPrefix = ConfigInitializer.getPath(Out.CHIP_QUALITY);
 
-        String sortedBamStar = ConfigInitializer.getPath(Out.BAM_SORTED) + "*" + Constant.SFX_SORTED_BAM;
+        StringBuilder bamList = new StringBuilder();
+        StringBuilder labelList = new StringBuilder();
+        for (Experiment e : CONF.getExperiments()) {
+            bamList.append(inPrefix).append(e.getCode()).append(Constant.SFX_SORTED_BAM).append(" ");
+            labelList.append(e.getCode()).append(" ");
+        }
+
         String exeFingerprint = exePrefix + Constant.EXE_DT_PLOT_FINGERPRINT;
-        String outPng = dirPrefix + Constant.PNG_DT_FINGER_PRINT;
+        String outPng = outPrefix + Constant.PNG_DT_FINGER_PRINT;
         String title = "\"Fingerprints of all experiments\"";
-        commands.add(String.format("%s -b %s -T %s -plot %s",
-                exeFingerprint, sortedBamStar, title, outPng));
+        //usage: An example usage is: plotFingerprint -b treatment.bam control.bam -plot fingerprint.png
+        commands.add(String.format("%s -b %s -T %s -l %s -plot %s",
+                exeFingerprint, bamList.toString(), title, labelList.toString(), outPng));
 
         return FileUtil.listToArray(commands);
     }
@@ -540,23 +557,26 @@ public class SwCmd {
         //multi bigwig summary
 //        String exePrefix = CONF.getSwExecutable(Software.DEEPTOOLS);
         String exePrefix = getTmpDeeptools();
-        String dirPrefix = ConfigInitializer.getPath(Out.DEEPTOOLS);
+        String inPrefix = ConfigInitializer.getPath(Out.BIGWIG_DT);
+        String dirPrefix = ConfigInitializer.getPath(Out.CORRELATION);
 
         String exeMultiBigwigSummary = exePrefix + Constant.EXE_DT_MULTI_BIGWIG_SUMMARY;
         StringBuilder bigwigList = new StringBuilder();
+        StringBuilder labelList = new StringBuilder();
         for (Experiment experiment : CONF.getExperiments()) {
-            bigwigList.append(dirPrefix).append(experiment.getCode()).append(Constant.SFX_DT_BIG_WIG).append(" ");
+            bigwigList.append(inPrefix).append(experiment.getCode()).append(Constant.SFX_DT_BIG_WIG).append(" ");
+            labelList.append(experiment.getCode()).append(" ");
         }
         String outNpz = dirPrefix + Constant.SFX_DT_NPZ;
-        commands.add(String.format("%s -b %s -out %s",
+        commands.add(String.format("%s bins -b %s -out %s",
                 exeMultiBigwigSummary, bigwigList.toString(), outNpz));
 
         //correlation
         String exeCorrelation = exePrefix + Constant.EXE_DT_PLOT_CORRELATION;
         String outCorrelation = dirPrefix + Constant.SFX_DT_CORRELATION;
         String plotTitle = " \"Spearman Correlation of Read Counts\"";
-        commands.add(String.format("%s bins -in %s -c spearman --skipZeros  --plotTitle %s, -p heatmap --colorMap RdYlBu -o %s",
-                exeCorrelation, outNpz, plotTitle, outCorrelation));
+        commands.add(String.format("%s -in %s -c spearman --skipZeros  --plotTitle %s -p heatmap --colorMap RdYlBu -o %s -l %s -plotNumbers",
+                exeCorrelation, outNpz, plotTitle, outCorrelation, labelList));
         return FileUtil.listToArray(commands);
     }
 

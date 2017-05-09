@@ -64,7 +64,8 @@ public class Analysis {
             case PEAK_ANNOTATION:
             case FLAGSTAT:
             case BIGWIG:
-            case DEEPTOOLS:
+            case BW_DT:
+            case PROFILE:
                 iterateExperiment(function, true);
                 break;
 
@@ -80,8 +81,8 @@ public class Analysis {
                 break;
 
             //function should start only once, without iterate genome or experiment
-            case CORRELATION:
             case CHIP_QUALITY:
+            case CORRELATION:
                 runShellFunction(function);
                 break;
             case HTML:

@@ -10,7 +10,7 @@ public enum StatType {
     PEAK_CALL("4_peak_calling.stat", "Sample\tPeak type\tAverage Length\tPeak Count"),
     PEAK_ANNO("5_peak_annotation.stat", PeakAnnoColumn.Type.asHeader()),
     GENE_ONTOLOGY("6_go.stat", "Sample\tGO type\tDescription\tCount\tPercent"),
-    PATHWAY("7_pathway.stat", "Sample\tDescription\tCount\tPercent"),
+//    PATHWAY("7_pathway.stat", "Sample\tDescription\tCount\tPercent"),
     MOTIF("8_motif.stat", "Sample\tMotif 1\tMotif 2\tMotif 3\tMotif 4\tMotif 5");
 
     private String resFileName;
