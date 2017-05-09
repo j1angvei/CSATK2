@@ -85,8 +85,6 @@ public class Statistics {
                     if (StrUtil.isInvalid(line)) {
                         continue;
                     }
-
-
                     //change the readFront as GoTypeStr is Pathway
                     if (line.startsWith("#")) {
                         goDescription = line.substring(1, line.length());
@@ -141,6 +139,10 @@ public class Statistics {
                         + File.separator + Constant.FOLDER_KNOWN_MOTIF + File.separator + "motif";
                 MotifColumn motifColumn = new MotifColumn(exp.getCode(), motifPngPfx, 5);
                 return motifColumn.toString();
+            case CHIP_QUALITY:
+
+            case CORRELATION:
+            case TSS_PROFILE:
             default:
                 return type.name() + "\tunder construction";
         }

@@ -30,7 +30,9 @@ public class Directory {
         TSS_PROFILE("22_tss_profile"),
         CORRELATION("23_correlation"),
         BIGWIG_DT("24_bigwig_dt"),
-        DEEPTOOLS("21_deeptools");
+        DEEPTOOLS("21_deeptools"),
+        MATRIX("25_matrix"),
+        PEAK_HEATMAP("26_peak_heatmap");
 
         private String dirName;
 
