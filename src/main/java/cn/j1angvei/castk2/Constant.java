@@ -47,6 +47,7 @@ public class Constant {
      */
     public static final String SFX_DT_BIG_WIG = ".deeptools.bw";
     public static final String SFX_DT_TSS_MATRIX = ".tss.matrix";
+    public static final String SFX_DT_PEAK_MATRIX = ".peak.matrix";
     public static final String SFX_DT_NPZ = "dt.multibigwigsummary.npz";
     public static final String SFX_DT_CORRELATION = "dt.correlation.png";
 

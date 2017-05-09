@@ -65,8 +65,8 @@ public class Analysis {
             case FLAGSTAT:
             case BIGWIG:
             case BW_DT:
-            case MATRIX:
-            case PROFILE:
+            case PEAK_HEATMAP:
+            case TSS_PROFILE:
                 iterateExperiment(function, true);
                 break;
 
