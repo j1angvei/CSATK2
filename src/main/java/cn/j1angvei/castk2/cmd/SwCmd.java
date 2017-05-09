@@ -521,7 +521,7 @@ public class SwCmd {
                 exeComputeMatrix, inBw, inPeak, matrix));
         String outHeatmap = ConfigInitializer.getPath(Out.PEAK_HEATMAP) + experiment.getCode() + Constant.PNG_DT_HEATMAP;
 
-        commands.add(String.format("%s -m %s -out %s --samplesLabel %s",
+        commands.add(String.format("%s -m %s -out %s --samplesLabel %s --startLabel Start --endLabel End --regionsLabel Peaks",
                 exePlotHeatmap, matrix, outHeatmap, experiment.getCode()));
         return FileUtil.listToArray(commands);
     }
