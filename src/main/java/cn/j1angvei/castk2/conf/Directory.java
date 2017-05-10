@@ -31,7 +31,8 @@ public class Directory {
         CORRELATION("23_correlation"),
         BIGWIG_DT("24_bigwig_dt"),
         MATRIX("25_matrix"),
-        PEAK_HEATMAP("26_peak_heatmap");
+        PEAK_HEATMAP("26_peak_heatmap"),
+        PEAK_OVER_CHROMOSOME("27_peak_over_chromosome");
 
         private String dirName;
 

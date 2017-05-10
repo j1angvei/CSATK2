@@ -19,6 +19,7 @@
         a {
             text-decoration: none;
         }
+
         /**
           right bar style
             */
@@ -60,6 +61,7 @@
             font-size: 2em;
             line-height: 300%;
         }
+
         /**
         header style
          */
@@ -94,6 +96,7 @@
         .header #header_filename {
             font-size: 2em;
         }
+
         /**
         .mian img style
         */
@@ -107,6 +110,7 @@
             max-width: 95%;
             margin: auto;
         }
+
         /**
         module h2 style
         */
@@ -116,6 +120,7 @@
             text-align: center;
             color: #1cb495;
         }
+
         /**
         table style
          */
@@ -126,6 +131,7 @@
             border-top: 2px solid #1cb495;
             border-bottom: 2px solid #1cb495;
         }
+
         /*表头在这个DIV内*/
 
         .main .module .title {
@@ -142,6 +148,7 @@
         .main .module .content div {
             width: 100%;
         }
+
         /*表格样式*/
 
         .main .module table {
@@ -153,7 +160,6 @@
             word-break: keep-all;
             word-wrap: break-word;
         }
-
 
         .main .module table td img {
             width: 100%;
@@ -191,295 +197,337 @@
 </head>
 
 <body>
-    <div class="header" id="content">
-        <div id="header_title">CSATK Report</div>
-        <div th:text="${date}" id="header_filename">星期五 24 三月 2017</div>
-        <div>Produced by
+<div class="header" id="content">
+    <div id="header_title">CSATK Report</div>
+    <div th:text="${date}" id="header_filename">星期五 24 三月 2017</div>
+    <div>Produced by
         <a href="https://github.com/j1angvei/CSATK2">CSATK</a> (version 2.0-170422)
-        </div>
     </div>
-    <div class="summary">
-        <h2><a href="#content">Content</a></h2>
-        <ol type="1">
-            <li><a href="#raw_data">Raw Data</a></li>
-            <li><a href="#chip_quality">ChIP Quality</a></li>
-            <li><a href="#quality_control">Quality Control</a></li>
-            <li><a href="#reads_alignment">Reads Alignment</a></li>
-            <li><a href="#correlation_analysis">Correlation</a></li>
-            <li><a href="#tss_plot">TSS Plot</a></li>
-            <li><a href="#peak_calling">Peak Calling</a></li>
-            <li><a href="#peak_annotation">Peak Annotation</a></li>
-            <li><a href="#go_analysis">GO Analysis</a></li>
-            <!--<li><a href="#pathway_analysis">Pathway Analysis</a></li>-->
-            <li><a href="#motif_analysis">Motif Analysis</a></li>
-            <!--<li><a href="#M8">TSS Plot</a></li>-->
-        </ol>
+</div>
+<div class="summary">
+    <h2><a href="#content">Content</a></h2>
+    <ol type="1">
+        <li><a href="#raw_data">Raw Data</a></li>
+        <li><a href="#quality_control">Quality Control</a></li>
+        <li><a href="#reads_alignment">Reads Alignment</a></li>
+        <li><a href="#chip_quality">ChIP Quality</a></li>
+        <li><a href="#correlation_analysis">Correlation</a></li>
+        <li><a href="#tss_plot">TSS Plot</a></li>
+        <li><a href="#peak_calling">Peak Calling</a></li>
+        <li><a href="#peak_heatmap">Peak Heatmap</a></li>
+        <li><a href="#peak_over_chr">Peak over Chromosome</a></li>
+        <li><a href="#peak_annotation">Peak Annotation</a></li>
+        <li><a href="#go_analysis">GO Analysis</a></li>
+        <!--<li><a href="#pathway_analysis">Pathway Analysis</a></li>-->
+        <li><a href="#motif_analysis">Motif Analysis</a></li>
+        <!--<li><a href="#M8">TSS Plot</a></li>-->
+    </ol>
+</div>
+<div class="main">
+    <div class="module">
+        <h2 id="raw_data">Raw Data</h2>
+        <div class="all">
+            <div class="title">
+                <table>
+                    <tr>
+                        <th th:each="header : ${raw_header}" th:text="${header}"></th>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="content">
+                <div>
+                    <table>
+                        <tbody>
+                        <tr th:each="data : ${raw_data}">
+                            <td th:each="item : ${data}" th:text="${item}">Cell</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
-    <div class="main">
-        <div class="module">
-            <h2 id="raw_data">Raw Data</h2>
-            <div class="all">
-                <div class="title">
-                    <table>
-                        <tr>
-                            <th th:each="header : ${raw_header}" th:text="${header}"></th>
-                        </tr>
-                    </table>
-                </div>
 
-                <div class="content">
-                    <div>
-                        <table>
-                            <tbody>
-                                <tr th:each="data : ${raw_data}">
-                                    <td th:each="item : ${data}" th:text="${item}">Cell</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+
+    <div class="module">
+        <h2 id="quality_control">Quality Control</h2>
+
+        <div class="all">
+            <div class="title">
+                <table>
+                    <tr>
+                        <th th:each="header : ${qc_header}" th:text="${header}"></th>
+                    </tr>
+                </table>
             </div>
 
+            <div class="content">
+                <div>
+                    <table>
+                        <tbody>
+                        <tr th:each="data : ${qc_data}">
+                            <td th:each="item : ${data}" th:text="${item}">Cell</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
+
+        <p><img class="indented" src="#" th:src="'data:image/png;base64,'+${qc_chart}"/></p>
+        <!--<p><img  src="" alt="Per base quality graph" width="800" height="600"/></p>-->
+    </div>
+    <div class="module">
+        <h2 id="reads_alignment">Reads Alignment</h2>
+        <div class="all">
+            <div class="title">
+                <table>
+                    <tr>
+                        <th th:each="header : ${align_header}" th:text="${header}"></th>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="content">
+                <div>
+                    <table>
+                        <tbody>
+                        <tr th:each="data : ${align_data}">
+                            <td th:each="item : ${data}" th:text="${item}">Cell</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <p><img class="indented" src="#" th:src="'data:image/png;base64,'+${alignment_chart}"/></p>
+        <!--<p><img class="indented" src="" alt="Per base quality graph" width="800" height="600"/></p>-->
+    </div>
+
+    <div class="module">
+        <h2 id="chip_quality">ChIP Quality</h2>
+        <p><img class="indented" src="#" th:src="'data:image/png;base64,'+${fingerprint_data[0][1]}"/></p>
+
+    </div>
+    <div class="module">
+        <h2 id="correlation_analysis">Correlation Analysis</h2>
+
+        <p><img class="indented" src="#" th:src="'data:image/png;base64,'+${correlation_data[0][1]}"/></p>
+        <!--<p><img  src="" alt="Per base quality graph" width="800" height="600"/></p>-->
+
+    </div>
+
+    <div class="module">
+        <h2 id="tss_plot">TSS Plot</h2>
+        <p>Still under construction...</p>
+        <!--<p><img  src="" alt="Per base quality graph" width="800" height="600"/></p>-->
+
+    </div>
+    <div class="module">
+        <h2 id="peak_calling">Peak Calling</h2>
+
+        <div class="all">
+            <div class="title">
+                <table>
+                    <tr>
+                        <th th:each="header : ${call_header}" th:text="${header}"></th>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="content">
+                <div>
+                    <table>
+
+                        <tbody>
+                        <tr th:each="data : ${call_data}">
+                            <td th:each="item : ${data}" th:text="${item}">Cell</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div>
+            <table>
+                <tbody>
+                <tr>
+                    <td><img class="indented" src="#" th:src="'data:image/png;base64,'+${peak_call_chart[0]}"/></td>
+                    <td><img class="indented" src="#" th:src="'data:image/png;base64,'+${peak_call_chart[1]}"/></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--<p><img class="indented" src="" alt="Per Sequence quality graph" width="800" height="600"/></p>-->
+
         <div class="module">
-            <h2 id="chip_quality">ChIP Quality</h2>
-            <p>Still under construction...</p>
+            <h2 id="peak_heatmap">Peak Heatmap</h2>
+            <!--<p>-->
+            <!--<img th:each="data : ${peak_heatmap_data}" class="indented" src="#" th:src="'data:image/png;base64,'+${data[1]}"/>-->
+            <!--</p>-->
+            <table>
+                <thead>
+                <tr>
+                    <th th:each="header : ${peak_heatmap_data}" th:text="${header[0]}"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:each="data: ${peak_heatmap_data}">
+                        <img src="#" th:src="'data:image/png;base64,'+${data[1]}"/>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+
             <!--<p><img  src="" alt="Per base quality graph" width="800" height="600"/></p>-->
 
         </div>
 
         <div class="module">
-            <h2 id="quality_control">Quality Control</h2>
-
-            <div class="all">
-                <div class="title">
-                    <table>
-                        <tr>
-                            <th th:each="header : ${qc_header}" th:text="${header}"></th>
-                        </tr>
-                    </table>
-                </div>
-
-                <div class="content">
-                    <div>
-                        <table>
-                            <tbody>
-                                <tr th:each="data : ${qc_data}">
-                                    <td th:each="item : ${data}" th:text="${item}">Cell</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-
-            <p><img class="indented" src="#" th:src="'data:image/png;base64,'+${qc_chart}" /></p>
-            <!--<p><img  src="" alt="Per base quality graph" width="800" height="600"/></p>-->
-        </div>
-        <div class="module">
-            <h2 id="reads_alignment">Reads Alignment</h2>
-            <div class="all">
-                <div class="title">
-                    <table>
-                        <tr>
-                            <th th:each="header : ${align_header}" th:text="${header}"></th>
-                        </tr>
-                    </table>
-                </div>
-
-                <div class="content">
-                    <div>
-                        <table>
-                            <tbody>
-                                <tr th:each="data : ${align_data}">
-                                    <td th:each="item : ${data}" th:text="${item}">Cell</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-
-            <p><img class="indented" src="#" th:src="'data:image/png;base64,'+${alignment_chart}" /></p>
-            <!--<p><img class="indented" src="" alt="Per base quality graph" width="800" height="600"/></p>-->
-        </div>
-
-        <div class="module">
-            <h2 id="correlation_analysis">Correlation Analysis</h2>
-            <p>Still under construction...</p>
-            <!--<p><img  src="" alt="Per base quality graph" width="800" height="600"/></p>-->
-
-        </div>
-
-        <div class="module">
-            <h2 id="tss_plot">TSS Plot</h2>
-            <p>Still under construction...</p>
-            <!--<p><img  src="" alt="Per base quality graph" width="800" height="600"/></p>-->
-
-        </div>
-        <div class="module">
-            <h2 id="peak_calling">Peak Calling</h2>
-
-            <div class="all">
-                <div class="title">
-                    <table>
-                        <tr>
-                            <th th:each="header : ${call_header}" th:text="${header}"></th>
-                        </tr>
-                    </table>
-                </div>
-
-                <div class="content">
-                    <div>
-                        <table>
-
-                            <tbody>
-                                <tr th:each="data : ${call_data}">
-                                    <td th:each="item : ${data}" th:text="${item}">Cell</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-
-            <p><img class="indented" src="#" th:src="'data:image/png;base64,'+${peak_call_chart[0]}" /></p>
-            <p><img class="indented" src="#" th:src="'data:image/png;base64,'+${peak_call_chart[1]}" /></p>
-            <!--<p><img class="indented" src="" alt="Per Sequence quality graph" width="800" height="600"/></p>-->
-        </div>
-        <div class="module">
-            <h2 id="peak_annotation">Peak Annotation</h2>
-
-            <div class="all">
-                <div class="title">
-                    <table>
-                        <tr>
-                            <th th:each="header : ${anno_header}" th:text="${header}"></th>
-                        </tr>
-                    </table>
-                </div>
-
-                <div class="content">
-                    <div>
-                        <table>
-                            <tbody>
-                                <tr th:each="data : ${anno_data}">
-                                    <td th:each="item : ${data}" th:text="${item}">Cell</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <p th:each="data : ${peak_anno_pie}">
-                <img class="indented" src="#" th:src="'data:image/png;base64,'+${data}" />
+            <h2 id="peak_over_chr">Peak over Chromosome</h2>
+            <p>
+                <img th:each="data : ${peak_over_chr_data}" class="indented" src="#" th:src="'data:image/png;base64,'+${data[1]}"/>
             </p>
-            <!--<p><img class="indented" src="" alt="Per base sequence content" width="800" height="600"/></p>-->
+            <!--<p><img  src="" alt="Per base quality graph" width="800" height="600"/></p>-->
+
         </div>
-        <div class="module">
-            <h2 id="go_analysis">GO Analysis</h2>
-            <div class="all">
-                <div class="title">
-                    <table>
-                        <tr>
-                            <th th:each="header : ${go_header}" th:text="${header}"></th>
-                        </tr>
-                    </table>
-                </div>
-
-                <div class="content">
-                    <div>
-                        <table>
-
-                            <tbody>
-                                <tr th:each="data : ${go_data}">
-                                    <td th:each="item : ${data}" th:text="${item}">Cell</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <p th:each="data : ${go_bar_chart}">
-                <img class="indented" src="#" th:src="'data:image/png;base64,'+${data}" />
-            </p>
-            <!--<p><img class="indented" src="" alt="Per sequence GC content graph" width="800" height="600"/></p>-->
-        </div>
-        <!--<div class="module">-->
-        <!--<h2 id="pathway_analysis">Pathway Analysis</h2>-->
-        <!--<table>-->
-        <!--<thead>-->
-        <!--<tr>-->
-        <!--<th th:each="header : ${pathway_header}" th:text="${header}"></th>-->
-        <!--</tr>-->
-        <!--</thead>-->
-        <!--<tbody>-->
-        <!--<tr th:each="data : ${pathway_data}">-->
-        <!--<td th:each="item : ${data}" th:text="${item}">Cell</td>-->
-        <!--</tr>-->
-        <!--</tbody>-->
-        <!--</table>-->
-        <!--&lt;!&ndash;<p><img class="indented" src="" alt="N content graph" width="800" height="600"/></p>&ndash;&gt;-->
-        <!--</div>-->
-        <div class="module">
-            <h2 id="motif_analysis">Motif Analysis</h2>
-            <div class="all">
-                <div class="title">
-                    <table>
-                        <tr>
-                            <th th:each="header : ${motif_header}" th:text="${header}"></th>
-                        </tr>
-                    </table>
-                </div>
-
-                <div class="content">
-                    <div>
-                        <table>
-
-                            <tbody>
-                                <tr th:each="data : ${motif_data}">
-                                    <td th:text="${data[0]}"></td>
-                                    <td><img src="#" th:src="'data:image/png;base64,'+${data[1]}" /></td>
-                                    <td><img src="#" th:src="'data:image/png;base64,'+${data[2]}" /></td>
-                                    <td><img src="#" th:src="'data:image/png;base64,'+${data[3]}" /></td>
-                                    <td><img src="#" th:src="'data:image/png;base64,'+${data[4]}" /></td>
-                                    <td><img src="#" th:src="'data:image/png;base64,'+${data[5]}" /></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!--<p><img class="indented" src="" alt="Sequence length distribution" width="800" height="600"/></p>-->
-        </div>
-        <!--<div class="module">-->
-        <!--<h2 id="M8">TSS Plot</h2>-->
-        <!--<p><img class="indented" src="" alt="Duplication level graph" width="800" height="600"/></p>-->
-        <!--</div>-->
     </div>
-    <footer>Produced by
-        <a href="https://github.com/j1angvei/CSATK2">CSATK</a> (version 2.0-170422)
-    </footer>
+    <div class="module">
+        <h2 id="peak_annotation">Peak Annotation</h2>
+
+        <div class="all">
+            <div class="title">
+                <table>
+                    <tr>
+                        <th th:each="header : ${anno_header}" th:text="${header}"></th>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="content">
+                <div>
+                    <table>
+                        <tbody>
+                        <tr th:each="data : ${anno_data}">
+                            <td th:each="item : ${data}" th:text="${item}">Cell</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <p th:each="data : ${peak_anno_pie}">
+            <img class="indented" src="#" th:src="'data:image/png;base64,'+${data}"/>
+        </p>
+        <!--<p><img class="indented" src="" alt="Per base sequence content" width="800" height="600"/></p>-->
+    </div>
+    <div class="module">
+        <h2 id="go_analysis">GO Analysis</h2>
+        <div class="all">
+            <div class="title">
+                <table>
+                    <tr>
+                        <th th:each="header : ${go_header}" th:text="${header}"></th>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="content">
+                <div>
+                    <table>
+
+                        <tbody>
+                        <tr th:each="data : ${go_data}">
+                            <td th:each="item : ${data}" th:text="${item}">Cell</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <p th:each="data : ${go_bar_chart}">
+            <img class="indented" src="#" th:src="'data:image/png;base64,'+${data}"/>
+        </p>
+        <!--<p><img class="indented" src="" alt="Per sequence GC content graph" width="800" height="600"/></p>-->
+    </div>
+    <!--<div class="module">-->
+    <!--<h2 id="pathway_analysis">Pathway Analysis</h2>-->
+    <!--<table>-->
+    <!--<thead>-->
+    <!--<tr>-->
+    <!--<th th:each="header : ${pathway_header}" th:text="${header}"></th>-->
+    <!--</tr>-->
+    <!--</thead>-->
+    <!--<tbody>-->
+    <!--<tr th:each="data : ${pathway_data}">-->
+    <!--<td th:each="item : ${data}" th:text="${item}">Cell</td>-->
+    <!--</tr>-->
+    <!--</tbody>-->
+    <!--</table>-->
+    <!--&lt;!&ndash;<p><img class="indented" src="" alt="N content graph" width="800" height="600"/></p>&ndash;&gt;-->
+    <!--</div>-->
+    <div class="module">
+        <h2 id="motif_analysis">Motif Analysis</h2>
+        <div class="all">
+            <div class="title">
+                <table>
+                    <tr>
+                        <th th:each="header : ${motif_header}" th:text="${header}"></th>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="content">
+                <div>
+                    <table>
+
+                        <tbody>
+                        <tr th:each="data : ${motif_data}">
+                            <td th:text="${data[0]}"></td>
+                            <td><img src="#" th:src="'data:image/png;base64,'+${data[1]}"/></td>
+                            <td><img src="#" th:src="'data:image/png;base64,'+${data[2]}"/></td>
+                            <td><img src="#" th:src="'data:image/png;base64,'+${data[3]}"/></td>
+                            <td><img src="#" th:src="'data:image/png;base64,'+${data[4]}"/></td>
+                            <td><img src="#" th:src="'data:image/png;base64,'+${data[5]}"/></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!--<p><img class="indented" src="" alt="Sequence length distribution" width="800" height="600"/></p>-->
+    </div>
+    <!--<div class="module">-->
+    <!--<h2 id="M8">TSS Plot</h2>-->
+    <!--<p><img class="indented" src="" alt="Duplication level graph" width="800" height="600"/></p>-->
+    <!--</div>-->
+</div>
+<footer>Produced by
+    <a href="https://github.com/j1angvei/CSATK2">CSATK</a> (version 2.0-170422)
+</footer>
 </body>
 <script>
 
     (function () {
-        window.onload=function () {
-            var titles=document.querySelectorAll(".title");
-            var contents=document.querySelectorAll(".content");
+        window.onload = function () {
+            var titles = document.querySelectorAll(".title");
+            var contents = document.querySelectorAll(".content");
 
-            for(var i=0,len=titles.length;i<len;i++){
-                var table=contents[i].querySelector("div").querySelector("table");
-                var table_title= titles[i].querySelector("table");
+            for (var i = 0, len = titles.length; i < len; i++) {
+                var table = contents[i].querySelector("div").querySelector("table");
+                var table_title = titles[i].querySelector("table");
 
-                table_title.style.width=table.clientWidth+"px";
+                table_title.style.width = table.clientWidth + "px";
             }
         };
 

@@ -114,6 +114,23 @@ public class HtmlGenerator {
             case MOTIF:
                 headerKey = "motif_header";
                 dataKey = "motif_data";
+                break;
+            case PEAK_OVER_CHROMOSOME:
+                dataKey = "peak_over_chr_data";
+                break;
+            case PEAK_HEATMAP:
+                dataKey = "peak_heatmap_data";
+                break;
+            case TSS_PROFILE:
+                dataKey = "tss_profile_data";
+                break;
+            case CORRELATION:
+                dataKey = "correlation_data";
+                break;
+            case CHIP_QUALITY:
+                headerKey = "plot_header";
+                dataKey = "fingerprint_data";
+                break;
             default:
                 break;
         }

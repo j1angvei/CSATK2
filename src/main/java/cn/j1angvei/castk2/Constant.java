@@ -49,11 +49,12 @@ public class Constant {
     public static final String SFX_DT_TSS_MATRIX = ".tss.matrix";
     public static final String SFX_DT_PEAK_MATRIX = ".peak.matrix";
     public static final String SFX_DT_NPZ = "dt.multibigwigsummary.npz";
-    public static final String SFX_DT_CORRELATION = "dt.correlation.png";
 
     //png suffix
-    public static final String PNG_DT_PROFILE = ".profile.png";
-    public static final String PNG_DT_HEATMAP = ".heatmap.png";
+    public static final String PNG_DT_CORRELATION = "dt.correlation.png";
+    public static final String PNG_DT_PROFILE = ".tss.profile.png";
+    public static final String PNG_DT_HEATMAP = ".peak.heatmap.png";
+    public static final String PNG_DT_PEAK_OVER_CHROMOSOME = ".peak.over.chromosome.png";
     public static final String PNG_DT_FINGER_PRINT = "dt.fingerprint.png";
     /**
      * genome relevant suffix

@@ -609,7 +609,7 @@ public class SwCmd {
 
         //correlation
         String exeCorrelation = exePrefix + Constant.EXE_DT_PLOT_CORRELATION;
-        String outCorrelation = dirPrefix + Constant.SFX_DT_CORRELATION;
+        String outCorrelation = dirPrefix + Constant.PNG_DT_CORRELATION;
         String plotTitle = " \"Spearman Correlation of Read Counts\"";
         commands.add(String.format("%s -in %s -c spearman --skipZeros  --plotTitle %s -p heatmap --colorMap RdYlBu -o %s -l %s -plotNumbers",
                 exeCorrelation, outNpz, plotTitle, outCorrelation, labelList));

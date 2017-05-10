@@ -140,11 +140,21 @@ public class Statistics {
                 MotifColumn motifColumn = new MotifColumn(exp.getCode(), motifPngPfx, 5);
                 return motifColumn.toString();
             case CHIP_QUALITY:
-
+                String fingerprintPngPath = ConfigInitializer.getPath(Directory.Out.CHIP_QUALITY) + Constant.PNG_DT_FINGER_PRINT;
+                PlotColumn plotColumn = new PlotColumn("All", fingerprintPngPath);
+                return plotColumn.toString();
             case CORRELATION:
+                String correlationPngPath = ConfigInitializer.getPath(Directory.Out.CORRELATION) + Constant.PNG_DT_CORRELATION;
+                return new PlotColumn("All", correlationPngPath).toString();
+            case PEAK_HEATMAP:
+                String peakHeatmap = ConfigInitializer.getPath(Directory.Out.PEAK_HEATMAP) + exp.getCode() + Constant.PNG_DT_HEATMAP;
+                return new PlotColumn(exp.getCode(), peakHeatmap).toString();
+            case PEAK_OVER_CHROMOSOME:
+                String peakOverChr = ConfigInitializer.getPath(Directory.Out.PEAK_OVER_CHROMOSOME) + exp.getCode() + Constant.PNG_DT_PEAK_OVER_CHROMOSOME;
+                return new PlotColumn(exp.getCode(), peakOverChr).toString();
             case TSS_PROFILE:
             default:
-                return type.name() + "\tunder construction";
+                return type.name() + "function \t under construction";
         }
     }
 
