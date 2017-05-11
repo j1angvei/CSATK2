@@ -40,14 +40,14 @@ public class Constant {
     public static final String EXE_DT_PLOTPROFILE = "plotProfile";
 
     //correlation
-    public static final String EXE_DT_MULTI_BIGWIG_SUMMARY = "multiBigwigSummary";
+    public static final String EXE_DT_MULTI_BAM_SUMMARY = "multiBamSummary";
     public static final String EXE_DT_PLOT_CORRELATION = "plotCorrelation";
     /**
      * deeptools intermediate files suffix
      */
     public static final String SFX_DT_BIG_WIG = ".deeptools.bw";
-    public static final String SFX_DT_TSS_MATRIX = ".tss.matrix";
-    public static final String SFX_DT_PEAK_MATRIX = ".peak.matrix";
+    public static final String SFX_DT_TSS_MATRIX = ".tss.matrix.gz";
+    public static final String SFX_DT_PEAK_MATRIX = ".peak.matrix.gz";
     public static final String SFX_DT_NPZ = "dt.multibigwigsummary.npz";
 
     //png suffix

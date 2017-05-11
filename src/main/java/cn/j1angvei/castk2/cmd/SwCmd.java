@@ -462,18 +462,18 @@ public class SwCmd {
         //convert bam to bigwig using bamCompare and bamCoverage
         String exeBamCoverage = exePrefix + Constant.EXE_DT_BAMCOVERAGE;
         String exeBamCompare = exePrefix + Constant.EXE_DT_BAMCOMPARE;
-        String treatBam = ConfigInitializer.getPath(Out.BAM_SORTED) + experiment.getCode() + Constant.SFX_SORTED_BAM;
+        String treatBam = ConfigInitializer.getPath(Out.BAM_UNIQUE) + experiment.getCode() + Constant.SFX_UNIQUE_BAM;
         String outBw = outPrefix + Constant.SFX_DT_BIG_WIG;
 
         if (hasControl) {
             //has control experiment
-            String controlBam = ConfigInitializer.getPath(Out.BAM_SORTED) + experiment.getControl() + Constant.SFX_SORTED_BAM;
+            String controlBam = ConfigInitializer.getPath(Out.BAM_UNIQUE) + experiment.getControl() + Constant.SFX_UNIQUE_BAM;
             //bamCompare usage:bamCompare -b1 treatment.bam -b2 control.bam -o log2ratio.bw
-            commands.add(String.format("%s -b1 %s -b2 %s -o %s -of bigwig", exeBamCompare, treatBam, controlBam, outBw));
+            commands.add(String.format("%s -b1 %s -b2 %s -o %s -of bigwig --normalizeUsingRPKM", exeBamCompare, treatBam, controlBam, outBw));
         } else {
             //no control experiment
             //bamCoverage usage: bamCoverage -b reads.bam -o coverage.bw
-            commands.add(String.format("%s -b %s -o %s -of bigwig", exeBamCoverage, treatBam, outBw));
+            commands.add(String.format("%s -b %s -o %s -of bigwig --normalizeUsingRPKM", exeBamCoverage, treatBam, outBw));
         }
         return FileUtil.listToArray(commands);
     }
@@ -563,13 +563,13 @@ public class SwCmd {
         List<String> commands = new ArrayList<>();
 //        commands.add(OsCmd.addPythonPath(CONF.getSwDestFolder(Software.DEEPTOOLS)));
         String exePrefix = getTmpDeeptools();
-        String inPrefix = ConfigInitializer.getPath(Out.BAM_SORTED);
+        String inPrefix = ConfigInitializer.getPath(Out.BAM_UNIQUE);
         String outPrefix = ConfigInitializer.getPath(Out.CHIP_QUALITY);
 
         StringBuilder bamList = new StringBuilder();
         StringBuilder labelList = new StringBuilder();
         for (Experiment e : CONF.getExperiments()) {
-            bamList.append(inPrefix).append(e.getCode()).append(Constant.SFX_SORTED_BAM).append(" ");
+            bamList.append(inPrefix).append(e.getCode()).append(Constant.SFX_UNIQUE_BAM).append(" ");
             labelList.append(e.getCode()).append(" ");
         }
 
@@ -593,19 +593,20 @@ public class SwCmd {
         //multi bigwig summary
 //        String exePrefix = CONF.getSwExecutable(Software.DEEPTOOLS);
         String exePrefix = getTmpDeeptools();
-        String inPrefix = ConfigInitializer.getPath(Out.BIGWIG_DT);
         String dirPrefix = ConfigInitializer.getPath(Out.CORRELATION);
 
-        String exeMultiBigwigSummary = exePrefix + Constant.EXE_DT_MULTI_BIGWIG_SUMMARY;
-        StringBuilder bigwigList = new StringBuilder();
+        String exeMultiBamSummary = exePrefix + Constant.EXE_DT_MULTI_BAM_SUMMARY;
+        StringBuilder bamList = new StringBuilder();
         StringBuilder labelList = new StringBuilder();
         for (Experiment experiment : CONF.getExperiments()) {
-            bigwigList.append(inPrefix).append(experiment.getCode()).append(Constant.SFX_DT_BIG_WIG).append(" ");
+            bamList.append(ConfigInitializer.getPath(Out.BAM_UNIQUE))
+                    .append(experiment.getCode())
+                    .append(Constant.SFX_UNIQUE_BAM).append(" ");
             labelList.append(experiment.getCode()).append(" ");
         }
         String outNpz = dirPrefix + Constant.SFX_DT_NPZ;
         commands.add(String.format("%s bins -b %s -out %s",
-                exeMultiBigwigSummary, bigwigList.toString(), outNpz));
+                exeMultiBamSummary, bamList.toString(), outNpz));
 
         //correlation
         String exeCorrelation = exePrefix + Constant.EXE_DT_PLOT_CORRELATION;
