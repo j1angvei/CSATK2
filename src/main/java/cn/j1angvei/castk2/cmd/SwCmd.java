@@ -541,7 +541,7 @@ public class SwCmd {
 
         String outTssMatrix = ConfigInitializer.getPath(Out.MATRIX) + experiment.getCode() + Constant.SFX_DT_TSS_MATRIX;
 
-        commands.add(String.format("%s scale-regions -S %s -R %s -b 1000 -a 1000 -out %s",
+        commands.add(String.format("%s scale-regions -S %s -R %s -b 3000 -a 3000 --regionBodyLength 5000 -out %s",
                 exeComputeMatrix, inBw, inTss, outTssMatrix));
 
         //plot profile usage: plotProfile -m matrix -out outfile

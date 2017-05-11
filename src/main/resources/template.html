@@ -176,6 +176,44 @@
             font-size: 0.8em;
         }
 
+        /**
+      此处 针对Peak Annotation module 中饼状图样式
+      和heatmap module 的图片排版；
+      */
+        .main .module .imgsPlaceholder {
+            width: 95%;
+            margin: 2em auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .main .module .imgsPlaceholderHeatmap {
+            width: 95%;
+            margin: 2em auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .main .module .imgsPlaceholder > p {
+            /**默认为2列
+            3列 width：33%；
+            4列 width：24%
+            。。。。。。
+            **/
+            width: 24%;
+        }
+
+        .main .module .imgsPlaceholderHeatmap > p {
+            /**默认为2列
+            3列 width：33%；
+            4列 width：24%
+            。。。。。。
+            **/
+            width: 49%;
+        }
+
         footer {
             width: 75%;
             line-height: 500%;
@@ -353,16 +391,14 @@
                 </div>
             </div>
         </div>
-        <div>
-            <table>
-                <tbody>
-                <tr>
-                    <td><img class="indented" src="#" th:src="'data:image/png;base64,'+${peak_call_chart[0]}"/></td>
-                    <td><img class="indented" src="#" th:src="'data:image/png;base64,'+${peak_call_chart[1]}"/></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+        <table>
+            <tbody>
+            <tr>
+                <td><img class="indented" src="#" th:src="'data:image/png;base64,'+${peak_call_chart[0]}"/></td>
+                <td><img class="indented" src="#" th:src="'data:image/png;base64,'+${peak_call_chart[1]}"/></td>
+            </tr>
+            </tbody>
+        </table>
         <!--<p><img class="indented" src="" alt="Per Sequence quality graph" width="800" height="600"/></p>-->
 
         <div class="module">
@@ -370,6 +406,18 @@
             <!--<p>-->
             <!--<img th:each="data : ${peak_heatmap_data}" class="indented" src="#" th:src="'data:image/png;base64,'+${data[1]}"/>-->
             <!--</p>-->
+
+            <!--
+                觉得这样排版会好看点
+            <table>
+                <tr>
+                    <th th:each="header : ${peak_heatmap_data}" th:text="${header[0]}"></th>
+                    <td th:each="data: ${peak_heatmap_data}">
+                            <img src="#" th:src="'data:image/png;base64,'+${data[1]}"/>
+                    </td>
+                </tr>
+            </table>
+            -->
             <table>
                 <thead>
                 <tr>
@@ -382,7 +430,6 @@
                         <img src="#" th:src="'data:image/png;base64,'+${data[1]}"/>
                     </td>
                 </tr>
-
                 </tbody>
             </table>
 
@@ -392,10 +439,12 @@
 
         <div class="module">
             <h2 id="peak_over_chr">Peak over Chromosome</h2>
-            <p>
-                <img th:each="data : ${peak_over_chr_data}" class="indented" src="#" th:src="'data:image/png;base64,'+${data[1]}"/>
-            </p>
-            <!--<p><img  src="" alt="Per base quality graph" width="800" height="600"/></p>-->
+            <div class="imgsPlaceholderHeatmap">
+                <p th:each="data : ${peak_over_chr_data}">
+                    <img class="indented" src="#" th:src="'data:image/png;base64,'+${data[1]}"/>
+                </p>
+                <!--<p><img  src="" alt="Per base quality graph" width="800" height="600"/></p>-->
+            </div>
 
         </div>
     </div>
@@ -424,10 +473,14 @@
             </div>
         </div>
 
-        <p th:each="data : ${peak_anno_pie}">
-            <img class="indented" src="#" th:src="'data:image/png;base64,'+${data}"/>
-        </p>
-        <!--<p><img class="indented" src="" alt="Per base sequence content" width="800" height="600"/></p>-->
+        <div class="imgsPlaceholder">
+            <p th:each="data : ${peak_anno_pie}">
+                <img class="indented" src="#" th:src="'data:image/png;base64,'+${data}"/>
+            </p>
+            <!--<p><img class="indented" src="" alt="Per base sequence content" width="800" height="600"/></p>-->
+        </div>
+
+
     </div>
     <div class="module">
         <h2 id="go_analysis">GO Analysis</h2>

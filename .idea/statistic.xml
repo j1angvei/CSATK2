@@ -10,6 +10,7 @@
         <option value="$PROJECT_DIR$/.idea" />
         <option value="$PROJECT_DIR$/config" />
         <option value="$PROJECT_DIR$/output" />
+        <option value="$PROJECT_DIR$/bin" />
       </list>
     </option>
   </component>
