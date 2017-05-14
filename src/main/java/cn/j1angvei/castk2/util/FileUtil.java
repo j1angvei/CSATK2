@@ -305,4 +305,13 @@ public class FileUtil {
     public enum Unit {
         BYTES, KB, MB, GB
     }
+
+    public static void printMatrix(String[][] matrix) {
+        for (String[] rowInfo : matrix) {
+            for (String item : rowInfo) {
+                System.out.print(item + "\t");
+            }
+            System.out.println();
+        }
+    }
 }

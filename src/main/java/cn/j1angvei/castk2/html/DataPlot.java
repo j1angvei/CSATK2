@@ -244,5 +244,6 @@ public class DataPlot {
 
     private void setBackground(JFreeChart chart) {
 //        chart.getPlot().setBackgroundPaint(new Color(238, 238, 238));
+        chart.getPlot().setBackgroundPaint(new Color(255, 255, 255));
     }
 }

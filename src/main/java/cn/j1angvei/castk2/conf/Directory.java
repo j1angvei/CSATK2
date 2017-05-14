@@ -19,7 +19,7 @@ public class Directory {
         BAM_RMDUP("11_bam_rmdup"),
         BAM_UNIQUE("12_bam_unique"),
         PEAK_CALLING("13_peak_calling"),
-        BIGWIG("14_bigwig"),
+//        BIGWIG("14_bigwig"),
         ANNOTATION("15_peak_anno"),
         GENE_LIST("16_gene_list"),
         GO_PATHWAY("17_go_pathway"),

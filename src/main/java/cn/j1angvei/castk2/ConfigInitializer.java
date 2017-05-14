@@ -31,7 +31,7 @@ public class ConfigInitializer {
         }
     }
 
-    public static ConfigInitializer getInstance() {
+    public static synchronized ConfigInitializer getInstance() {
         if (INSTANCE == null) {
             Gson gson = GsonUtil.getGson();
             INSTANCE = new ConfigInitializer(gson);

@@ -59,8 +59,8 @@ public class SwCmd {
                 return SwCmd.annotatePeaks(exp);
             case FLAGSTAT:
                 return SwCmd.bamIndexStat(exp);
-            case BIGWIG:
-                return SwCmd.bigwig(exp);
+//            case BIGWIG:
+//                return SwCmd.bigwig(exp);
             case TSS_PROFILE:
                 return SwCmd.tssProfile(exp);
             case BW_DT:
@@ -430,27 +430,27 @@ public class SwCmd {
         return FileUtil.listToArray(cmd);
     }
 
-    public static String[] bigwig(Experiment experiment) {
-        List<String> commands = new ArrayList<>();
-        String code = experiment.getCode();
-        String bedGraph = ConfigInitializer.getPath(Out.PEAK_CALLING) + code + Constant.SFX_BEDGRAPH;
-        String bigWig = ConfigInitializer.getPath(Out.BIGWIG) + code + Constant.SFX_UCSC_BIG_WIG;
-        String wig = ConfigInitializer.getPath(Out.BIGWIG) + code + Constant.SFX_UCSC_WIG;
-
-        String chromeSize = ConfigInitializer.getPath(Sub.GENOME) +
-                CONF.getGenome(experiment.getGenomeCode()).getFasta() + Constant.SFX_GENOME_SIZES;
-        //sort bedGraph in place
-        String exeBedSort = CONF.getSwExecutable(Software.UCSC) + Constant.EXE_UCSC_BED_SORT;
-        String exeBedGraphToBigWig = CONF.getSwExecutable(Software.UCSC) + Constant.EXE_UCSC_BEDGRAPH_2_BIGWIG;
-        String exeBigWigToWig = CONF.getSwExecutable(Software.UCSC) + Constant.EXE_UCSC_BIGWIG_2_WIG;
-        //bed sort usage: bedSort in.bed out.bed (in.bed and out.bed may be the same.)
-        commands.add(String.format("%s %s %s", exeBedSort, bedGraph, bedGraph));
-        //bedGraphToBigWig usage:  bedGraphToBigWig in.bedGraph chrom.sizes out.bw
-        commands.add(String.format("%s %s %s %s", exeBedGraphToBigWig, bedGraph, chromeSize, bigWig));
-        //bigWigToWig usage: bigWigToWig in.bigWig out.wig
-        commands.add(String.format("%s %s %s", exeBigWigToWig, bigWig, wig));
-        return FileUtil.listToArray(commands);
-    }
+//    public static String[] bigwig(Experiment experiment) {
+//        List<String> commands = new ArrayList<>();
+//        String code = experiment.getCode();
+//        String bedGraph = ConfigInitializer.getPath(Out.PEAK_CALLING) + code + Constant.SFX_BEDGRAPH;
+//        String bigWig = ConfigInitializer.getPath(Out.BIGWIG) + code + Constant.SFX_UCSC_BIG_WIG;
+//        String wig = ConfigInitializer.getPath(Out.BIGWIG) + code + Constant.SFX_UCSC_WIG;
+//
+//        String chromeSize = ConfigInitializer.getPath(Sub.GENOME) +
+//                CONF.getGenome(experiment.getGenomeCode()).getFasta() + Constant.SFX_GENOME_SIZES;
+//        //sort bedGraph in place
+//        String exeBedSort = CONF.getSwExecutable(Software.UCSC) + Constant.EXE_UCSC_BED_SORT;
+//        String exeBedGraphToBigWig = CONF.getSwExecutable(Software.UCSC) + Constant.EXE_UCSC_BEDGRAPH_2_BIGWIG;
+//        String exeBigWigToWig = CONF.getSwExecutable(Software.UCSC) + Constant.EXE_UCSC_BIGWIG_2_WIG;
+//        //bed sort usage: bedSort in.bed out.bed (in.bed and out.bed may be the same.)
+//        commands.add(String.format("%s %s %s", exeBedSort, bedGraph, bedGraph));
+//        //bedGraphToBigWig usage:  bedGraphToBigWig in.bedGraph chrom.sizes out.bw
+//        commands.add(String.format("%s %s %s %s", exeBedGraphToBigWig, bedGraph, chromeSize, bigWig));
+//        //bigWigToWig usage: bigWigToWig in.bigWig out.wig
+//        commands.add(String.format("%s %s %s", exeBigWigToWig, bigWig, wig));
+//        return FileUtil.listToArray(commands);
+//    }
 
     public static String[] bigwigDt(Experiment experiment) {
         boolean hasControl = hasControl(experiment);
@@ -612,7 +612,7 @@ public class SwCmd {
         String exeCorrelation = exePrefix + Constant.EXE_DT_PLOT_CORRELATION;
         String outCorrelation = dirPrefix + Constant.PNG_DT_CORRELATION;
         String plotTitle = " \"Spearman Correlation of Read Counts\"";
-        commands.add(String.format("%s -in %s -c spearman --skipZeros  --plotTitle %s -p heatmap --colorMap RdYlBu -o %s -l %s -plotNumbers",
+        commands.add(String.format("%s -in %s -c spearman --skipZeros  --plotTitle %s -p heatmap --colorMap RdYlBu -o %s -l %s --plotNumbers",
                 exeCorrelation, outNpz, plotTitle, outCorrelation, labelList));
         return FileUtil.listToArray(commands);
     }
