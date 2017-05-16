@@ -38,7 +38,7 @@ public class HtmlGenerator {
         engine.setTemplateResolver(resolver);
         final Context context = new Context(Locale.getDefault());
         String title = "CSATK Report";
-        String date = DateFormat.getDateInstance(DateFormat.LONG, Locale.CHINA).format(new Date());
+        String date = DateFormat.getDateInstance(DateFormat.LONG, Locale.US).format(new Date());
         context.setVariable("title", title);
         context.setVariable("date", date);
         for (StatType type : StatType.values()) {
