@@ -7,7 +7,9 @@ import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
@@ -243,7 +245,11 @@ public class DataPlot {
     }
 
     private void setBackground(JFreeChart chart) {
-//        chart.getPlot().setBackgroundPaint(new Color(238, 238, 238));
-        chart.getPlot().setBackgroundPaint(new Color(255, 255, 255));
+        chart.getPlot().setBackgroundPaint(new Color(238, 238, 238));
+//        adjustPlot((XYPlot) chart.getPlot());
     }
+
+//    private void adjustPlot(XYPlot plot) {
+//        plot.setBackgroundPaint(new Color(255, 255, 255));
+//    }
 }

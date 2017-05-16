@@ -61,18 +61,25 @@ public class Constant {
      */
     public static final String SFX_GENOME_FAIDX = ".fai";
     public static final String SFX_GENOME_SIZES = ".sizes";
-    public static final String SFX_GENOME_TSS = ".tss.bed";
+//    public static final String SFX_GENOME_TSS = ".tss.bed";
     /**
      * real executable distributed by UCSC
      */
-    public static final String EXE_UCSC_BED_SORT = "bedSort";
-    public static final String EXE_UCSC_BEDGRAPH_2_BIGWIG = "bedGraphToBigWig";
-    public static final String EXE_UCSC_BIGWIG_2_WIG = "bigWigToWig";
+//    public static final String EXE_UCSC_BED_SORT = "bedSort";
+//    public static final String EXE_UCSC_BEDGRAPH_2_BIGWIG = "bedGraphToBigWig";
+//    public static final String EXE_UCSC_BIGWIG_2_WIG = "bigWigToWig";
+    public static final String EXE_UCSC_GFF3_TO_GENEPRED = "gff3ToGenePred";
+    public static final String EXE_UCSC_GTF_TO_GENEPRED = "gtfToGenePred";
+    public static final String EXE_UCSC_GENEPRED_TO_BED = "genePredToBed";
+
     /**
      * bigWig file relevant suffix
      */
-    public static final String SFX_UCSC_BIG_WIG = ".ucsc.bw";
-    public static final String SFX_UCSC_WIG = ".wig";
+//    public static final String SFX_UCSC_BIG_WIG = ".ucsc.bw";
+//    public static final String SFX_UCSC_WIG = ".wig";
+    public static final String SFX_UCSC_GENEPRED = ".genePred";
+    public static final String SFX_UCSC_GENE_BED = ".gene.bed";
+
     /**
      * FastQC generate zip report file name is, FastQ file name + "_fastqc.zip";
      */

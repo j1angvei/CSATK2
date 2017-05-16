@@ -63,7 +63,7 @@ public class Analysis {
             case MOTIF:
             case PEAK_ANNOTATION:
             case FLAGSTAT:
-            case BIGWIG:
+//            case BIGWIG:
             case BW_DT:
             case PEAK_HEATMAP:
             case TSS_PROFILE:

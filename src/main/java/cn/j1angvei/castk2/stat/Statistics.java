@@ -153,6 +153,8 @@ public class Statistics {
                 String peakOverChr = ConfigInitializer.getPath(Directory.Out.PEAK_OVER_CHROMOSOME) + exp.getCode() + Constant.PNG_DT_PEAK_OVER_CHROMOSOME;
                 return new PlotColumn(exp.getCode(), peakOverChr).toString();
             case TSS_PROFILE:
+                String tssProfile = ConfigInitializer.getPath(Directory.Out.TSS_PROFILE) + exp.getCode() + Constant.PNG_DT_PROFILE;
+                return new PlotColumn(exp.getCode(), tssProfile).toString();
             default:
                 return type.name() + "function \t under construction";
         }

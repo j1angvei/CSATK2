@@ -188,24 +188,7 @@
             justify-content: space-between;
         }
 
-        .main .module .imgsPlaceholderHeatmap {
-            width: 95%;
-            margin: 2em auto;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-
         .main .module .imgsPlaceholder > p {
-            /**默认为2列
-            3列 width：33%；
-            4列 width：24%
-            。。。。。。
-            **/
-            width: 24%;
-        }
-
-        .main .module .imgsPlaceholderHeatmap > p {
             /**默认为2列
             3列 width：33%；
             4列 width：24%
@@ -362,8 +345,13 @@
 
     <div class="module">
         <h2 id="tss_plot">TSS Plot</h2>
-        <p>Still under construction...</p>
         <!--<p><img  src="" alt="Per base quality graph" width="800" height="600"/></p>-->
+        <div class="imgsPlaceholder">
+            <p th:each="data : ${tss_profile_data}">
+                <img class="indented" src="#" th:src="'data:image/png;base64,'+${data[1]}"/>
+            </p>
+            <!--<p><img class="indented" src="" alt="Per base sequence content" width="800" height="600"/></p>-->
+        </div>
 
     </div>
     <div class="module">
@@ -439,7 +427,7 @@
 
         <div class="module">
             <h2 id="peak_over_chr">Peak over Chromosome</h2>
-            <div class="imgsPlaceholderHeatmap">
+            <div class="imgsPlaceholder">
                 <p th:each="data : ${peak_over_chr_data}">
                     <img class="indented" src="#" th:src="'data:image/png;base64,'+${data[1]}"/>
                 </p>
