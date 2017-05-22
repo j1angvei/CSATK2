@@ -41,8 +41,8 @@ public class Statistics {
                 return qcColumn.toString();
             case ALIGNMENT:
                 long[] sortedReads = readFlagstatCount(Directory.Out.BAM_SORTED, exp.getCode());
-                long rmdupReads = readFlagstatCount(Directory.Out.BAM_RMDUP, exp.getCode())[0];
-                long uniqueReads = readFlagstatCount(Directory.Out.BAM_UNIQUE, exp.getCode())[0];
+                long rmdupReads = readFlagstatCount(Directory.Out.BAM_RMDUP, exp.getCode())[1];
+                long uniqueReads = readFlagstatCount(Directory.Out.BAM_UNIQUE, exp.getCode())[1];
                 AlignColumn alignColumn = new AlignColumn(exp.getCode(), sortedReads[0], sortedReads[1], rmdupReads, uniqueReads);
                 return alignColumn.toString();
             case PEAK_CALL:
