@@ -1,6 +1,12 @@
 # CSATK (ChIP-Seq Analysis Toolkit)
 ## Warning 
 This project is deprecated!!!
+
+## How to compile 
+1. Download and unzip the source code.
+2. Run `./gradlew jar`(unix based OS) or `gradlew.bat jar`(windows, not tested).
+3. The jar file is located at `./build/libs/CSATK2-yyMMdd.jar`. 
+
 ## Introduction
 CSATK is Java written bio-informatics software, the main goal of CSATK is to make ChIP-Seq analysis easier and more efficient.  
 
