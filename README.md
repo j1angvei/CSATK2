@@ -1,4 +1,6 @@
 # CSATK (ChIP-Seq Analysis Toolkit)
+## Warning 
+This project is deprecated!!!
 ## Introduction
 CSATK is Java written bio-informatics software, the main goal of CSATK is to make ChIP-Seq analysis easier and more efficient.  
 
